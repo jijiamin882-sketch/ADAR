@@ -1,0 +1,152 @@
+/* افترضنا أن كلاس القسم الأول يسمى hero-wrapper */
+ 
+
+/* إنشاء التلاشي الأبيض باستخدام ::after */
+.hero-wrapper::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50px; /* طول مساحة التلاشي (يمكنك زيادتها أو تقليلها) */
+  background: linear-gradient(to top,  #0F172A , transparent); /* يبدأ أبيض من الأسفل ويصبح شفافاً للأعلى */
+  z-index: 2; /* لكي يظهر فوق الصورة */
+}
+.hero-wrapper{ 
+  position: relative;
+  width: 100%;
+  height: 100vh;  /*خذ كامل ارتفاع الشاشة  */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; 
+  
+}
+.hero-bg-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+ /* background: linear-gradient(90deg,#1F2A44 ,#2C3E5A );*/
+}
+
+.hero-bg-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* لزيادة وضوح النص  */
+}
+
+.hero-container {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  color: white;
+}
+
+.hero-container h1 {
+  font-size: 4rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.hero-container p {
+  font-size: 1.5rem;
+  margin-bottom: 40px;
+}
+
+.hero-search-bar {
+  background: white;
+  padding: 10px 20px;
+  border-radius: 50px;
+  display: flex;
+  width: 100%;
+  max-width: 600px;
+  justify-content: space-between;
+  box-shadow: 0px 10px 20px rgba(0,0,0,0.3);
+}
+
+.hero-search-bar input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 1.1rem;
+  text-align: right;
+}
+ 
+.hero-content h1{
+  font-weight: normal;
+  font-family: 'Tajawal';
+} 
+ 
+
+/* شكل الروابط النصية */
+.hero-nav-link {
+  color: rgba(255, 255, 255, 0.85); /* لون أبيض شفاف قليلاً */
+  text-decoration: none;
+  font-size: 18px;
+  font-weight:600;
+  position: relative;
+  padding-bottom: 5px;
+  transition: color 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+  cursor: pointer;
+}
+
+/* الخط الذهبي السفلي الذي يظهر عند التمرير أو التحديد */
+.hero-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0; /* يبدأ من اليمين ليناسب العربي */
+  width: 0;
+  height: 2px;
+  background-color: white;/*اللون الذهبي */
+  transition: width 0.3s ease;
+}
+
+/* عند تمرير الماوس (Hover) */
+.hero-nav-link:hover {
+  color: #ffffff;
+}
+.hero-nav-link:hover::after {
+  width: 100%; /* الخط يمتد من اليمين لليسار */
+}
+
+/* الرابط النشط (الافتراضي) */
+.hero-nav-link.active {
+  color: #ffffff;
+}
+.hero-nav-link.active::after {
+  width: 100%; /* الخط الذهبي يظهر بشكل دائم على "شراء" */
+}
+
+/* الفاصل بين الكلمات (الخط العمودي) */
+.hero-nav-divider {
+  color: rgba(255, 255, 255, 0.3); /* لون رمادي باهت جداً */
+  font-size: 18px;
+  user-select: none; /* لمنع المستخدم من تحديد الخط */
+}
+.hero-nav-menu {
+ display: flex;
+  justify-content: center; /* يوسط الكلمات */
+  align-items: center;
+  gap: 30px; /* المسافة بين شراء وكراء */
+  margin-left: auto; /* هذه الثلاثة أسطر تقوم بتوسيط المينو في منتصف الشاشة */
+  margin-right: auto; /* بغض النظر عن اتجاه الموقع (عربي/إنجليزي) */
+  margin-bottom: 30px; /* المسافة بين المينو وشريط البحث */
+  width: fit-content; /* يجعل خلفية المينو ضيقة حول الكلمات فقط */
+}
+.hero-search-bar button{
+  background-color: black;
+}

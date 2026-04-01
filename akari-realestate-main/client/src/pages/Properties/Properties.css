@@ -1,0 +1,49 @@
+ 
+.properties-container{
+  gap: 2rem;
+  padding-top: 120px;  
+}
+.properties-container .search-bar{
+    width: clamp(12rem, 100%, 28rem);
+    border-radius: 30px;
+    border: 1px solid rgba(120, 120, 120, 0.374);
+    flex-wrap: nowrap;
+}
+
+.properties-container .search-bar .button{
+    border-radius: 30px;
+    font-size: 12px;
+    padding: 10px 15px;
+}
+
+.properties-container .search-bar input{
+    width: 70%;
+} 
+.properties {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+ 
+.search-bar {
+    background: rgba(198, 49, 49, 0.1) !important;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: white;
+}
+
+.search-bar input {
+    color: white !important;
+}
+
+.search-bar input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+.properties-container h2{
+  color:  rgb(233, 174, 93);
+}

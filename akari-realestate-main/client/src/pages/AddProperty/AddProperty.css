@@ -1,0 +1,47 @@
+.add-property-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+    min-height: 80vh;
+}
+
+.add-form {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+    gap: 1.2rem;
+}
+
+.add-form input, .add-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-family: 'Cairo', sans-serif;
+}
+
+.facilities-input {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    width: 100%;
+}
+
+.add-form button {
+    margin-top: 1rem;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.add-form button:hover {
+    transform: scale(1.02);
+}
+
+.add-form button:disabled {
+    background: gray;
+    cursor: not-allowed;
+}

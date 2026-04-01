@@ -1,0 +1,37 @@
+.search-bar-container {
+    background-color: white;
+    border-radius: 25px;
+    border: 3px solid rgba(120, 120, 120, 0.174);
+    padding: 0.5rem 1rem;
+    width: 100%;
+    max-width: 900px;
+}
+
+.search-group {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-input {
+    border-left: 1px solid var(--secondary); /* فاصل بين القوائم */
+    padding-left: 10px;
+    flex: 1;
+}
+
+.search-input:last-child {
+    border-left: none;
+}
+
+@media (max-width: 768px) {
+    .search-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .search-input {
+        border-left: none;
+        border-bottom: 1px solid #eee;
+        width: 100%;
+    }
+}

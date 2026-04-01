@@ -1,0 +1,28 @@
+.agencies-wrapper {
+  /* هذا هو اللون المتدرج الذي يعطي إحساس الصفحة الرئيسية */
+  
+  min-height: 100vh ;
+  width: 100%;
+  padding-top: 120px;
+  color: white;
+}
+
+/* لجعل الصفحة تبدو كأنها قطعة واحدة من الرئيسية */
+.agencies-container {
+  background: transparent ;
+}
+
+.agency-card {
+  /* بطاقات زجاجية تندمج مع الخلفية الزرقاء */
+  background: rgba(255, 255, 255, 0.03) ;
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1) ;
+  border-radius: 20px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.agency-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: scale(1.03);
+}

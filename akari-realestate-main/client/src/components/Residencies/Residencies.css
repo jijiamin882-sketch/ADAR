@@ -1,0 +1,209 @@
+/*.r-container {
+  gap: 2rem;
+  position:  center;
+  overflow: hidden;
+   
+}
+.r-wrapper{
+  background: linear-gradient(to right,#0b1a2b, #0f2a44, #122642);
+  
+  padding: 80px 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh; /* مهم جداً: اجعل الارتفاع يكفي لدفعهما للأسفل *
+  justify-content: space-between; 
+    
+}
+
+.r-head{
+  margin-bottom: 3rem;
+}
+.r-head span{
+   background: linear-gradient(to left, #6b591c, #d3ba5e, #fff2a8, #564717);
+  
+  /* قص الخلفية بشكل النص *
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* جعل لون النص شفافًا لإظهار الخلفية المتدرجة *
+  -webkit-text-fill-color: transparent;
+  
+  /* خصائص إضافية للعرض *
+  display: inline-block;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  font-family: 'Arial', sans-serif; /* يمكنك تغيير الخط حسب رغبتك */
+  
+  /* إضافة ظل خفيف لتعزيز التأثير (اختياري) *
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+  margin-top: 5px; ;
+
+}
+
+
+.swiper-horizontal{
+  overflow: visible;
+}
+.r-buttons{
+  position:center;
+  gap: 1rem;
+  top: 4rem;
+  right: 0;
+}
+.r-buttons button{
+  font-size: 1.2rem;
+  padding: .2rem .8rem;
+  align-items: center;
+  color: black;
+  border: none;
+  border-radius: 5px;
+  background:linear-gradient(270deg, #6b591c,#d3ba5e, #fff2a8, #564717);
+  cursor: pointer;
+          
+}
+.r-buttons button:hover{
+  background: white;
+}
+.r-buttons>:nth-child(1)
+{
+  background-color: #ffeeee;
+}
+.r-buttons>:nth-child(2)
+{
+  box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.25);
+}
+
+
+@media (max-width: 640px) {
+  .r-head{
+  align-items: center;
+  }
+  .r-buttons{
+    position: initial;
+  }
+}
+.orangeText span {
+  align-items: center;
+  color: linear-gradient(270deg, #6b591c,#d3ba5e, #fff2a8, #564717); 
+}*/
+
+/* === الخلفية البيضاء النظيفة (مثل Realtor بالضبط) === */
+.r-wrapper {
+  background:  #0F172A;
+  padding: 50px 0 70px 0;
+ }
+
+/* === شبكة البطاقات === */
+.r-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* === العنوان (حافظنا على ذهبيتك المميزة) === */
+.r-head {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+}
+
+.r-head span {
+  background: linear-gradient(to left, #6b591c, #d3ba5e, #fff2a8, #564717);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+
+/* =============================================
+   === تصميم البطاقة (نسخة Realtor المطبوعة) ===
+   ============================================= */
+.realtor-card {
+  position: relative;
+  height: 230px; /* ارتفاع مناسب لشاشات الديسكتوب */
+  border-radius: 12px; /* حواف مستديرة قليلاً وليست كبيرة */
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); /* ظل خفيف جداً ومحدد */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.realtor-card:hover {
+  transform: translateY(-4px); /* يرتفع مسافة قصيرة جداً */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12); /* ظل أعمق قليلاً عند التمرير */
+}
+
+.realtor-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.realtor-card:hover img {
+  transform: scale(1.05);
+}
+
+/* التدرج الأسود في الأسفل (محدد ونظيف مثل الصورة) */
+.realtor-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 50%; /* لا يغطي نصف الصورة حتى لا يسود التصميم */
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+  pointer-events: none;
+}
+
+/* النصوص */
+.realtor-content {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 20px;
+  color: white;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+/* اسم الفئة (في اليسار) */
+.realtor-title {
+  font-size: 1.15rem;
+  font-weight: 600; /* وزن الخط متوسط وليس ثقيل جداً */
+  position: relative;
+  z-index: 3;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* === الرقم الشفاف (في اليمين كما في الصورة) === */
+.realtor-number {
+  font-size: 4.5rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.2); /* شفافية أبيض دقيقة */
+  position: absolute;
+  bottom: -20px;
+  right: 10px; /* ⚠️ وضعه في اليمين عشان الموقع عربي */
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+}
+
+
+/* === التجاوب === */
+@media (max-width: 1024px) {
+  .r-container { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .r-container { grid-template-columns: 1fr; }
+  .r-head span { font-size: 1.8rem; }
+}
+ 
