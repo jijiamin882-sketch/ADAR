@@ -1,0 +1,179 @@
+/* ==========================================
+   صفحة المدونة - التصميم الفاخر
+   ========================================== */
+.blog-wrapper {
+  min-height: 100vh;
+  background: #0d1117;
+  padding-top: 3.5rem; /* ليعلو فوق الهيدر المثبت */
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+}
+
+/* ==========================================
+   هيرو المدونة
+   ========================================== */
+.blog-hero {
+  background: linear-gradient(135deg, rgba(22, 28, 36, 1) 0%, rgba(13, 17, 23, 1) 100%);
+  border-bottom: 1px solid rgba(241, 201, 145, 0.1);
+  padding: 80px 20px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.blog-hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at center, rgba(241, 201, 145, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.blog-hero-content h1 {
+  font-size: 3rem;
+  color: #ffffff;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.blog-hero-content p {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+}
+
+/* ==========================================
+   محتوى المدونة
+   ========================================== */
+.blog-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 50px 24px 100px;
+}
+
+/* ==========================================
+   أزرار الفلتر
+   ========================================== */
+.blog-filters {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 50px;
+  flex-wrap: wrap;
+}
+
+.blog-filter-btn {
+  background: rgba(22, 28, 36, 0.6);
+  border: 1px solid rgba(241, 201, 145, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  padding: 10px 28px;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.blog-filter-btn:hover {
+  color: #f1c991;
+  border-color: rgba(241, 201, 145, 0.3);
+  background: rgba(241, 201, 145, 0.05);
+}
+
+.blog-filter-btn.active {
+  background: #f1c991;
+  color: #161c24;
+  border-color: #f1c991;
+  box-shadow: 0 4px 15px rgba(241, 201, 145, 0.2);
+}
+
+/* ==========================================
+   شبكة المقالات (Grid)
+   ========================================== */
+.blog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+/* ==========================================
+   حالة عدم وجود مقالات
+   ========================================== */
+.blog-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 80px 20px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+}
+
+.blog-empty h3 {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.blog-empty button {
+  background: rgba(241, 201, 145, 0.1);
+  border: 1px solid rgba(241, 201, 145, 0.3);
+  color: #f1c991;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.blog-empty button:hover {
+  background: #f1c991;
+  color: #161c24;
+}
+
+/* ==========================================
+   Responsive
+   ========================================== */
+@media (max-width: 1150px) {
+  .blog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .blog-hero {
+    padding: 60px 20px;
+  }
+  .blog-hero-content h1 {
+    font-size: 2.5rem;
+  }
+  .blog-grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .blog-filters {
+    gap: 10px;
+  }
+  .blog-filter-btn {
+    padding: 8px 20px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .blog-hero-content h1 {
+    font-size: 2rem;
+  }
+  .blog-hero-content p {
+    font-size: 1rem;
+  }
+  .blog-grid {
+    grid-template-columns: 1fr; /* عمود واحد في الجوال */
+  }
+}

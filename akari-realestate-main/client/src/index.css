@@ -1,3 +1,11 @@
+html {
+  overflow-x: hidden !important;
+}
+
+body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+}
 :root {
   --primary: #1f3e72;
   --secondary: rgba(255, 255, 255, 0.78);
@@ -6,7 +14,15 @@
   --orange-gradient: linear-gradient(270deg, #ffb978 0%, #ff922d 100%);
   --blue: #4066ff;
   --lightBlue: #eeeeff;
+  --width: 100%;
+  --overflow-x: hidden;
   --shadow: 0px 23px 21px -8px rgba(136, 160, 255, 0.25);
+}
+/* منع التمرير الأفقي تماماً عند الزوم */
+html, body {
+  overflow-x: hidden !important;
+  width: 100% !important;
+  max-width: 100vw !important;
 }
 
 * {
@@ -143,4 +159,33 @@ body[dir='ltr'] {
 .flexCenter, .flexStart, .flexEnd {
   display: flex;
   gap: 1rem;
+}
+
+/* ==========================================
+   إصلاح انحراف الهيدر (Header) عند عمل Zoom
+   ========================================== */
+
+/* 1. ضمان أن الإطار الخارجي للهيدر لا يتمدد خارج الشاشة */
+header,
+.layout-wrapper,
+nav {
+  width: 100% !important; /* نستخدم 100% وليس 100vw */
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important; /* يمنع ظهور شريط تمرير أفقي */
+}
+
+/* 2. إجبار الحاوية الداخلية (التي بداخلها اللوجو والمينيو) على التوسط */
+/* نستهدف كلاس innerWidth إذا كان مستخدماً داخل الـ Layout */
+header .innerWidth,
+.layout-wrapper .innerWidth {
+  margin: 0 auto !important; /* هذا السطر بالتحديد هو الذي سيرجعه للمنتصف */
+  width: 90% !important;      /* نسبة مئوية مرنة تتكيف مع الـ Zoom */
+  max-width: 1400px !important; /* أقصى عرض مسموح به */
+  box-sizing: border-box !important;
+}
+
+/* 3. تثبيت اتجاه النصوص */
+header {
+  direction: rtl !important;
 }

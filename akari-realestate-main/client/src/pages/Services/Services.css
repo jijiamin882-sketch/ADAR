@@ -1,0 +1,186 @@
+/* --- المتغيرات الرئيسية لألوان الموقع --- */
+:root {
+  --gold: #e3c08d;
+  --gold-hover: #d4ae7a;
+  --dark-bg: rgba(22, 28, 36, 1); /* اللون الداكن المطلوب */
+  --text-light: #f4f4f4;
+  --text-muted: #a0a0a0;
+}
+
+.services-page {
+  direction: rtl;
+  overflow-x: hidden;
+}
+
+/* --- عنوان الصفحة --- */
+.svc-main-header {
+  text-align: center;
+  background-color: var(--dark-bg);
+  padding: 100px 20px;
+}
+
+.svc-main-header h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 15px;
+}
+
+.svc-main-header p {
+  font-size: 18px;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* --- تنسيقات القسم الواحد --- */
+.svc-section {
+  padding: 80px 20px;
+  transition: all 0.3s ease;
+}
+
+/* تلوين الخلفيات */
+.svc-dark-bg {
+  background-color: var(--dark-bg);
+  color: var(--text-light);
+}
+
+.svc-light-bg {
+  background-color: #ffffff;
+  color: #1a1a1a;
+}
+
+/* الحاوية الداخلية لترتيب النص والصورة بجانب بعض */
+.svc-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 60px;
+}
+
+/* --- جزء النصوص --- */
+.svc-content {
+  flex: 1;
+}
+
+.svc-icon-wrapper {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(227, 192, 141, 0.15); /* خلفية ذهبية شفافة */
+  color: var(--gold);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.svc-content h2 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: var(--gold); /* العناوين ذهبية في كل الحالات */
+}
+
+.svc-content > p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 30px;
+  color: var(--text-muted);
+}
+
+.svc-light-bg .svc-content > p {
+  color: #555555; /* النص في الخلفية الفاتحة */
+}
+
+/* قائمة المميزات */
+.svc-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 35px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.svc-features li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.svc-check-icon {
+  color: var(--gold);
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+/* زر الاكتشاف */
+.svc-btn {
+  background-color: var(--gold);
+  color: var(--dark-bg);
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  width: fit-content;
+}
+
+.svc-btn:hover {
+  background-color: var(--gold-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(227, 192, 141, 0.3);
+}
+
+/* --- جزء الصورة --- */
+.svc-image-wrapper {
+  flex: 1;
+  position: relative;
+}
+
+.svc-img {
+  width: 100%;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* --- عكس الاتجاه (للأقسام 2 و 4) --- */
+/* في الـ RTL، الفليكس العادي يضع العنصر الأول (النص) على اليمين. 
+   لجعل الصورة على اليمين والنص على اليسار نستخدم row-reverse */
+.svc-reverse .svc-container {
+  flex-direction: row-reverse;
+}
+
+/* --- التجاوب مع الشاشات المتوسطة والصغيرة --- */
+@media (max-width: 900px) {
+  .svc-container,
+  .svc-reverse .svc-container {
+    flex-direction: column; /* تصبح الصورة فوق النص في الجوال */
+  }
+
+  .svc-image-wrapper {
+    width: 100%;
+  }
+
+  .svc-img {
+    height: 300px;
+  }
+
+  .svc-main-header h1 {
+    font-size: 32px;
+  }
+
+  .svc-content h2 {
+    font-size: 26px;
+  }
+}

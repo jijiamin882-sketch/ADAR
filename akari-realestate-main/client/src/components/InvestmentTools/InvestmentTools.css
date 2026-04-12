@@ -1,0 +1,109 @@
+.inv-tools-section {
+  direction: rtl;
+  min-height: 80vh;
+  background-color: #f9fafb;
+  font-family: 'Tajawal', 'Segoe UI', sans-serif;
+  color: #1f2937;
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+
+.inv-tools-header {
+  text-align: center;
+  padding: 0 20px 60px 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.inv-tools-header h1 {
+  font-size: 42px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 20px;
+}
+
+.inv-tools-header p {
+  font-size: 18px;
+  color: #6b7280;
+  line-height: 1.7;
+}
+
+.inv-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.inv-tools-card {
+  background-color: white;
+  border: 1px solid #f3f4f6;
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.inv-tools-card:hover {
+  border-color: transparent;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px);
+}
+
+.inv-icon-box {
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px auto;
+  font-size: 32px;
+  transition: transform 0.3s ease;
+}
+
+.inv-tools-card:hover .inv-icon-box {
+  transform: scale(1.1);
+}
+
+.icon-bg-blue { background-color: #eff6ff; color: #2563eb; }
+.icon-bg-green { background-color: #ecfdf5; color: #059669; }
+.icon-bg-purple { background-color: #faf5ff; color: #9333ea; }
+
+.inv-tools-card h3 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.inv-tools-card p {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+
+.inv-card-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  transition: color 0.2s;
+}
+
+.inv-tools-card:hover .inv-card-link { color: #2563eb; }
+.inv-link-arrow { transition: transform 0.2s; }
+.inv-tools-card:hover .inv-link-arrow { transform: translateX(-4px); }
+
+@media (max-width: 768px) {
+  .inv-tools-header h1 { font-size: 28px; }
+  .inv-tools-header p { font-size: 15px; }
+  .inv-tools-grid { grid-template-columns: 1fr; gap: 20px; }
+}

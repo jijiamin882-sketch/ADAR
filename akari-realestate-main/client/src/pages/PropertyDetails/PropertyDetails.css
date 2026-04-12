@@ -1,0 +1,522 @@
+/* ==========================================
+   صفحة تفاصيل العقار
+   ========================================== */
+.pd-wrapper {
+  min-height: 100vh;
+  background: #0d1117;
+  padding-top: 3.5rem;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+  color: #fff;
+}
+
+.pd-container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* === أعلى الصفحة === */
+.pd-top-section {
+  background: rgba(22, 28, 36, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 24px 0;
+}
+
+.pd-back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  font-size: 14px;
+  margin-bottom: 20px;
+  transition: color 0.3s ease;
+}
+.pd-back-btn:hover { color: #f1c991; }
+
+.pd-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.pd-badges {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.pd-type-badge, .pd-for-badge {
+  padding: 4px 14px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pd-type-badge {
+  background: rgba(241, 201, 145, 0.15);
+  color: #f1c991;
+}
+
+.pd-for-badge {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+.pd-title-row h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+
+.pd-location {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+}
+
+.pd-price-actions {
+  text-align: left;
+  flex-shrink: 0;
+}
+
+.pd-price {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #f1c991;
+  margin-bottom: 16px;
+}
+
+.pd-action-btns {
+  display: flex;
+  gap: 10px;
+}
+
+.pd-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.pd-action-btn:hover { border-color: #f1c991; color: #f1c991; }
+.pd-action-btn.fav { background: #f1c991; color: #161c24; border-color: #f1c991; }
+
+/* === الشبكة الرئيسية === */
+.pd-main-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 30px;
+  padding-top: 30px;
+  padding-bottom: 80px;
+}
+
+/* === معرض الصور === */
+.pd-gallery {
+  margin-bottom: 24px;
+}
+
+.pd-main-image {
+  position: relative;
+  width: 100%;
+  height: 450px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.pd-main-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pd-img-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(22, 28, 36, 0.7);
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: background 0.3s ease;
+}
+.pd-img-nav:hover { background: rgba(22, 28, 36, 0.9); }
+.pd-img-nav.prev { right: 16px; }
+.pd-img-nav.next { left: 16px; }
+
+.pd-img-counter {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(0,0,0,0.6);
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 13px;
+}
+
+.pd-thumbnails {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+}
+
+.pd-thumb {
+  width: 100px;
+  height: 70px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.pd-thumb.active { border-color: #f1c991; opacity: 1; }
+.pd-thumb:hover { opacity: 0.9; }
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* === تفاصيل سريعة === */
+.pd-quick-details {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 30px;
+}
+
+.pd-qd-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(22, 28, 36, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.pd-qd-icon { color: #f1c991; font-size: 20px; }
+.pd-qd-item strong { display: block; font-size: 16px; }
+.pd-qd-item span { font-size: 12px; color: rgba(255,255,255,0.5); }
+
+/* === الأقسام === */
+.pd-section {
+  margin-bottom: 30px;
+}
+
+.pd-section h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pd-section p {
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.9;
+  font-size: 15px;
+}
+
+.pd-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.pd-feature-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.pd-feat-icon { color: #f1c991; font-size: 18px; flex-shrink: 0; }
+
+/* === الخريطة === */
+.pd-map-container {
+  height: 350px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pd-leaflet-map {
+  width: 100%;
+  height: 100%;
+}
+
+/* === بطاقة الوكيل (العمود الأيمن) === */
+.pd-agent-card {
+  background: rgba(22, 28, 36, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  position: sticky;
+  top: 5rem;
+}
+
+.pd-agent-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.pd-agent-img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(241, 201, 145, 0.2);
+}
+
+.pd-agent-header h4 { font-size: 16px; }
+.pd-agent-header span { font-size: 13px; color: rgba(255,255,255,0.5); }
+
+.pd-agent-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.pd-agent-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.pd-agent-btn.primary {
+  background: #f1c991;
+  color: #161c24;
+}
+.pd-agent-btn.primary:hover { background: #e5b870; }
+
+.pd-agent-btn.whatsapp {
+  background: #f1c991;
+  color: #fff;
+}
+.pd-agent-btn.whatsapp:hover { background: #1da851; }
+
+/* نموذج التواصل */
+.pd-contact-form {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 24px;
+}
+
+.pd-contact-form h4 { margin-bottom: 16px; font-size: 16px; }
+
+.pd-contact-form input,
+.pd-contact-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  resize: none;
+  transition: border-color 0.3s ease;
+}
+
+.pd-contact-form input:focus,
+.pd-contact-form textarea:focus {
+  outline: none;
+  border-color: rgba(241, 201, 145, 0.4);
+}
+
+.pd-contact-form button {
+  width: 100%;
+  padding: 14px;
+  background: rgba(241, 201, 145, 0.1);
+  border: 1px solid rgba(241, 201, 145, 0.2);
+  border-radius: 8px;
+  color: #f1c991;
+  font-weight: 700;
+  font-size: 15px;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.pd-contact-form button:hover {
+  background: #f1c991;
+  color: #161c24;
+}
+
+/* === Responsive === */
+@media (max-width: 1024px) {
+  .pd-main-grid {
+    grid-template-columns: 1fr;
+  }
+  .pd-agent-card {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .pd-title-row {
+    flex-direction: column;
+  }
+  .pd-price-actions {
+    text-align: right;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .pd-main-image { height: 280px; }
+  .pd-quick-details { grid-template-columns: repeat(2, 1fr); }
+  .pd-features-grid { grid-template-columns: 1fr; }
+}
+ 
+/* ==========================================
+   فلاتر متدرج احترافي (Step Filters)
+   ========================================== */
+.props-filters-stepped {
+  margin-top: 20px;
+}
+
+/* === الصف الأول (الهدف) === */
+.props-step-1 {
+  display: flex;
+  gap: 0;
+  background: rgba(22, 28, 36, 0.6);
+  border-radius: 14px;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  width: fit-content;
+}
+
+.step-1-btn {
+  padding: 12px 32px;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.3s ease;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.step-1-btn:hover { color: rgba(255, 255, 255, 0.8); }
+
+.step-1-btn.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* تلوين مخصص عند التفعيل */
+.step-1-btn.sale.active {
+  background: rgba(241, 201, 145, 0.15);
+  color: #f1c991;
+}
+.step-1-btn.rent.active {
+  background: rgba(241, 201, 145, 0.15);
+  color: #f1c991;
+}
+
+/* === الصف الثاني (النوع) - مخفي بسلاسة === */
+.props-step-2-wrapper {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), margin-top 0.3s ease;
+  margin-top: 0;
+}
+
+.props-step-2-wrapper.show {
+  max-height: 100px;
+  margin-top: 16px;
+}
+
+.props-step-2 {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.step-2-btn {
+  padding: 8px 22px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.25s ease;
+}
+
+.step-2-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+/* تلوين الأزرار النشطة حسب نوع الصف الأول */
+.props-step-1 .sale.active ~ .props-step-2-wrapper .step-2-btn.active {
+  /* تم استخدام CSS المتقدم لتلوين حسب السياق */
+}
+
+/* حل بسيط وأنيق للتلوين (باستخدام كلاس على المكون الرئيسي) */
+.props-filters-stepped:has(.sale.active) .step-2-btn.active {
+  background: rgba(241, 201, 145, 0.15);
+  border-color: rgba(241, 201, 145, 0.3);
+  color: #f1c991;
+}
+
+.props-filters-stepped:has(.rent.active) .step-2-btn.active {
+  background: rgba(241, 201, 145, 0.15);
+  border-color: rgba(241, 201, 145, 0.3);
+  color: #f1c991;
+}
+
+/* Responsive للهاتف */
+@media (max-width: 768px) {
+  .props-step-1 {
+    width: 100%;
+    justify-content: center;
+  }
+  .step-1-btn {
+    flex: 1;
+    padding: 12px 10px;
+    font-size: 14px;
+  }
+  .props-step-2 {
+    justify-content: center;
+  }
+}

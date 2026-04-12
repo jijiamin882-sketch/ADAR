@@ -22,6 +22,7 @@ export const storage = getStorage(app);
 export const db = getDatabase(app);      // هذا سيعيد الوكالات والعقارات للعمل فوراً
 export const auth = getAuth(app);
 
+
 // التصدير الخاص بصفحة "إضافة إعلان" الجديدة (بأسماء مختلفة لتجنب التضارب):
 export const firestoreDB = getFirestore(app); 
 export const imageStorage = getStorage(app);

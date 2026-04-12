@@ -1,0 +1,262 @@
+/* ========================================
+   Auth Modal Styles (Realtor Style)
+   ======================================== */
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+  border-radius: 10px;
+  
+  
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* الصندوق الرئيسي */
+.auth-modal-box {
+  background: #ffffff;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 500px;
+  padding: 2rem 2rem;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease;
+  direction: rtl;
+  font-family: 'Tajawal', 'Cairo', sans-serif;
+  height: 598px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* زر الإغلاق */
+.auth-close-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  background: none;
+  border: none;
+  font-size: 1.3rem;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-close-btn:hover {
+  background: #f3f4f6;
+  color: #161c24;
+}
+
+/* العنوان */
+.auth-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #161c24;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* حقل الإيميل */
+.auth-input-group {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid #d1d5db;
+  border-radius: 10px;
+  padding: 0 15px;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.auth-input-group:focus-within {
+  border-color: #f1c991;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(241, 201, 145, 0.15);
+}
+
+.auth-input-icon {
+  color: #9ca3af;
+  font-size: 1.1rem;
+  margin-left: 10px;
+}
+
+.auth-input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  padding: 14px 0;
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: #161c24;
+}
+
+.auth-input-group input::placeholder {
+  color: #9ca3af;
+}
+
+/* زر المتابعة (ذهبي) */
+.auth-continue-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #c9963a, #f1c991);
+  color: #161c24;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+}
+
+.auth-continue-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(241, 201, 145, 0.35);
+}
+
+/* الفاصل */
+.auth-divider {
+  display: flex;
+  align-items: center;
+  margin: 1.5rem 0;
+  gap: 15px;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.auth-divider span {
+  font-size: 0.8rem;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+/* أزرار التواصل الاجتماعي */
+.auth-social-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.auth-social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.social-icon {
+  font-size: 1.2rem;
+}
+
+/* جوجل */
+.auth-social-btn.google {
+  background: #fff;
+  color: #333;
+  border: 1.5px solid #dadce0;
+}
+.auth-social-btn.google:hover {
+  background: #f8f9fa;
+  border-color: #c0c0c0;
+}
+
+/* فيسبوك */
+.auth-social-btn.facebook {
+  background: #1877F2;
+  color: #fff;
+  border: none;
+}
+.auth-social-btn.facebook:hover {
+  background: #166fe5;
+}
+
+/* أبل */
+.auth-social-btn.apple {
+  background: #000;
+  color: #fff;
+  border: none;
+}
+.auth-social-btn.apple:hover {
+  background: #333;
+}
+
+/* رابط الوكلاء */
+.auth-agent-link {
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: #4b5563;
+}
+
+.auth-agent-link a {
+  color: #c9963a;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.auth-agent-link a:hover {
+  text-decoration: underline;
+}
+
+/* الشروط */
+.auth-terms {
+  text-align: center;
+  font-size: 0.75rem;
+  color: #9ca3af;
+  margin-top: 1.5rem;
+  line-height: 1.6;
+}
+
+.auth-terms a {
+  color: #6b7280;
+  text-decoration: underline;
+}
+
+/* التجاوب */
+@media (max-width: 480px) {
+  .auth-modal-box {
+    padding: 2rem 1.5rem;
+  }
+  .auth-title {
+    font-size: 1.3rem;
+  }
+}

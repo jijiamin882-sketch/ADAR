@@ -1,0 +1,305 @@
+/* ==========================================
+   صفحة المفضلة - النسخة النهائية
+   ========================================== */
+/* ==========================================
+   صفحة المفضلة - خلفية جديدة
+   ========================================== */
+.favorites-page {
+  min-height: 100vh;
+  background: #0a0604;
+  margin-top: 3.5rem;
+  padding: 40px 0;
+  direction: rtl;
+  position: relative;
+  overflow: hidden;
+}
+
+/* --- الصورة الخلفية --- */
+.favorites-page::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('./hero.jpg') center center / cover no-repeat;
+  opacity: 0.08;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* --- تدرج لوني فوق الصورة --- */
+.favorites-page::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  
+  background-color: linear-gradient(
+    160deg,
+    rgba(10, 6, 4, 0.95) 0%,
+    rgba(22, 28, 36, 0.92) 40%,
+    rgba(10, 6, 4, 0.98) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+.favorites-page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.favorites-page-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* --- العنوان --- */
+.favorites-page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.favorites-page-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  background: rgba(227, 192, 141, 0.1);
+  border: 1px solid rgba(227, 192, 141, 0.15);
+  border-radius: 50px;
+  color: #e3c08d;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.favorites-page-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0 0 8px 0;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.favorites-page-header p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+}
+
+.favorites-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e3c08d;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 20px;
+  border: 1px solid rgba(227, 192, 141, 0.2);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.favorites-back-btn:hover {
+  background: #e3c08d;
+  color: #0e0806;
+  border-color: #e3c08d;
+}
+
+/* --- الحالة الفارغة --- */
+.favorites-empty {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.favorites-empty-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: rgba(227, 192, 141, 0.1);
+  color: rgba(227, 192, 141, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 24px;
+}
+
+.favorites-empty h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.favorites-empty p {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 24px 0;
+}
+
+.favorites-browse-btn {
+  display: inline-block;
+  padding: 12px 30px;
+  background: #e3c08d;
+  color: #0e0806;
+  text-decoration: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+  cursor: pointer;
+  border: none;
+}
+
+.favorites-browse-btn:hover {
+  background: #d4ae7a;
+  transform: translateY(-2px);
+}
+
+/* --- قائمة المفضلات --- */
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.favorite-list-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(22, 28, 36, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 16px;
+  transition: all 0.3s ease;
+}
+
+.favorite-list-card:hover {
+  border-color: rgba(227, 192, 141, 0.2);
+  transform: translateY(-2px);
+}
+
+.favorite-list-img {
+  width: 180px;
+  height: 130px;
+  border-radius: 12px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.favorite-list-info {
+  flex: 1;
+}
+
+.favorite-list-type {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(227, 192, 141, 0.1);
+  color: #e3c08d;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.favorite-list-info h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.favorite-list-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 10px 0;
+}
+
+.favorite-list-details {
+  display: flex;
+  gap: 16px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.favorite-list-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.favorite-list-price {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #e3c08d;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.favorite-list-remove {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(231, 76, 60, 0.1);
+  border: 1px solid rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Tajawal', sans-serif;
+}
+
+.favorite-list-remove:hover {
+  background: #e74c3c;
+  color: white;
+  border-color: #e74c3c;
+}
+
+/* --- تجاوب --- */
+@media (max-width: 768px) {
+  .favorites-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .favorite-list-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .favorite-list-img {
+    width: 100%;
+    height: 180px;
+  }
+
+  .favorite-list-actions {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

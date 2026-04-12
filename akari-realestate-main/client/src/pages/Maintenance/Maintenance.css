@@ -1,0 +1,205 @@
+.maintenance-page-wrapper {
+  direction: rtl;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Tajawal', sans-serif;
+  padding-bottom: 60px; /* مسافة مريحة عن الفوتر */
+}
+
+/* --- واجهة الهيرو --- */
+.maintenance-hero {
+  background-color: rgba(22, 28, 36, 1);
+  padding: 100px 20px;
+  text-align: center;
+  color: white;
+}
+
+.maintenance-hero-icon {
+  width: 80px;
+  height: 80px;
+  background-color: rgba(227, 192, 141, 0.15);
+  color: #e3c08d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  margin: 0 auto 25px auto;
+}
+
+.maintenance-hero h1 {
+  font-size: 36px;
+  color: #e3c08d;
+  margin-bottom: 15px;
+}
+
+.maintenance-hero p {
+  font-size: 17px;
+  color: #a0a0a0;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* --- المحتوى --- */
+.maintenance-content-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+.maintenance-section-box {
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+  margin-bottom: 40px;
+}
+
+.maintenance-section-box h2 {
+  font-size: 24px;
+  color: rgba(22, 28, 36, 1);
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+/* شبكة المميزات */
+.maintenance-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.maintenance-feature-item {
+  text-align: center;
+  padding: 20px;
+}
+
+.maintenance-feat-icon {
+  font-size: 32px;
+  color: #e3c08d;
+  margin-bottom: 15px;
+}
+
+.maintenance-feature-item h3 {
+  font-size: 18px;
+  color: #1a1a1a;
+  margin-bottom: 10px;
+}
+
+.maintenance-feature-item p {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.7;
+}
+
+/* خطوات العمل */
+.maintenance-steps-flex {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.maintenance-step {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+  position: relative;
+}
+
+.maintenance-step-num {
+  width: 40px;
+  height: 40px;
+  background-color: rgba(22, 28, 36, 1);
+  color: #e3c08d;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  margin: 0 auto 15px auto;
+}
+
+.maintenance-step h4 {
+  font-size: 17px;
+  color: #1a1a1a;
+  margin-bottom: 8px;
+}
+
+.maintenance-step p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+  padding: 0 10px;
+}
+
+.maintenance-step-arrow {
+  font-size: 24px;
+  color: #ccc;
+  margin-top: 10px;
+}
+
+/* أزرار الأسفل */
+.maintenance-actions-bar {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px 0 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.maintenance-back-btn {
+  padding: 12px 30px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  color: #333;
+}
+
+.maintenance-back-btn:hover { background: #f3f4f6; }
+
+.maintenance-cta-btn {
+  padding: 12px 30px;
+  border: none;
+  background-color: #e3c08d;
+  color: rgba(22, 28, 36, 1);
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.maintenance-cta-btn:hover { background-color: #d4ae7a; }
+
+/* --- الـ Modal (نفس تصميم الموثقون لعدم تكرار الأكواد) --- */
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 9999; }
+.modal-box { background: white; width: 90%; max-width: 500px; border-radius: 16px; padding: 30px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); position: relative; animation: fadeInModal 0.3s ease-out; }
+@keyframes fadeInModal { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.modal-header h3 { font-size: 22px; color: rgba(22, 28, 36, 1); }
+.modal-close-icon { font-size: 24px; color: #999; cursor: pointer; transition: 0.2s; }
+.modal-close-icon:hover { color: #333; }
+.modal-subtitle { font-size: 14px; color: #777; margin-bottom: 25px; line-height: 1.6; }
+.modal-form { display: flex; flex-direction: column; gap: 15px; }
+.modal-form input, .modal-form textarea, .modal-form select { width: 100%; padding: 12px 16px; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'Tajawal', sans-serif; font-size: 15px; outline: none; transition: border-color 0.2s; background-color: #f9fafb; color: #333; }
+.modal-form input:focus, .modal-form textarea:focus, .modal-form select:focus { border-color: #e3c08d; background-color: white; }
+.modal-form textarea { resize: vertical; }
+.modal-actions { display: flex; gap: 15px; margin-top: 10px; }
+.modal-cancel-btn { flex: 1; padding: 12px; border: 1px solid #ddd; background: white; border-radius: 8px; font-weight: bold; cursor: pointer; color: #555; transition: 0.2s; }
+.modal-cancel-btn:hover { background: #f3f4f6; }
+.modal-submit-btn { flex: 1; padding: 12px; border: none; background-color: #e3c08d; color: rgba(22, 28, 36, 1); border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+.modal-submit-btn:hover { background-color: #d4ae7a; }
+
+@media (max-width: 768px) {
+  .maintenance-actions-bar { flex-direction: column; }
+  .maintenance-step-arrow { display: none; }
+  .modal-box { width: 95%; padding: 20px; }
+}
