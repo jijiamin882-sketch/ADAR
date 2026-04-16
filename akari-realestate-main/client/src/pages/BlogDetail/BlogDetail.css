@@ -1,0 +1,115 @@
+/* BlogDetail.css */
+
+.detail-hero {
+  height: 60vh;
+  min-height: 400px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.detail-hero-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, #0d1117 0%, rgba(13, 17, 23, 0.8) 50%, rgba(13, 17, 23, 0) 100%);
+  padding: 40px 0 60px;
+}
+
+.detail-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+}
+
+.detail-category {
+  color: #f1c991;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.detail-title {
+  font-size: 2.5rem;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 15px;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.detail-separator {
+  margin: 0 10px;
+  color: #f1c991;
+}
+
+/* --- جسم المقال --- */
+.detail-content-wrapper {
+  background: #161c24;
+  padding: 40px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detail-body {
+  font-family: 'Tajawal', sans-serif;
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.detail-body p {
+  margin-bottom: 25px;
+}
+
+.detail-body h3 {
+  color: #f1c991;
+  font-size: 1.6rem;
+  margin-top: 40px;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.detail-footer {
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.back-button {
+  display: inline-block;
+  background: rgba(241, 201, 145, 0.1);
+  color: #f1c991;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.back-button:hover {
+  background: #f1c991;
+  color: #161c24;
+}
+
+/* التجاوب */
+@media (max-width: 768px) {
+  .detail-hero { height: 50vh; }
+  .detail-title { font-size: 1.8rem; }
+  .detail-content-wrapper { padding: 25px; }
+  .detail-body { font-size: 1rem; }
+}

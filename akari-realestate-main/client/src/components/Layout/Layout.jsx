@@ -41,13 +41,23 @@ const Layout = () => {
   }, [isAuthenticated]);
 
   return (
-    <>
-      <div style={{ background: "var(--black)", overflow: "hidden" }}>
+     <div className="layout-container">
+      <div className="wrapper">
+        {/* الهيدر ثابت دائماً */}
         <Header />
-        <Outlet />
+        
+        {/* 2. هذا هو الجزء الأهم: الـ Outlet هو الذي سيُظهر المدونة أو الرئيسية أو غيرها */}
+        <main className="main-content">
+           <Outlet />
+        </main>
       </div>
+
+      {/* الفوتر */}
       <Footer />
-    </>
+
+      {/* الأزرار العائمة إذا وجدت */}
+      {/* <ChatButtons /> */}
+    </div>
   );
 };
 

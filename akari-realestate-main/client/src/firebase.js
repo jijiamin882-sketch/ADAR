@@ -4,25 +4,24 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
+// ==========================================
+// استبدلنا هذا الجزء فقط ببياناتك الجديدة
+// ==========================================
 const firebaseConfig = {
-  apiKey: "AIzaSyA_4R6WhQbcr-7KTl_mX2fFGjTRlRDFewE",
-  authDomain: "akari-realestate.firebaseapp.com",
-  databaseURL: "https://akari-realestate-default-rtdb.firebaseio.com", 
-  projectId: "akari-realestate",
-  storageBucket: "akari-realestate.appspot.com",
-  messagingSenderId: "771995711830",
-  appId: "1:771995711830:web:5b771c99a76e505d42fef7"
+  apiKey: "AIzaSyAi9tA04LMnzlqCCtfypzeFBVyJ6zB_QEE",
+  authDomain: "adar-real-estate-4de68.firebaseapp.com",
+  projectId: "adar-real-estate-4de68",
+  storageBucket: "adar-real-estate-4de68.firebasestorage.app",
+  messagingSenderId: "839321922914",
+  appId: "1:839321922914:web:ab97b57daaf4edfb8f103b"
 };
+// ==========================================
 
 const app = initializeApp(firebaseConfig);
-// أضيفي هذا السطر إذا كان ناقصاً
-export const storage = getStorage(app);
 
-// التصدير الذي يعيد الحياة لصفحاتك القديمة:
-export const db = getDatabase(app);      // هذا سيعيد الوكالات والعقارات للعمل فوراً
+// التصدير (لا تغير فيها شيئاً لكي يعمل الموقع)
+ 
+export const db = getDatabase(app);      
 export const auth = getAuth(app);
-
-
-// التصدير الخاص بصفحة "إضافة إعلان" الجديدة (بأسماء مختلفة لتجنب التضارب):
 export const firestoreDB = getFirestore(app); 
 export const imageStorage = getStorage(app);

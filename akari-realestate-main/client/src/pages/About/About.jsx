@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FiTarget,
@@ -13,12 +13,29 @@ import {
   FiLinkedin,
   FiTwitter,
   FiMail,
+  FiX,
+  FiSend,
+  FiUser,
+  FiPhone,
+  FiMessageSquare,
 } from "react-icons/fi";
 import "./About.css";
 
 const About = () => {
   const navigate = useNavigate();
   const sectionsRef = useRef([]);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    subject: "",
+    message: "",
+  });
+  const [formErrors, setFormErrors] = useState({});
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const modalRef = useRef(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -39,9 +56,83 @@ const About = () => {
     return () => observer.disconnect();
   }, []);
 
+  // إغلاق النافذة بالضغط على Escape
+  useEffect(() => {
+    const handleEsc = (e) => {
+      if (e.key === "Escape") closeModal();
+    };
+    if (showContactModal) {
+      document.addEventListener("keydown", handleEsc);
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.removeEventListener("keydown", handleEsc);
+      document.body.style.overflow = "";
+    };
+  }, [showContactModal]);
+
   const addToRefs = (el) => {
     if (el && !sectionsRef.current.includes(el)) {
       sectionsRef.current.push(el);
+    }
+  };
+
+  const openModal = () => {
+    setShowContactModal(true);
+    setFormSubmitted(false);
+    setFormData({ name: "", email: "", phone: "", subject: "", message: "" });
+    setFormErrors({});
+  };
+
+  const closeModal = () => {
+    setShowContactModal(false);
+  };
+
+  const handleOverlayClick = (e) => {
+    if (e.target === modalRef.current) {
+      closeModal();
+    }
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = "الاسم مطلوب";
+    if (!formData.email.trim()) {
+      errors.email = "البريد الإلكتروني مطلوب";
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      errors.email = "بريد إلكتروني غير صالح";
+    }
+    if (!formData.phone.trim()) {
+      errors.phone = "رقم الهاتف مطلوب";
+    } else if (!/^[\d\s+]{8,15}$/.test(formData.phone)) {
+      errors.phone = "رقم هاتف غير صالح";
+    }
+    if (!formData.subject.trim()) errors.subject = "الموضوع مطلوب";
+    if (!formData.message.trim()) errors.message = "الرسالة مطلوبة";
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setIsSending(true);
+    // محاكاة إرسال البيانات
+    setTimeout(() => {
+      setIsSending(false);
+      setFormSubmitted(true);
+    }, 1500);
+  };
+
+  const handleInputChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (formErrors[field]) {
+      setFormErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
 
@@ -249,10 +340,7 @@ const About = () => {
             </div>
             <div className="vision-content">
               <span className="section-badge">رؤيتنا</span>
-              <h2
-                className="section-title"
-                style={{ textAlign: "right" }}
-              >
+              <h2 className="section-title" style={{ textAlign: "right" }}>
                 نحو مستقبل عقاري رقمي
               </h2>
               <p className="vision-text">
@@ -290,10 +378,7 @@ const About = () => {
           <div className="mission-wrapper">
             <div className="mission-content">
               <span className="section-badge">رسالتنا</span>
-              <h2
-                className="section-title"
-                style={{ textAlign: "right" }}
-              >
+              <h2 className="section-title" style={{ textAlign: "right" }}>
                 ما نعمل من أجله
               </h2>
               <p className="mission-text">
@@ -412,15 +497,11 @@ const About = () => {
               </div>
             ))}
           </div>
-          <div className="partners-cta">
-            <p>هل تريد أن تكون شريكاً معنا؟</p>
-            <button
-              className="partners-cta-btn"
-              onClick={() => navigate("/contact")}
-            >
+           
+            <button className="partners-cta-btn" onClick={openModal}>
               تواصل معنا الآن
             </button>
-          </div>
+         
         </div>
       </section>
 
@@ -432,8 +513,7 @@ const About = () => {
             className="section-subtitle"
             style={{ maxWidth: "600px", margin: "0 auto 2rem" }}
           >
-            ابدأ الآن واكتشف آلاف العقارات المتاحة عبر جميع ولايات
-            الجزائر
+            ابدأ الآن واكتشف آلاف العقارات المتاحة عبر جميع ولايات الجزائر
           </p>
           <div className="about-back-buttons">
             <button
@@ -451,6 +531,186 @@ const About = () => {
           </div>
         </div>
       </section>
+
+      {/* ===== نافذة التواصل المنبثقة ===== */}
+      {showContactModal && (
+        <div
+          className="contact-modal-overlay"
+          ref={modalRef}
+          onClick={handleOverlayClick}
+        >
+          <div className="contact-modal">
+            {/* رأس النافذة */}
+            <div className="contact-modal-header">
+              <div className="contact-modal-header-content">
+                <div className="contact-modal-icon">
+                  <FiMail />
+                </div>
+                <div>
+                  <h2>تواصل معنا</h2>
+                  <p>نحن هنا لمساعدتك، أرسل لنا رسالتك وسنرد عليك في أقرب وقت</p>
+                </div>
+              </div>
+              <button className="contact-modal-close" onClick={closeModal}>
+                <FiX />
+              </button>
+            </div>
+
+            {/* محتوى النافذة */}
+            <div className="contact-modal-body">
+              {!formSubmitted ? (
+                <form className="contact-modal-form" onSubmit={handleSubmit} noValidate>
+                  {/* الاسم */}
+                  <div className={`contact-form-group ${formErrors.name ? "has-error" : ""}`}>
+                    <label htmlFor="contact-name">
+                      <FiUser /> الاسم الكامل
+                    </label>
+                    <input
+                      id="contact-name"
+                      type="text"
+                      placeholder="أدخل اسمك الكامل"
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      className="contact-form-input"
+                    />
+                    {formErrors.name && (
+                      <span className="contact-form-error">{formErrors.name}</span>
+                    )}
+                  </div>
+
+                  {/* البريد الإلكتروني */}
+                  <div className={`contact-form-group ${formErrors.email ? "has-error" : ""}`}>
+                    <label htmlFor="contact-email">
+                      <FiMail /> البريد الإلكتروني
+                    </label>
+                    <input
+                      id="contact-email"
+                      type="email"
+                      placeholder="example@email.com"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      className="contact-form-input"
+                      dir="ltr"
+                      style={{ textAlign: "right" }}
+                    />
+                    {formErrors.email && (
+                      <span className="contact-form-error">{formErrors.email}</span>
+                    )}
+                  </div>
+
+                  {/* رقم الهاتف */}
+                  <div className={`contact-form-group ${formErrors.phone ? "has-error" : ""}`}>
+                    <label htmlFor="contact-phone">
+                      <FiPhone /> رقم الهاتف
+                    </label>
+                    <input
+                      id="contact-phone"
+                      type="tel"
+                      placeholder="0XXXXXXXXX"
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      className="contact-form-input"
+                      dir="ltr"
+                      style={{ textAlign: "right" }}
+                    />
+                    {formErrors.phone && (
+                      <span className="contact-form-error">{formErrors.phone}</span>
+                    )}
+                  </div>
+
+                  {/* الموضوع */}
+                  <div className={`contact-form-group ${formErrors.subject ? "has-error" : ""}`}>
+                    <label htmlFor="contact-subject">
+                      <FiTarget /> الموضوع
+                    </label>
+                    <select
+                      id="contact-subject"
+                      value={formData.subject}
+                      onChange={(e) => handleInputChange("subject", e.target.value)}
+                      className="contact-form-input contact-form-select"
+                    >
+                      <option value="">اختر موضوع الرسالة</option>
+                      <option value="partnership">طلب شراكة</option>
+                      <option value="support">دعم فني</option>
+                      <option value="inquiry">استفسار عام</option>
+                      <option value="complaint">شكوى أو اقتراح</option>
+                      <option value="other">أخرى</option>
+                    </select>
+                    {formErrors.subject && (
+                      <span className="contact-form-error">{formErrors.subject}</span>
+                    )}
+                  </div>
+
+                  {/* الرسالة */}
+                  <div className={`contact-form-group ${formErrors.message ? "has-error" : ""}`}>
+                    <label htmlFor="contact-message">
+                      <FiMessageSquare /> الرسالة
+                    </label>
+                    <textarea
+                      id="contact-message"
+                      rows="4"
+                      placeholder="اكتب رسالتك هنا..."
+                      value={formData.message}
+                      onChange={(e) => handleInputChange("message", e.target.value)}
+                      className="contact-form-input contact-form-textarea"
+                    ></textarea>
+                    {formErrors.message && (
+                      <span className="contact-form-error">{formErrors.message}</span>
+                    )}
+                  </div>
+
+                  {/* زر الإرسال */}
+                  <button
+                    type="submit"
+                    className="contact-modal-submit"
+                    disabled={isSending}
+                  >
+                    {isSending ? (
+                      <>
+                        <span className="contact-spinner"></span>
+                        جاري الإرسال...
+                      </>
+                    ) : (
+                      <>
+                        <FiSend /> إرسال الرسالة
+                      </>
+                    )}
+                  </button>
+                </form>
+              ) : (
+                <div className="contact-modal-success">
+                  <div className="success-icon-wrapper">
+                    <div className="success-checkmark">
+                      <svg viewBox="0 0 52 52" className="checkmark-svg">
+                        <circle
+                          className="checkmark-circle"
+                          cx="26"
+                          cy="26"
+                          r="25"
+                          fill="none"
+                        />
+                        <path
+                          className="checkmark-check"
+                          fill="none"
+                          d="M14.1 27.2l7.1 7.2 16.7-16.8"
+                        />
+                      </svg>
+                    </div>
+                  </div>
+                  <h3>تم الإرسال بنجاح!</h3>
+                  <p>
+                    شكراً لتواصلك معنا. سنقوم بمراجعة رسالتك والرد عليك في
+                    أقرب وقت ممكن خلال 24 ساعة.
+                  </p>
+                  <button className="contact-modal-submit" onClick={closeModal}>
+                    حسناً، فهمت
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

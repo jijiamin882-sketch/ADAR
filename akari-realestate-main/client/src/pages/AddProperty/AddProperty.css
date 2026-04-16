@@ -1,47 +1,242 @@
-.add-property-wrapper {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    align-items: center;
-    min-height: 80vh;
+/* ==========================================
+   صفحة إضافة عقار
+   ========================================== */
+/* === تأكد أن هذه الأسطر موجودة في أعلى الملف === */
+.add-prop-wrapper {
+  min-height: 100vh;
+  background: #0d1117;
+  padding-top: 3.5rem;
+  font-family: 'Tajawal', sans-serif;
+  direction: rtl;
+  color: #fff;
 }
 
-.add-form {
-    width: 100%;
-    max-width: 600px;
-    background: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
-    gap: 1.2rem;
+.add-prop-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px 100px;
 }
 
-.add-form input, .add-form textarea {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    font-family: 'Cairo', sans-serif;
+/* الهيدر */
+.add-prop-header {
+  margin-bottom: 40px;
 }
 
-.facilities-input {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 10px;
-    width: 100%;
+.add-prop-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.5);
+  font-size: 14px;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  margin-bottom: 16px;
+}
+.add-prop-back:hover { color: #f1c991; }
+
+.add-prop-header h1 { font-size: 2rem; margin-bottom: 8px; }
+.add-prop-header p { color: rgba(255,255,255,0.5); }
+
+/* أشرطة التقدم */
+.add-prop-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 50px;
+  background: rgba(22, 28, 36, 0.5);
+  border-radius: 16px;
+  padding: 24px 20px;
+  border: 1px solid rgba(255,255,255,0.05);
 }
 
-.add-form button {
-    margin-top: 1rem;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+.prop-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255,255,255,0.3);
+  transition: all 0.3s ease;
+  z-index: 2;
 }
 
-.add-form button:hover {
-    transform: scale(1.02);
+.prop-step.active { color: #f1c991; }
+
+.step-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  transition: all 0.3s ease;
 }
 
-.add-form button:disabled {
-    background: gray;
-    cursor: not-allowed;
+.prop-step.active .step-circle {
+  background: rgba(241, 201, 145, 0.15);
+  box-shadow: 0 0 20px rgba(241, 201, 145, 0.2);
+}
+
+.progress-line {
+  width: 80px;
+  height: 2px;
+  background: rgba(255,255,255,0.1);
+  margin: 0 12px;
+  margin-bottom: 30px;
+}
+
+/* النموذج */
+.add-prop-form {
+  background: rgba(22, 28, 36, 0.4);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-radius: 20px;
+  padding: 40px;
+}
+
+.form-step h2 { font-size: 1.5rem; margin-bottom: 24px; }
+.form-step .step-desc { color: rgba(255,255,255,0.4); margin-top: -16px; margin-bottom: 24px; font-size: 14px; }
+
+.form-group {
+  margin-bottom: 20px;
+  flex: 1;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  color: #fff;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: rgba(241, 201, 145, 0.4);
+  background: rgba(255,255,255,0.08);
+}
+
+.form-row {
+  display: flex;
+  gap: 20px;
+}
+
+/* زر البيع/الكراء */
+.toggle-group {
+  display: flex;
+  gap: 12px;
+}
+
+.toggle-btn {
+  flex: 1;
+  padding: 14px;
+  border-radius: 10px;
+  border: 2px solid rgba(255,255,255,0.1);
+  background: transparent;
+  color: rgba(255,255,255,0.5);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+  border-color: #f1c991;
+  background: rgba(241, 201, 145, 0.1);
+  color: #f1c991;
+}
+
+/* منطقة رفع الصور */
+.upload-area {
+  border: 2px dashed rgba(255,255,255,0.1);
+  border-radius: 16px;
+  padding: 60px 20px;
+  text-align: center;
+  color: rgba(255,255,255,0.4);
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+  border-color: rgba(241, 201, 145, 0.3);
+  background: rgba(241, 201, 145, 0.03);
+}
+
+.upload-area h3 { color: #fff; margin: 16px 0 8px; font-size: 18px; }
+
+.upload-btn {
+  margin-top: 16px;
+  padding: 12px 32px;
+  background: rgba(241, 201, 145, 0.1);
+  border: 1px solid rgba(241, 201, 145, 0.2);
+  border-radius: 50px;
+  color: #f1c991;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.3s ease;
+}
+.upload-btn:hover { background: #f1c991; color: #161c24; }
+
+/* أزرار التنقل */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.btn-primary, .btn-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: 'Tajawal', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background: #f1c991;
+  color: #161c24;
+  border: none;
+  margin-right: auto;
+}
+.btn-primary:hover { background: #e5b870; transform: translateY(-2px); }
+
+.btn-secondary {
+  background: transparent;
+  color: rgba(255,255,255,0.6);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.btn-secondary:hover { border-color: rgba(255,255,255,0.3); color: #fff; }
+
+@media (max-width: 768px) {
+  .form-row { flex-direction: column; gap: 0; }
+  .add-prop-progress { flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .progress-line { display: none; }
 }

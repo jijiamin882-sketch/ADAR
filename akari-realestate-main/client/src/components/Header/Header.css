@@ -63,11 +63,11 @@
 }
 
 .h-menu a.active {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .nav-dropdown-btn.active {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 /* ==========================================
@@ -78,7 +78,7 @@
 }
 
 .nav-item-wrapper:hover {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .nav-dropdown-btn {
@@ -94,7 +94,7 @@
 }
 
 .nav-dropdown-btn:hover {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .dropdown-arrow {
@@ -164,7 +164,7 @@
 .h-login-text {
   background: none;
   border: none;
-  color: #ce9c56;
+  color: #f1c994;
   font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
@@ -192,7 +192,7 @@
 }
 
 .h-login-text:hover {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .h-subscribe-btn {
@@ -200,9 +200,9 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #ce9c56;
+  background: #f1c994;
   color: #161c24;
-  border: 2px solid #ce9c56;
+  border: 2px solid #f1c994;
   padding: 8px 24px;
   border-radius: 50px;
   font-size: 0.9rem;
@@ -233,7 +233,7 @@
 
 .h-subscribe-btn:hover {
   color: #161c24;
-  border-color: #ce9c56;
+  border-color: #f1c994;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(241, 201, 145, 0.3);
 }
@@ -248,7 +248,7 @@
 }
 
 .button {
-  background: #ce9c56;
+  background: #f1c994;
   color: black;
   border-radius: 20px;
   border: 2px solid #d3ba5e;
@@ -265,7 +265,7 @@
   display: none;
   background: none;
   border: 1.5px solid rgba(241, 201, 145, 0.3);
-  color: #ce9c56;
+  color: #f1c994;
   cursor: pointer;
   padding: 8px 10px;
   border-radius: 10px;
@@ -288,7 +288,7 @@
   display: block;
   width: 20px;
   height: 2px;
-  background: #ce9c56;
+  background: #f1c994;
   border-radius: 2px;
   transition: all 0.3s ease;
 }
@@ -370,7 +370,7 @@
 
 .mobile-nav-link:hover,
 .mobile-nav-link.active {
-  color: #ce9c56;
+  color: #f1c994;
   background: rgba(241, 201, 145, 0.05);
 }
 
@@ -395,11 +395,11 @@
 }
 
 .mobile-accordion-header:hover {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .mobile-accordion-header.open {
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .mobile-accordion-header.open .dropdown-arrow {
@@ -448,7 +448,7 @@
   font-size: 16px;
   border: 1px solid rgba(241, 201, 145, 0.3);
   border-radius: 12px;
-  color: #ce9c56;
+  color: #f1c994;
 }
 
 .mobile-auth-section .h-login-text::after {

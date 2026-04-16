@@ -1,78 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import BlogCard from "../../components/BlogCard/BlogCard";
+import { Link } from "react-router-dom";
+import { blogData } from "../../blogData";// استيراد من الملف الجديد
 import "./Blog.css";
 
-// بيانات وهمية للمدونة (يمكنك استبدالها ببيانات من Firebase أو API)
-const blogData = [
-  {
-    id: 1,
-    image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=1000&auto=format&fit=crop",
-    category: "أخبار العقارات",
-    type: "news",
-    date: "15 أكتوبر 2023",
-    title: "ارتفاع ملحوظ في أسعار العقارات الفاخرة بالعاصمة الرباط",
-    description: "شهدت الأشهر الأخيرة ارتفاعاً بنسبة 12% في أسعار الفيلات والشقق الفاخرة في منطقة سوية والمعاريف، مما يعكس ثقة المستثمرين في السوق المغربي.",
-    link: "/blog/1"
-  },
-  {
-    id: 2,
-    image: "https://images.unsplash.com/photo-1554995207-c18c203602cb?q=80&w=1000&auto=format&fit=crop",
-    category: "نصائح الاستثمار",
-    type: "tips",
-    date: "8 أكتوبر 2023",
-    title: "5 نصائح ذهبية قبل شراء عقارك الأول",
-    description: "شراء العقار لأول مرة يمكن أن يكون تجربة مرهقة. في هذا المقال نستعرض أهم الخطوات التي يجب اتباعها لضمان صفقة ناجحة وآمنة.",
-    link: "/blog/2"
-  },
-  {
-    id: 3,
-    image: "https://images.unsplash.com/photo-1560520031-3a4dc4e9de0c?q=80&w=1000&auto=format&fit=crop",
-    category: "دليل المشتري",
-    type: "guide",
-    date: "1 أكتوبر 2023",
-    title: "الدليل الشامل للقروض العقارية في المغرب",
-    description: "كل ما تحتاج معرفته عن شروط القروض العقارية، نسب الفائدة، والبنوك التي تقدم أفضل العروض لعام 2023.",
-    link: "/blog/3"
-  },
-  {
-    id: 4,
-    image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?q=80&w=1000&auto=format&fit=crop",
-    category: "أخبار العقارات",
-    type: "news",
-    date: "25 سبتمبر 2023",
-    title: "مشاريع سكنية عملاقة قادمة إلى مدينة مراكش",
-    description: "أعلنت عدة شركات تطوير عقاري عن خططها لإنشاء مجمعات سكنية حديثة تضم مرافق ترفيهية وتجارية بمنطقة مراكش.",
-    link: "/blog/4"
-  },
-  {
-    id: 5,
-    image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?q=80&w=1000&auto=format&fit=crop",
-    category: "نصائح الاستثمار",
-    type: "tips",
-    date: "18 سبتمبر 2023",
-    title: "كيف تختار موقعك العقاري المثالي؟",
-    description: "الموقع هو العامل الأول في نجاح استثمارك العقاري. تعرف على المعايير الجغرافية والاقتصادية التي يجب أن تنتبه لها.",
-    link: "/blog/5"
-  },
-  {
-    id: 6,
-    image: "https://images.unsplash.com/photo-1570129477492-45c003edd2be?q=80&w=1000&auto=format&fit=crop",
-    category: "دليل المشتري",
-    type: "guide",
-    date: "10 سبتمبر 2023",
-    title: "الفرق بين الشراء على الخارطة والشراء الجاهز",
-    description: "مقارنة شاملة بين الشراء في المشروعات قيد الإنشاء والشراء من العقارات الجاهزة من حيث التكلفة والمخاطر والمزايا.",
-    link: "/blog/6"
-  }
-];
+ 
+   
 
 const Blog = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialType = searchParams.get('type') || 'all';
   
   const [activeFilter, setActiveFilter] = useState(initialType);
+  const [visibleCount, setVisibleCount] = useState(6); // عرض 6 مقالات في البداية
 
+  // عند تغيير الفلتر، نعود لإظهار أول 6 مقالات فقط
   useEffect(() => {
     const type = searchParams.get('type');
     if (type) {
@@ -80,6 +23,7 @@ const Blog = () => {
     } else {
       setActiveFilter('all');
     }
+    setVisibleCount(6); // إعادة تعيين العداد
   }, [searchParams]);
 
   const handleFilterChange = (type) => {
@@ -95,12 +39,19 @@ const Blog = () => {
     ? blogData 
     : blogData.filter(post => post.type === activeFilter);
 
+  const handleLoadMore = () => {
+    setVisibleCount(prev => prev + 3); // إضافة 3 مقالات إضافية عند كل ضغطة
+  };
+
   const filters = [
     { key: 'all', label: 'الكل' },
-    { key: 'news', label: 'أخبار العقارات' },
-    { key: 'tips', label: 'نصائح الاستثمار' },
-    { key: 'guide', label: 'دليل المشتري' }
+    { key: 'news', label: 'قوانين العقارات' },
+    { key: 'tips', label: 'نصائح استثمارية' },
+    { key: 'guide', label: 'دليل الولايات' }
   ];
+
+  // البيانات التي سيتم عرضها حالياً (مقطوعة بناءً على العدد)
+  const displayedData = filteredData.slice(0, visibleCount);
 
   return (
     <div className="blog-wrapper">
@@ -108,8 +59,8 @@ const Blog = () => {
       {/* هيرو المدونة */}
       <div className="blog-hero">
         <div className="blog-hero-content">
-          <h1>المدونة</h1>
-          <p>نصائح، أخبار، ودليلك الشامل لعالم الاستثمار العقاري</p>
+          <h1>المدونة العقارية</h1>
+          <p>دليلك الشامل للاستثمار، القوانين، وأهم الأحياء في الجزائر</p>
         </div>
       </div>
 
@@ -130,12 +81,23 @@ const Blog = () => {
         </div>
 
         {/* شبكة المقالات */}
-        {filteredData.length > 0 ? (
-          <div className="blog-grid">
-            {filteredData.map(post => (
-              <BlogCard key={post.id} {...post} />
-            ))}
-          </div>
+        {displayedData.length > 0 ? (
+          <>
+            <div className="blog-grid">
+              {displayedData.map(post => (
+                <BlogCard key={post.id} {...post} />
+              ))}
+            </div>
+
+            {/* زر عرض المزيد */}
+            {filteredData.length > visibleCount && (
+              <div className="blog-load-more-wrapper">
+                <button className="load-more-btn" onClick={handleLoadMore}>
+                  عرض المزيد من المقالات
+                </button>
+              </div>
+            )}
+          </>
         ) : (
           <div className="blog-empty">
             <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

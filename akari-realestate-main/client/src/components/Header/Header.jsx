@@ -54,79 +54,12 @@ const Header = () => {
         {/* ========== قائمة الديسكتوب ========== */}
         <div className="h-menu">
           <NavLink to="/">الرئيسية</NavLink>
-
-          <div className="nav-item-wrapper">
-            <button 
-              className={`nav-dropdown-btn ${isPropertiesActive ? 'active' : ''}`} 
-              onClick={() => toggleDropdown('properties')}
-            >
-              العقارات <BiChevronDown className={`dropdown-arrow ${activeDropdown === 'properties' ? 'rotate' : ''}`} />
-            </button>
-            <div className={`nav-dropdown-content ${activeDropdown === 'properties' ? 'show' : ''}`}>
-              <NavLink to="/properties?type=apartment" onClick={() => setActiveDropdown(null)}>شقق للبيع</NavLink>
-              <NavLink to="/properties?type=villa" onClick={() => setActiveDropdown(null)}>فيلات</NavLink>
-              <NavLink to="/properties?type=land" onClick={() => setActiveDropdown(null)}>اراضي</NavLink>
-              <NavLink to="/properties?type=commercial" onClick={() => setActiveDropdown(null)}>محلات تجارية</NavLink>
-            </div>
-          </div>
-
-          <div className="nav-item-wrapper">
-            <button 
-              className={`nav-dropdown-btn ${isagenciesActive ? 'active' : ''}`} 
-              onClick={() => toggleDropdown('agencies')}
-            >
-              الوكالات <BiChevronDown className={`dropdown-arrow ${activeDropdown === 'agencies' ? 'rotate' : ''}`} />
-            </button>
-            <div className={`nav-dropdown-content ${activeDropdown === 'agencies' ? 'show' : ''}`}>
-              <NavLink to="/agencies" onClick={() => setActiveDropdown(null)}>افضل الوكالات</NavLink>
-              <NavLink to="/agencies" onClick={() => setActiveDropdown(null)}>وكالات العاصمة</NavLink>
-            </div>
-          </div>
-
-          <div className="nav-item-wrapper">
-            <button 
-              className={`nav-dropdown-btn ${isServicesActive ? 'active' : ''}`} 
-              onClick={() => toggleDropdown('services')}
-            >
-              الخدمات <BiChevronDown className={`dropdown-arrow ${activeDropdown === 'services' ? 'rotate' : ''}`} />
-            </button>
-            <div className={`nav-dropdown-content ${activeDropdown === 'services' ? 'show' : ''}`}>
-              <NavLink to="/Services#valuation" onClick={() => setActiveDropdown(null)}>تقييم عقاري</NavLink>
-              <NavLink to="/Services#legal" onClick={() => setActiveDropdown(null)}>استشارات قانونية</NavLink>
-            </div>
-          </div>
-
-          {/* ========== المدونة (منسدلة مثل الباقي) ========== */}
-          <div className="nav-item-wrapper">
-            <button 
-              className={`nav-dropdown-btn ${isBlogActive ? 'active' : ''}`} 
-              onClick={() => toggleDropdown('blog')}
-            >
-              المدونة <BiChevronDown className={`dropdown-arrow ${activeDropdown === 'blog' ? 'rotate' : ''}`} />
-            </button>
-            <div className={`nav-dropdown-content ${activeDropdown === 'blog' ? 'show' : ''}`}>
-              <NavLink to="/Blog" onClick={() => setActiveDropdown(null)}>جميع المقالات</NavLink>
-              <NavLink to="/Blog?type=news" onClick={() => setActiveDropdown(null)}>أخبار العقارات</NavLink>
-              <NavLink to="/Blog?type=tips" onClick={() => setActiveDropdown(null)}>نصائح الاستثمار</NavLink>
-              <NavLink to="/Blog?type_guide" onClick={() => setActiveDropdown(null)}>دليل المشتري</NavLink>
-            </div>
-          </div>
-
-          <div className="nav-item-wrapper">
-            <button 
-              className={`nav-dropdown-btn ${isaboutActive ? 'active' : ''}`}  
-              onClick={() => toggleDropdown('about')}
-            >
-              عنا <BiChevronDown className={`dropdown-arrow ${activeDropdown === 'about' ? 'rotate' : ''}`} />
-            </button>
-            <div className={`nav-dropdown-content ${activeDropdown === 'about' ? 'show' : ''}`}>
-              <NavLink to="/about" onClick={() => setActiveDropdown(null)}>رؤيتنا</NavLink>
-              <NavLink to="/about" onClick={() => setActiveDropdown(null)}>شركاؤنا</NavLink>
-              <NavLink to="/about" onClick={() => setActiveDropdown(null)}>فريق العمل</NavLink>
-            </div>
-          </div>
+          <NavLink to="/properties">العقارات</NavLink>
+          <NavLink to="/services">الخدمات</NavLink>
+          <NavLink to="/blog">المدونة</NavLink>
+          <NavLink to="/about">عنا</NavLink>
+          
         </div>
-
         {/* ========== أزرار الدخول ========== */}
         <div className="h-auth-buttons">
           {!currentUser ? (
@@ -153,83 +86,18 @@ const Header = () => {
         <NavLink to="/" className="mobile-nav-link" onClick={closeMobileMenu}>
           الرئيسية
         </NavLink>
-
-        <div className="mobile-accordion-item">
-          <button 
-            className={`mobile-accordion-header ${activeDropdown === 'properties' ? 'open' : ''}`}
-            onClick={() => toggleDropdown('properties')}
-          >
-            العقارات
-            <BiChevronDown className="dropdown-arrow" />
-          </button>
-          <div className={`mobile-accordion-body ${activeDropdown === 'properties' ? 'open' : ''}`}>
-            <NavLink to="/properties?type=apartment" onClick={closeMobileMenu}>شقق للبيع</NavLink>
-            <NavLink to="/properties?type=villa" onClick={closeMobileMenu}>فيلات</NavLink>
-            <NavLink to="/properties?type=land" onClick={closeMobileMenu}>اراضي</NavLink>
-            <NavLink to="/properties?type=commercial" onClick={closeMobileMenu}>محلات تجارية</NavLink>
-          </div>
-        </div>
-
-        <div className="mobile-accordion-item">
-          <button 
-            className={`mobile-accordion-header ${activeDropdown === 'agencies' ? 'open' : ''}`}
-            onClick={() => toggleDropdown('agencies')}
-          >
-            الوكالات
-            <BiChevronDown className="dropdown-arrow" />
-          </button>
-          <div className={`mobile-accordion-body ${activeDropdown === 'agencies' ? 'open' : ''}`}>
-            <NavLink to="/agencies" onClick={closeMobileMenu}>افضل الوكالات</NavLink>
-            <NavLink to="/agencies" onClick={closeMobileMenu}>وكالات العاصمة</NavLink>
-          </div>
-        </div>
-
-        <div className="mobile-accordion-item">
-          <button 
-            className={`mobile-accordion-header ${activeDropdown === 'services' ? 'open' : ''}`}
-            onClick={() => toggleDropdown('services')}
-          >
-            الخدمات
-            <BiChevronDown className="dropdown-arrow" />
-          </button>
-          <div className={`mobile-accordion-body ${activeDropdown === 'services' ? 'open' : ''}`}>
-            <NavLink to="/Services#valuation" onClick={closeMobileMenu}>تقييم عقاري</NavLink>
-            <NavLink to="/Services#legal" onClick={closeMobileMenu}>استشارات قانونية</NavLink>
-          </div>
-        </div>
-
-        {/* ========== المدونة في الهاتف (أكورديون مثل الباقي) ========== */}
-        <div className="mobile-accordion-item">
-          <button 
-            className={`mobile-accordion-header ${activeDropdown === 'blog' ? 'open' : ''}`}
-            onClick={() => toggleDropdown('blog')}
-          >
-            المدونة
-            <BiChevronDown className="dropdown-arrow" />
-          </button>
-          <div className={`mobile-accordion-body ${activeDropdown === 'blog' ? 'open' : ''}`}>
-            <NavLink to="/Blog" onClick={closeMobileMenu}>جميع المقالات</NavLink>
-            <NavLink to="/Blog?type=news" onClick={closeMobileMenu}>أخبار العقارات</NavLink>
-            <NavLink to="/Blog?type=tips" onClick={closeMobileMenu}>نصائح الاستثمار</NavLink>
-            <NavLink to="/Blog?type=guide" onClick={closeMobileMenu}>دليل المشتري</NavLink>
-          </div>
-        </div>
-
-        <div className="mobile-accordion-item">
-          <button 
-            className={`mobile-accordion-header ${activeDropdown === 'about' ? 'open' : ''}`}
-            onClick={() => toggleDropdown('about')}
-          >
-            عنا
-            <BiChevronDown className="dropdown-arrow" />
-          </button>
-          <div className={`mobile-accordion-body ${activeDropdown === 'about' ? 'open' : ''}`}>
-            <NavLink to="/about" onClick={closeMobileMenu}>رؤيتنا</NavLink>
-            <NavLink to="/about" onClick={closeMobileMenu}>شركاؤنا</NavLink>
-            <NavLink to="/about" onClick={closeMobileMenu}>فريق العمل</NavLink>
-          </div>
-        </div>
-
+        <NavLink to="/properties" className="mobile-nav-link" onClick={closeMobileMenu}>
+          العقارات
+        </NavLink>
+        <NavLink to="/Services" className="mobile-nav-link" onClick={closeMobileMenu}>
+          الخدمات
+        </NavLink>
+        <NavLink to="/Blog" className="mobile-nav-link" onClick={closeMobileMenu}>
+          المدونة
+        </NavLink>
+        <NavLink to="/about" className="mobile-nav-link" onClick={closeMobileMenu}>
+          عنا
+        </NavLink>
         <div className="mobile-auth-section">
           {!currentUser ? (
             <>
