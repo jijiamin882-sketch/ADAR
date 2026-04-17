@@ -2,17 +2,19 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { 
   FiHome, FiMapPin, FiImage, FiCheckCircle, 
-  FiChevronLeft, FiArrowLeft, FiDollarSign
+  FiChevronLeft, FiArrowLeft, FiDollarSign, 
+  FiUser, FiFileText, FiUploadCloud, FiShield
 } from "react-icons/fi";
 import { firestoreDB } from "../../firebase";
 import "./AddProperty.css";
 
 export default function AddProperty() {
   const navigate = useNavigate();
-  const [step, setStep] = useState(1);
+  // تغيير البداية من 1 إلى 0 لتصبح الخطوة الأولى هي التحقق
+  const [step, setStep] = useState(0);
 
   const [formData, setFormData] = useState({
-    listingType: "sale", // sale أو rent
+    listingType: "sale", 
     type: "",
     price: "",
     area: "",
@@ -25,13 +27,46 @@ export default function AddProperty() {
     images: []
   });
 
+  // حالة خاصة ببيانات المالك والوثائق (لأنها لا تذهب لقاعدة البيانات بنفس طريقة العقار)
+  const [ownerData, setOwnerData] = useState({
+    firstName: "",
+    lastName: "",
+    idNumber: "",
+    propertyDoc: null // لتخزين ملف الوثيقة مؤقتاً
+  });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-     const handleSubmit = async (e) => {
+  const handleOwnerChange = (e) => {
+    const { name, value } = e.target;
+    setOwnerData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    setOwnerData(prev => ({ ...prev, propertyDoc: e.target.files[0] }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // التحقق من خطوة الهوية قبل الانتقال
+    if (step === 0) {
+      if (!ownerData.firstName || !ownerData.lastName || !ownerData.idNumber) {
+        alert("يرجى ملء جميع بيانات الهوية للمتابعة");
+        return;
+      }
+      if (!ownerData.propertyDoc) {
+        alert("يرجى إرفاق وثيقة تثبت ملكية العقار (عقد، رخصة...)");
+        return;
+      }
+      setStep(step + 1);
+      return;
+    }
+
+    // التنقل بين الخطوات العادية
     if (step < 3) {
       setStep(step + 1);
     } else {
@@ -39,6 +74,9 @@ export default function AddProperty() {
         const { collection, addDoc } = await import("firebase/firestore");
         
         await addDoc(collection(firestoreDB, "properties"), {
+          // حفظ بيانات المالك مع العقار (للمراجعة الإدارية لاحقاً)
+          ownerName: `${ownerData.firstName} ${ownerData.lastName}`,
+          ownerIdNumber: ownerData.idNumber,
           listingType: formData.listingType,
           type: formData.type,
           price: formData.price + (formData.listingType === 'rent' ? ' دج/شهر' : ' دج'),
@@ -48,10 +86,11 @@ export default function AddProperty() {
           baths: parseInt(formData.baths) || 0,
           area: formData.area,
           image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=600",
+          status: "pending_review", // حالة انتظار المراجعة بسبب الوثائق
           createdAt: new Date().toISOString()
         });
 
-        alert("تم نشر العقار بنجاح في قاعدة البيانات! ✅");
+        alert("تم إرسال طلب النشر بنجاح! سيتم مراجعة هويتك ووثائق العقار وسيظهر إعلانك خلال 24 ساعة. ✅");
         navigate("/properties");
       } catch (error) {
         console.error("خطأ في الحفظ:", error);
@@ -59,6 +98,7 @@ export default function AddProperty() {
       }
     }
   };
+
   return (
     <div className="add-prop-wrapper">
       <div className="add-prop-container">
@@ -69,21 +109,29 @@ export default function AddProperty() {
             <FiArrowLeft /> رجوع
           </button>
           <h1>إضافة عقار جديد</h1>
-          <p>أضف عقارك في 3 خطوات سهلة</p>
+          <p>أضف عقارك في 4 خطوات (بما فيها التحقق من الهوية)</p>
         </div>
 
-        {/* أشرطة التقدم */}
+        {/* أشرطة التقدم (تم تحديثها لتصبح 4 خطوات) */}
         <div className="add-prop-progress">
+          <div className={`prop-step ${step >= 0 ? 'active' : ''}`}>
+            <div className="step-circle"><FiShield /></div>
+            <span>التحقق والهوية</span>
+          </div>
+          <div className="progress-line"></div>
+          
           <div className={`prop-step ${step >= 1 ? 'active' : ''}`}>
             <div className="step-circle"><FiHome /></div>
             <span>النوع والسعر</span>
           </div>
           <div className="progress-line"></div>
+          
           <div className={`prop-step ${step >= 2 ? 'active' : ''}`}>
             <div className="step-circle"><FiMapPin /></div>
             <span>الموقع والتفاصيل</span>
           </div>
           <div className="progress-line"></div>
+          
           <div className={`prop-step ${step >= 3 ? 'active' : ''}`}>
             <div className="step-circle"><FiImage /></div>
             <span>الصور</span>
@@ -93,6 +141,75 @@ export default function AddProperty() {
         {/* النموذج */}
         <form className="add-prop-form" onSubmit={handleSubmit}>
           
+          {/* ===== الخطوة 0 (الجديدة): التحقق من هوية المالك والوثائق ===== */}
+          {step === 0 && (
+            <div className="form-step">
+              <h2>التحقق من هوية المالك وصحة العقار</h2>
+              <p className="step-desc">لضمان أمان المنصة وعدم وجود إعلانات وهمية، يجب إثبات الهوية وملكية العقار.</p>
+              
+              <div className="owner-details-grid">
+                <div className="form-group">
+                  <label><FiUser style={{verticalAlign: 'middle', marginLeft: '5px'}} /> الاسم</label>
+                  <input 
+                    type="text" 
+                    name="firstName" 
+                    placeholder="الاسم الأول" 
+                    value={ownerData.firstName} 
+                    onChange={handleOwnerChange} 
+                    required 
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>اللقب</label>
+                  <input 
+                    type="text" 
+                    name="lastName" 
+                    placeholder="لقب العائلة" 
+                    value={ownerData.lastName} 
+                    onChange={handleOwnerChange} 
+                    required 
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>رقم الهوية الوطنية (رقم التعريف)</label>
+                <input 
+                  type="text" 
+                  name="idNumber" 
+                  placeholder="أدخل رقم الهوية الوطنية المكون من 18 رقم" 
+                  value={ownerData.idNumber} 
+                  onChange={handleOwnerChange} 
+                  required 
+                  maxLength={18}
+                  style={{direction: 'ltr', textAlign: 'left'}}
+                />
+              </div>
+
+              <div className="form-group">
+                <label><FiFileText style={{verticalAlign: 'middle', marginLeft: '5px'}} /> وثيقة إثبات الملكية</label>
+                <div className="upload-area" style={{padding: '20px', cursor: 'pointer', borderStyle: 'dashed'}} onClick={() => document.getElementById('docUpload').click()}>
+                  <FiUploadCloud size={32} />
+                  <h3>{ownerData.propertyDoc ? ownerData.propertyDoc.name : "انقر لرفع العقد أو رخصة الملكية"}</h3>
+                  <p>(يتم قبول: صيغة PDF، JPG، PNG بحجم أقصى 5 ميجابايت)</p>
+                  <input 
+                    id="docUpload"
+                    type="file" 
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    style={{display: 'none'}} 
+                    onChange={handleFileChange} 
+                  />
+                </div>
+              </div>
+
+              <div className="form-notice-box">
+                <FiShield size={20} color="#e3c08d" />
+                <p>بياناتك الشخصية ووثائقك محمية ولا يتم مشاركتها مع أي طرف ثالث. تُستخدم فقط من قبل إدارة الموقع للتحقق من صحة الإعلان.</p>
+              </div>
+            </div>
+          )}
+
           {/* ===== الخطوة 1: النوع والسعر ===== */}
           {step === 1 && (
             <div className="form-step">
@@ -101,7 +218,7 @@ export default function AddProperty() {
               <div className="form-group">
                 <label>الغرض من الإعلان</label>
                 <div className="toggle-group">
-                  <button type="button"   className={`toggle-btn ${formData.listingType === 'sale' ? 'active' : ''}`} onClick={() => setFormData({...formData, listingType: 'sale'})}>للبيع</button>
+                  <button type="button" className={`toggle-btn ${formData.listingType === 'sale' ? 'active' : ''}`} onClick={() => setFormData({...formData, listingType: 'sale'})}>للبيع</button>
                   <button type="button" className={`toggle-btn rent ${formData.listingType === 'rent' ? 'active' : ''}`} onClick={() => setFormData({...formData, listingType: 'rent'})}>للكراء</button>
                 </div>
               </div>
@@ -193,7 +310,8 @@ export default function AddProperty() {
 
           {/* أزرار التنقل */}
           <div className="form-actions">
-            {step > 1 && (
+            {/* إخفاء زر السابق في الخطوة الأولى فقط */}
+            {step > 0 && (
               <button type="button" className="btn-secondary" onClick={() => setStep(step - 1)}>
                 <FiChevronLeft /> السابق
               </button>
@@ -201,7 +319,7 @@ export default function AddProperty() {
             
             <button type="submit" className="btn-primary">
               {step === 3 ? (
-                <><FiCheckCircle /> نشر العقار</>
+                <><FiCheckCircle /> إرسال للمراجعة</>
               ) : (
                 <>التالي</>
               )}

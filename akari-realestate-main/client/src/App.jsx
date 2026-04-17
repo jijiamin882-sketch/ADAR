@@ -31,6 +31,7 @@ import Blog from './pages/Blog/Blog';
 import PropertyDetails from "./pages/PropertyDetails/PropertyDetails";
 import AiChat from './pages/AiChat/AiChat';
 import BlogDetail from './pages/BlogDetail/BlogDetail';
+import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
  
 
 function App() {
@@ -78,7 +79,9 @@ function App() {
                     <Route path="/about" element={<About />} />
                     <Route path="/InvestmentTools" element={<InvestmentTools />}/>
                     <Route path="/AiChat" element={<AiChat />} />
-
+                    
+                    {/* سياسة الخصوصية */}
+                    <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
                   </Route>
                   
                   {/* المسارات التي لا تحتوي على Layout (مثل تسجيل الدخول) */}

@@ -60,11 +60,12 @@
 
 .hero-content h1 {
   font-size: 55px; padding: 20px; text-align: center;
-  font-weight: normal; font-family: 'Tajawal';
+  font-family:  'Cairo', 'Amiri', 'Traditional Arabic', serif;
 }
 
 .hero-content p {
-  font-size: 20px; padding: 10px 0; text-align: center;
+  font-size: 25px; padding: 10px 0; text-align: center;
+  font-weight: normal;font-family:  'Cairo'; 
 }
 
 /* ==========================================
@@ -469,4 +470,29 @@
   color: #0e0806;
   border-color: #e3c08d;
   transform: translateY(-2px);
+}
+/* ==========================================
+   تأثير النجوم التفاعلية (عند الإضافة)
+   ========================================== */
+.star-rating-selector {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.star-rating-selector svg {
+  font-size: 26px; /* حجم النجوم عند الاختيار */
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+/* تكبير النجمة قليلاً عندما يمرر الماوس عليها */
+.star-rating-selector svg:hover {
+  transform: scale(1.2);
+}
+
+/* حركة انبضاض صغيرة عند اختيار النجمة */
+.star-rating-selector .active-star {
+  animation: starPop 0.35s ease;
 }

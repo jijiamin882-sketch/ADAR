@@ -32,6 +32,19 @@ const Header = () => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
   };
+  // دالة تسجيل الدخول بجوجل
+  const signInWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+      redirectTo: window.location.origin, // يعيد المستخدم للموقع بعد الدخول
+    },
+  });
+
+  if (error) console.log("خطأ في تسجيل الدخول:", error.message);
+};
+
+ 
 
   return (
     <section className="h-wrapper">
@@ -73,7 +86,7 @@ const Header = () => {
             </>
           ) : (
             <button className="h-login-text" onClick={handleLogout}>
-              <FiLogOut /> خروج
+              <FiLogOut /> تسجيل الخروج
             </button>
           )}
         </div>
