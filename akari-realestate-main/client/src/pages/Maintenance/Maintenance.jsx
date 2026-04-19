@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiTool, FiZap, FiUserCheck, FiSettings, FiArrowRight, FiX } from 'react-icons/fi';
+import { FiTool, FiZap, FiUserCheck, FiSettings, FiArrowRight, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Maintenance.css';
@@ -62,13 +62,14 @@ const Maintenance = () => {
               <h4>حجز موعد</h4>
               <p>حدد نوع العطل واختر الوقت المناسب لك من خلال نموذج التواصل السريع.</p>
             </div>
-            <FiArrowRight className="maintenance-step-arrow" />
+            <FiArrowLeft className="maintenance-step-arrow" />
             <div className="maintenance-step">
               <div className="maintenance-step-num">2</div>
               <h4>الفحص والتشخيص</h4>
               <p>يصل الفني لموقعك، يقوم بتشخيص المشكلة بدقة ويحدد التكلفة قبل البدء.</p>
             </div>
-            <FiArrowRight className="maintenance-step-arrow" />
+             <FiArrowLeft className="maintenance-step-arrow" />
+            
             <div className="maintenance-step">
               <div className="maintenance-step-num">3</div>
               <h4>الإصلاح والضمان</h4>

@@ -8,9 +8,9 @@ import { useMutation } from "react-query";
 import { createUser } from "../../utils/api";
 import useFavourites from "../../hooks/useFavourites";
 import useBookings from "../../hooks/useBookings";
+import TopAdBanner from "../TopAdBanner/TopAdBanner";
 
 const Layout = () => {
-
   useFavourites()
   useBookings()
 
@@ -24,7 +24,6 @@ const Layout = () => {
 
   useEffect(() => {
     const getTokenAndRegsiter = async () => {
-
       const res = await getAccessTokenWithPopup({
         authorizationParams: {
           audience: "http://localhost:8000",
@@ -36,27 +35,26 @@ const Layout = () => {
       mutate(res)
     };
 
-
     isAuthenticated && getTokenAndRegsiter();
   }, [isAuthenticated]);
 
   return (
      <div className="layout-container">
       <div className="wrapper">
-        {/* الهيدر ثابت دائماً */}
+        
+         
+
+        {/* 2. الهيدر تحته مباشرة */}
         <Header />
         
-        {/* 2. هذا هو الجزء الأهم: الـ Outlet هو الذي سيُظهر المدونة أو الرئيسية أو غيرها */}
+        {/* 3. محتوى الصفحة */}
         <main className="main-content">
            <Outlet />
         </main>
       </div>
 
-      {/* الفوتر */}
+      {/* 4. الفوتر */}
       <Footer />
-
-      {/* الأزرار العائمة إذا وجدت */}
-      {/* <ChatButtons /> */}
     </div>
   );
 };

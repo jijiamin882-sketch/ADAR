@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiLayout, FiStar, FiPackage, FiArrowRight, FiX } from 'react-icons/fi';
+import { FiLayout, FiStar, FiPackage, FiArrowRight, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Furniture.css';
@@ -62,13 +62,13 @@ const Furniture = () => {
               <h4>اختيار الباقة</h4>
               <p>تصفح باقاتنا الجاهزة (غرف نوم، صالات، مكاتب) أو طلب تصميم مخصص بالكامل.</p>
             </div>
-            <FiArrowRight className="furniture-step-arrow" />
+            <FiArrowLeft className="furniture-step-arrow" />
             <div className="furniture-step">
               <div className="furniture-step-num">2</div>
               <h4>المعاينة والموافقة</h4>
               <p>نرسل لك نماذج ومواصفات الأثاث بالتفصيل للموافقة عليها قبل بدء التصنيع.</p>
             </div>
-            <FiArrowRight className="furniture-step-arrow" />
+            <FiArrowLeft className="furniture-step-arrow" />
             <div className="furniture-step">
               <div className="furniture-step-num">3</div>
               <h4>التسليم النهائي</h4>

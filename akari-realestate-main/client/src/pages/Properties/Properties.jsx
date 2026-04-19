@@ -5,13 +5,13 @@ import {
   FiGrid, FiList, FiSliders
 } from "react-icons/fi";
 import "./Properties.css";
-// استيراد supabase من الملف الذي أعددتِه
-import { SupabaseClient } from "@supabase/supabase-js";
+import { createClient } from "@supabase/supabase-js";
 
-const fallbackProperties = [
-  { id: 1, title: "شقة فاخرة في قلب المدينة", location: "الجلفة، حي البساتين", price: "12,500,000 دج", type: "شقة", beds: 3, baths: 2, area: "120 م²", listingType: "sale", image: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?q=80&w=600" },
-];
-
+// === إنشاء اتصال Supabase مباشرة هنا ===
+const supabase = createClient(
+  "https://pngumoydgkdpurzbcxqv.supabase.co", // <-- ضع رابط مشروعك هنا
+  "sb_publishable_YAdSiCennqPgMOdeeDO42g_ZRr9hYTz"               // <-- ضع مفتاح Anon العام هنا
+);
 export default function Properties() {
   const [searchParams] = useSearchParams();
   const initialType = searchParams.get('type') || 'all';

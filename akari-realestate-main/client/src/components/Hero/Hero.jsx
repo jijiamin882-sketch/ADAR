@@ -10,6 +10,13 @@ import {
 } from 'react-icons/fi';
 import AiChat from "../../pages/AiChat/AiChat";
 import AddProperty from "../../pages/AddProperty/AddProperty";
+import { createClient } from "@supabase/supabase-js";
+
+// === إنشاء اتصال Supabase مباشرة هنا ===
+const supabase = createClient(
+  "https://pngumoydgkdpurzbcxqv.supabase.co",  
+  "sb_publishable_YAdSiCennqPgMOdeeDO42g_ZRr9hYTz"                
+);
 
 export default function Hero() {
   const navigate = useNavigate();
@@ -119,7 +126,7 @@ export default function Hero() {
 
   return (
     <div className="home-page">
-
+           
       {/* === 1. الهيرو === */}
       <section className="hero-wrapper">
         <div className="hero-bg-container"><img src="./hero.jpg" alt="Djelfa Real Estate" /><div className="hero-overlay"></div></div>
@@ -323,7 +330,7 @@ export default function Hero() {
               <button className="cta-btn-secondary" onClick={() => navigate("/AddProperty")}>
                 <FiUploadCloud /> أضف عقارك
               </button>
-              <button className="cta-btn-secondary" onClick={() => navigate("/AddProperty")}>
+              <button className="cta-btn-secondary" onClick={() => navigate("/AddService")}>
                 <FiUploadCloud /> أضف خدمة
               </button>
             </div>

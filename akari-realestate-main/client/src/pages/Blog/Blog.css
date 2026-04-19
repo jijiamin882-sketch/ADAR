@@ -310,3 +310,486 @@
   color: #161c24;
   box-shadow: 0 0 15px rgba(241, 201, 145, 0.4);
 }
+
+ 
+/* ===================================
+   شريط التحديث التلقائي
+   =================================== */
+.blog-refresh-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #fefaf3;
+  border: 1px solid #ede4d6;
+  border-radius: 12px;
+  padding: 0.8rem 1.2rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.refresh-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #8b7355;
+}
+
+.refresh-info svg {
+  color: #c49560;
+  flex-shrink: 0;
+}
+
+.refresh-auto-text {
+  color: #bfae96;
+  font-size: 0.78rem;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #f1c994 0%, #c49560 100%);
+  color: #3d2e1a;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.refresh-btn:hover {
+  box-shadow: 0 4px 12px rgba(241, 201, 148, 0.4);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.refresh-btn.spinning svg {
+  animation: spinRefresh 0.8s linear infinite;
+}
+
+@keyframes spinRefresh {
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================
+   شبكات ديناميكية حسب القسم
+   =================================== */
+.blog-grid-mixed {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.blog-grid-tips {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.blog-grid-guide {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 1.5rem;
+}
+
+.blog-grid-neighborhoods {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+
+/* ===================================
+   بطاقة بديلة (إذا لم يوجد BlogCard)
+   =================================== */
+.blog-fallback-card {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(61, 46, 26, 0.05);
+  border: 1px solid #ede4d6;
+  transition: transform 0.3s;
+}
+
+.blog-fallback-card:hover {
+  transform: translateY(-4px);
+}
+
+.fallback-card-img {
+  height: 200px;
+  overflow: hidden;
+}
+
+.fallback-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fallback-card-body {
+  padding: 1.3rem;
+}
+
+.fallback-date {
+  font-size: 0.78rem;
+  color: #bfae96;
+}
+
+.fallback-card-body h3 {
+  font-size: 1.05rem;
+  margin: 0.4rem 0;
+  color: #3d2e1a;
+}
+
+.fallback-card-body p {
+  font-size: 0.88rem;
+  color: #6b5a46;
+  line-height: 1.6;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===================================
+   بطاقة النصائح
+   =================================== */
+.blog-tip-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.8rem;
+  box-shadow: 0 4px 15px rgba(61, 46, 26, 0.05);
+  border: 1px solid #ede4d6;
+  border-top: 4px solid #f1c994;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-tip-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(61, 46, 26, 0.08);
+}
+
+.tip-card-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.tip-card-icon {
+  width: 44px;
+  height: 44px;
+  background: #fefaf3;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #c49560;
+}
+
+.tip-card-header h3 {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0;
+  color: #3d2e1a;
+}
+
+.tip-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.2rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  flex: 1;
+}
+
+.tip-card-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: #4a3728;
+  line-height: 1.6;
+}
+
+.tip-check-icon {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: #c49560;
+}
+
+.tip-card-excerpt {
+  font-size: 0.9rem;
+  color: #6b5a46;
+  line-height: 1.7;
+  margin: 0 0 1.2rem 0;
+  flex: 1;
+}
+
+.tip-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid #f3ede2;
+}
+
+.tip-date {
+  font-size: 0.78rem;
+  color: #bfae96;
+}
+
+.tip-link {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #8b6f47;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.tip-link:hover {
+  color: #d35400;
+}
+
+/* ===================================
+   بطاقة الدليل السياحي
+   =================================== */
+.blog-guide-card {
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(61, 46, 26, 0.06);
+  border: 1px solid #ede4d6;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-guide-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 30px rgba(61, 46, 26, 0.1);
+}
+
+.guide-card-img {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.guide-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.blog-guide-card:hover .guide-card-img img {
+  transform: scale(1.05);
+}
+
+.guide-card-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(transparent, rgba(61, 46, 26, 0.85));
+  padding: 2.5rem 1.2rem 1rem;
+}
+
+.guide-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(241, 201, 148, 0.2);
+  color: #f1c994;
+  padding: 0.3rem 0.8rem;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(241, 201, 148, 0.3);
+}
+
+.guide-card-info {
+  padding: 1.3rem 1.5rem;
+}
+
+.guide-card-info h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.15rem;
+  margin: 0 0 0.6rem;
+  color: #3d2e1a;
+}
+
+.guide-card-info h3 svg {
+  color: #c49560;
+}
+
+.guide-card-info p {
+  font-size: 0.88rem;
+  color: #6b5a46;
+  line-height: 1.7;
+  margin: 0 0 1rem;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.guide-explore-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #8b6f47;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.guide-explore-link:hover {
+  color: #d35400;
+}
+
+/* ===================================
+   بطاقة كتيب الأحياء
+   =================================== */
+.blog-hood-card {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(61, 46, 26, 0.05);
+  border: 1px solid #ede4d6;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.blog-hood-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(61, 46, 26, 0.08);
+}
+
+.hood-card-img {
+  overflow: hidden;
+}
+
+.hood-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+
+.blog-hood-card:hover .hood-card-img img {
+  transform: scale(1.05);
+}
+
+.hood-card-content {
+  padding: 1.3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hood-type-badge {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #c49560;
+  background: #fefaf3;
+  padding: 0.2rem 0.7rem;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
+  align-self: flex-start;
+  border: 1px solid rgba(241, 201, 148, 0.25);
+}
+
+.hood-card-content h3 {
+  font-size: 1.05rem;
+  margin: 0 0 0.8rem;
+  color: #3d2e1a;
+}
+
+.hood-features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+}
+
+.hood-feature-tag {
+  font-size: 0.73rem;
+  background: rgba(241, 201, 148, 0.12);
+  color: #8b6f47;
+  padding: 0.25rem 0.65rem;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.hood-details-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8b6f47;
+  text-decoration: none;
+  align-self: flex-start;
+  padding: 0.4rem 0.8rem;
+  border: 1px solid #ede4d6;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.hood-details-link:hover {
+  border-color: #f1c994;
+  background: #fefaf3;
+  color: #3d2e1a;
+}
+
+/* ===================================
+   استجابة الشاشات
+   =================================== */
+@media (max-width: 768px) {
+  .blog-refresh-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .refresh-btn {
+    align-self: flex-end;
+  }
+
+  .refresh-auto-text {
+    display: none;
+  }
+
+  .blog-grid-mixed,
+  .blog-grid-tips,
+  .blog-grid-guide,
+  .blog-grid-neighborhoods {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-hood-card {
+    grid-template-columns: 1fr;
+  }
+
+  .hood-card-img {
+    height: 180px;
+  }
+}

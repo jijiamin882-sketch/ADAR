@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiFileText, FiShield, FiClock, FiUsers, FiArrowRight, FiX } from 'react-icons/fi';
+import { FiFileText, FiShield, FiClock, FiUsers, FiArrowRight, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify'; // <-- استدعاء أداة التنبيهات
 import './Notaries.css';
@@ -66,13 +66,13 @@ const Notaries = () => {
               <h4>طلب الخدمة</h4>
               <p>أرسل تفاصيل عقارك ونوع العقد المطلوب عبر نموذجنا المباشر.</p>
             </div>
-            <FiArrowRight className="step-arrow" />
+            <FiArrowLeft className="step-arrow" />
             <div className="notary-step">
               <div className="step-num">2</div>
               <h4>مراجعة الأوراق</h4>
               <p>يقوم فريقنا القانوني بمراجعة مستنداتك الأولية والتأكد من صحتها.</p>
             </div>
-            <FiArrowRight className="step-arrow" />
+            <FiArrowLeft className="step-arrow" />
             <div className="notary-step">
               <div className="step-num">3</div>
               <h4>التوثيق النهائي</h4>

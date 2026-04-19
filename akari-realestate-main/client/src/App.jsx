@@ -11,6 +11,7 @@ import Layout from "./components/Layout/Layout";
 import Website from "./pages/Website";
 import Properties from "./pages/Properties/Properties";
 import Services from './pages/Services/Services'; 
+import AddService from './pages/AddService/AddService';
 import Notaries from "./pages/Notaries/Notaries";
 import Maintenance from "./pages/Maintenance/Maintenance";
 import Furniture from "./pages/Furniture/Furniture";
@@ -72,6 +73,7 @@ function App() {
                     
                     {/* الخدمات والمعلومات */}
                     <Route path="/services" element={<Services />} />
+                    <Route path="/AddService" element={<AddService />}/>
                     <Route path="/notaries" element={<Notaries />} />
                     <Route path="/maintenance" element={<Maintenance />} />
                     <Route path="/furniture" element={<Furniture />} />

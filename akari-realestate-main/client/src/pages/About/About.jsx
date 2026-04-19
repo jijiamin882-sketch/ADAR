@@ -140,37 +140,37 @@ const About = () => {
     {
       name: "أمين بن عمر",
       role: "المؤسس والمدير التنفيذي",
-      img: "https://picsum.photos/seed/amin-ceo/400/400.jpg",
+      img: "https://i.pinimg.com/736x/51/d1/54/51d1544728a635bfdbcbbf30aeb0e4c0.jpg",
       bio: "خبرة تتجاوز 10 سنوات في مجال التكنولوجيا والعقارات",
     },
     {
       name: "سارة بلقاسم",
       role: "مديرة المنتج",
-      img: "https://picsum.photos/seed/sara-pm/400/400.jpg",
+      img: "https://i.pinimg.com/736x/cf/d5/8e/cfd58ec52156c7161f46dd27edf9a7c9.jpg",
       bio: "متخصصة في تصميم تجارب المستخدم وإدارة المنتجات الرقمية",
     },
     {
       name: "يوسف حداد",
       role: "المدير التقني",
-      img: "https://picsum.photos/seed/youssef-cto/400/400.jpg",
+      img: "https://i.pinimg.com/736x/70/2e/b3/702eb327186a62e6bfab5be1e40a1b77.jpg",
       bio: "مهندس برمجيات بخبرة واسعة في بناء المنصات الرقمية",
     },
     {
       name: "نادية مرابط",
       role: "مديرة التسويق",
-      img: "https://picsum.photos/seed/nadia-marketing/400/400.jpg",
+      img: "https://i.pinimg.com/736x/5d/1c/82/5d1c8267d98775387b73b121c7412eb7.jpg",
       bio: "خبيرة في التسويق الرقمي واستراتيجيات النمو",
     },
     {
       name: "كريم بوزيد",
       role: "مدير الشراكات",
-      img: "https://picsum.photos/seed/karim-partner/400/400.jpg",
-      bio: "مسؤول عن بناء شبكة الشراكات مع الوكالات العقارية",
+      img: "https://i.pinimg.com/736x/9f/1b/3c/9f1b3cc7a89f92825b2850ba1f57b33f.jpg",
+      bio: "مسؤول عن بناء شبكة الشراكات مع اصحاب العقارات",
     },
     {
       name: "ليلى شريف",
       role: "مديرة خدمة العملاء",
-      img: "https://picsum.photos/seed/layla-support/400/400.jpg",
+      img: "https://i.pinimg.com/736x/c1/38/ad/c138ad87230eaba8b70d714335e5187f.jpg",
       bio: "متخصصة في تحسين تجربة العملاء وحل المشكلات",
     },
   ];
@@ -179,38 +179,38 @@ const About = () => {
     {
       name: "مجموعة الإعمار",
       type: "شريك استراتيجي",
-      img: "https://picsum.photos/seed/partner-1/300/150.jpg",
+      img: "https://i.pinimg.com/736x/1e/20/8e/1e208e5ef1f1b0daf0deaf009853f1a1.jpg",
     },
-    {
-      name: "عقارات الجزائر",
-      type: "وكالة معتمدة",
-      img: "https://picsum.photos/seed/partner-2/300/150.jpg",
-    },
+     
     {
       name: "بنك الفلاحة",
       type: "شريك مالي",
       img: "https://picsum.photos/seed/partner-3/300/150.jpg",
     },
     {
-      name: "دار التعمير",
+      name: "بنك الاسكان و التعمير",
       type: "شريك حكومي",
-      img: "https://picsum.photos/seed/partner-4/300/150.jpg",
+      img: "https://i.pinimg.com/1200x/9e/af/dc/9eafdc3feeb511f7b756d67f0c2201b1.jpg",
     },
     {
       name: "مؤسسة البناء الحديث",
       type: "شريك تقني",
-      img: "https://picsum.photos/seed/partner-5/300/150.jpg",
+      img: "https://i.pinimg.com/736x/74/54/04/745404d12e92abd7c73cfaac6e25d915.jpg",
     },
     {
       name: "شركة الضمان العقاري",
       type: "شريك قانوني",
-      img: "https://picsum.photos/seed/partner-6/300/150.jpg",
+      img: "https://i.pinimg.com/736x/1e/01/aa/1e01aae9fc8a8f8b262fcc02b9b93c3a.jpg",
+    },
+    {
+      name: "شركة نقل",
+      type: "شريك تجاري",
+      img: "https://i.pinimg.com/1200x/c5/72/8a/c5728a6fb76a4728003dd8c955fb651f.jpg",
     },
   ];
 
   const stats = [
     { number: "+2,500", label: "عقار متاح", icon: <FiGlobe /> },
-    { number: "+150", label: "وكالة عقارية نشطة", icon: <FiUsers /> },
     { number: "+5,000", label: "مستخدم راضٍ", icon: <FiHeart /> },
     { number: "+48", label: "ولاية مغطّاة", icon: <FiTarget /> },
   ];
@@ -340,7 +340,7 @@ const About = () => {
             </div>
             <div className="vision-content">
               <span className="section-badge">رؤيتنا</span>
-              <h2 className="section-title" style={{ textAlign: "right" }}>
+              <h2 className="section-title" style={{ textAlign: "right"}}>
                 نحو مستقبل عقاري رقمي
               </h2>
               <p className="vision-text">
@@ -476,7 +476,7 @@ const About = () => {
             <span className="section-badge">شراكاتنا</span>
             <h2 className="section-title">شركاؤنا</h2>
             <p className="section-subtitle">
-              نفتخر بشراكتنا مع نخبة من المؤسسات والوكالات الرائدة في قطاع
+              نفتخر بشراكتنا مع نخبة من المؤسسات الرائدة في قطاع
               العقارات والتمويل
             </p>
           </div>

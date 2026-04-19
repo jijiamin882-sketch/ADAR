@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FiTruck, FiShield, FiClock, FiMapPin, FiArrowRight, FiX } from 'react-icons/fi';
+import { FiTruck, FiShield, FiClock, FiMapPin, FiArrowRight, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Moving.css';
@@ -58,13 +58,13 @@ const Moving = () => {
               <h4>طلب عرض سعر</h4>
               <p>أرسل لنا تفاصيل منزلك وموقعك الجديد وسنقدم لك عرض سعر فوري وشفاف.</p>
             </div>
-            <FiArrowRight className="moving-step-arrow" />
+            <FiArrowLeft className="moving-step-arrow" />
             <div className="moving-step">
               <div className="moving-step-num">2</div>
               <h4>التعبئة والتغليف</h4>
               <p>فريقنا يصل بكامل المعدات (أغطية، صناديق، بلاستيك فقاعي) لتغليف آمن.</p>
             </div>
-            <FiArrowRight className="moving-step-arrow" />
+            <FiArrowLeft className="moving-step-arrow" />
             <div className="moving-step">
               <div className="moving-step-num">3</div>
               <h4>النقل والتفريغ</h4>

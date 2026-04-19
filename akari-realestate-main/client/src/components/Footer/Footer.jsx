@@ -74,7 +74,6 @@ const Footer = () => {
             <h3 className="section-title">روابط سريعة</h3>
             <ul className="links-list">
               <li><Link to="/properties" className="footer-link">استكشف العقارات</Link></li>
-              <li><Link to="/agencies" className="footer-link">الوكالات العقارية</Link></li>
               <li><Link to="/About" className="footer-link">من نحن</Link></li>
               <li><Link to="/PrivacyPolicy" className="footer-link">سياسة الخصوصية</Link></li>
             </ul>
@@ -82,7 +81,7 @@ const Footer = () => {
 
           {/* 4. قسم النشرة البريدية */}
           <div className="footer-section">
-            <h3 className="section-title">النشرة البريدية</h3>
+            <h3 className="section-title">اشترك معنا</h3>
             <p className="newsletter-desc">اشترك ليصلك كل جديد عن العقارات والعروض الحصرية.</p>
             <form className="newsletter-form" onSubmit={handleSubscribe}>
               <input 
@@ -91,7 +90,7 @@ const Footer = () => {
                 className="newsletter-input" 
                 required 
               />
-              <button type="submit" className="newsletter-btn">اشتراك</button>
+              <button type="submit" className="newsletter-btn">ارسل</button>
             </form>
           </div>
 

@@ -78,7 +78,7 @@ export default function AiChat({ onClose }) {
         <div className="ai-messages-container">
           {messages.length === 0 ? (
             <div className="ai-welcome-section">
-              <div className="ai-welcome-icon">🏠</div>
+               
               <p className="ai-welcome-text">مرحباً بك. يمكنني مساعدتك في البحث عن عقارات أو الاستفسارات.</p>
               <div className="ai-suggestions">
                 <button className="ai-suggestion-btn" onClick={() => setInput('أبحث عن شقة في الجزائر')}>شقق في الجزائر</button>
