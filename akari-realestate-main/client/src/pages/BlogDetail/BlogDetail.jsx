@@ -1,37 +1,47 @@
 import React from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { blogData } from '../../blogData'; // تأكد من مسار الاستيراد الصحيح
-import './BlogDetail.css';
+import { blogData } from '../../blogData';
+import './BlogDetail.css'; // الآن سيتم استخدام التنسيق بشكل كامل
 
 const BlogDetail = () => {
-  const { id } = useParams(); // جلب ID من الرابط
+  const { id } = useParams();
   const post = blogData.find(item => item.id === parseInt(id));
 
   // في حال عدم وجود المقال
   if (!post) {
     return (
-      <div className="blog-wrapper">
-        <div className="blog-container" style={{ textAlign: 'center', padding: '100px 0', color: 'white' }}>
-          <h2>عذراً، المقال غير موجود</h2>
-          <Link to="/blog" className="back-link">العودة للمدونة</Link>
-        </div>
+      <div className="blog-wrapper" style={{ textAlign: 'center', padding: '100px 20px', color: 'white' }}>
+        <h2>عذراً، المقال غير موجود</h2>
+        <Link to="/blog" className="back-button" style={{ marginTop: '20px', display: 'inline-block' }}>
+          العودة للمدونة
+        </Link>
       </div>
     );
   }
 
+  // تحديد اسم التصنيف بالعربية
+  const getCategoryName = (type) => {
+    switch (type) {
+      case "news": return "أخبار وقوانين";
+      case "tips": return "نصائح قانونية";
+      case "guide": return "دليل الاستثمار";
+      default: return "عام";
+    }
+  };
+
   return (
     <div className="blog-wrapper">
       
-      {/* هيرو الصفحة (صورة المقال) */}
-      <div className="detail-hero" style={{ backgroundImage: `url(${post.image})` }}>
+      {/* هيرو الصفحة (يتحكم فيه الـ CSS بالكامل) */}
+      <div className="detail-hero" style={{ backgroundImage: `url(${post.img})` }}>
         <div className="detail-hero-overlay">
           <div className="detail-container">
-            <span className="detail-category">{post.category}</span>
+            <span className="detail-category">{getCategoryName(post.type)}</span>
             <h1 className="detail-title">{post.title}</h1>
             <div className="detail-meta">
               <span className="detail-date">{post.date}</span>
               <span className="detail-separator">•</span>
-              <span className="detail-author">تحرير العقار</span>
+              <span className="detail-author">{post.author}</span>
             </div>
           </div>
         </div>

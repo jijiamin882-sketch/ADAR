@@ -1,102 +1,268 @@
-import React from "react";
-import { FiFileText, FiTool, FiLayout, FiTruck, FiCheckCircle } from 'react-icons/fi';
-import { useNavigate } from 'react-router-dom'; // <-- 1. استيراد أداة التنقل
-import './Services.css'; 
+import React, { useState, useEffect } from "react";
+import {
+  FiTool,
+  FiTruck,
+  FiLayout,
+  FiFileText,
+  FiSend,
+  FiMapPin,
+  FiUser,
+  FiFilter,
+  FiSearch,
+  FiBriefcase,
+  FiBox,
+} from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabaseClient";
+import { useAuth } from "../../context/AuthContext";
+import "./Services.css";
+
+const categories = [
+  { id: "all", label: "الكل", icon: <FiFilter /> },
+  { id: "maintenance", label: "صيانة", icon: <FiTool /> },
+  { id: "transport", label: "نقل وشحن", icon: <FiTruck /> },
+  { id: "architecture", label: "هندسة وتصميم", icon: <FiLayout /> },
+  { id: "legal", label: "توثيق قانوني", icon: <FiFileText /> },
+  { id: "cleaning", label: "تنظيف", icon: <FiBox /> },
+  { id: "other", label: "أخرى", icon: <FiBriefcase /> },
+];
+
+const categoryLabels = {
+  maintenance: "صيانة عقارات",
+  transport: "نقل وشحن",
+  architecture: "هندسة وتصميم",
+  legal: "توثيق قانوني",
+  cleaning: "تنظيف وخدمات",
+  other: "خدمات أخرى",
+};
 
 const Services = () => {
-  const navigate = useNavigate(); // <-- 2. تفعيل أداة التنقل
+  const navigate = useNavigate();
+  const { currentUser } = useAuth();
+  const [services, setServices] = useState([]);
+  const [filteredServices, setFilteredServices] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
+  const [loading, setLoading] = useState(true);
 
-  // بيانات الخدمات مع إضافة خاصية (path) لكل خدمة
-  const servicesData = [
-    {
-      id: 1,
-      icon: <FiFileText />,
-      title: "خدمات الموثقون",
-      description: "تواصل مباشرة مع موثقين معتمدين لضمان شرعية وسلامة معاملاتك العقارية. نضمن لك إتمام الإجراءات القانونية بسرعة ودقة عالية بعيداً عن التعقيدات.",
-      features: ["توثيق عقود البيع والشراء", "استخراج رسوم عقارية", "تحقيق في الملكية القانونية"],
-      image: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      reverse: false,
-      path: "/notaries" // <-- مسار صفحة الموثقين
-    },
-    {
-      id: 2,
-      icon: <FiTool />,
-      title: "صيانة العقار",
-      description: "فريق متخصص لضمان بقاء منزلك في حالة مثالية بعد الشراء أو خلال فترة الكراء. نقدم حلولاً شاملة تشمل الكهرباء، السباكة، والتشطيبات.",
-      features: ["صيانة كهربائية وسباكة", "طلاء وتشطيبات داخلية", "خدمات طوارئ على مدار الساعة"],
-      image: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      reverse: true,
-      path: "/maintenance" // <-- مسار صفحة الصيانة
-    },
-    {
-      id: 3,
-      icon: <FiLayout />,
-      title: "خدمات الأثاث",
-      description: "وفرنا عليك عناء البحث، نوفر لك باقات أثاث جاهزة أو مخصصة حسب مساحة عقارك بتصاميم عصرية تجمع بين الراحة والأناقة.",
-      features: ["باقات أثاث حديثة بالكامل", "تصميم داخلي مخصص", "توصيل وتركيب احترافي"],
-      image: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      reverse: false,
-      path: "/furniture" // <-- مسار صفحة الأثاث
-    },
-    {
-      id: 4,
-      icon: <FiTruck />,
-      title: "خدمة نقل الأثاث",
-      description: "نقل آمن وموثوق لعفشك باستخدام سيارات مجهزة وفرق عمل محترفة لضمان سلامة منقولاتك من الباب إلى الباب.",
-      features: ["تعبئة وتغليف باحترافية عالية", "نقل داخل وخارج المدينة", "تأمين شامل على المنقولات"],
-      image: "https://images.unsplash.com/photo-1600518464441-9154a4dea21b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
-      reverse: true,
-      path: "/moving" // <-- مسار صفحة النقل
+  useEffect(() => {
+    const fetchServices = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from("services")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", { ascending: false });
+
+      if (!error && data) {
+        setServices(data);
+        setFilteredServices(data);
+      }
+      setLoading(false);
+    };
+
+    fetchServices();
+
+    const channel = supabase
+      .channel("realtime-services")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "services" },
+        (payload) => {
+          if (payload.new.status === "active") {
+            setServices((prev) => [payload.new, ...prev]);
+            if (activeFilter === "all" || payload.new.category === activeFilter) {
+              setFilteredServices((prev) => [payload.new, ...prev]);
+            }
+          }
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [activeFilter]);
+
+  useEffect(() => {
+    if (activeFilter === "all") {
+      setFilteredServices(services);
+    } else {
+      setFilteredServices(
+        services.filter((s) => s.category === activeFilter)
+      );
     }
-  ];
+  }, [activeFilter, services]);
+
+  const handleRequestService = async (service) => {
+    if (!currentUser) {
+      alert("يجب عليك تسجيل الدخول أولاً لتقديم طلب");
+      navigate("/login");
+      return;
+    }
+
+    const details = prompt(
+      "اكتب تفاصيل طلبك هنا:\nمثال: أريد صيانة مكيف في غرفة المعيشة"
+    );
+    if (!details || details.trim() === "") return;
+
+    try {
+      const { error } = await supabase.from("messages").insert([
+        {
+          sender_id: currentUser.id,
+          receiver_id: service.user_id,
+          content: `طلب خدمة جديد بخصوص: "${service.title}"\nالتفاصيل: ${details}`,
+          is_read: false,
+        },
+      ]);
+
+      if (error) throw error;
+      alert("تم إرسال طلبك بنجاح! سيقوم مقدم الخدمة بالتواصل معك قريباً ✅");
+    } catch (error) {
+      alert("حدث خطأ: " + error.message);
+    }
+  };
+
+  const getCategoryCount = (catId) => {
+    if (catId === "all") return services.length;
+    return services.filter((s) => s.category === catId).length;
+  };
+
+  const uniqueWilayas = [...new Set(services.map((s) => s.wilaya))].length;
 
   return (
-    <div className="services-page">
-      
-      <div className="svc-main-header">
-        <h1>خدماتنا المتكاملة</h1>
-        <p>لا نكتفي بتسهيل عقود البيع والشراء، بل نوفر لك حلولاً متكاملة لما بعد الاستحواذ على عقارك.</p>
+    <div className="svc-page">
+      {/* Hero */}
+      <div className="svc-hero">
+        <div className="svc-hero-content">
+          <span className="svc-hero-badge">  سوق ADAR للخدمات</span>
+          <h1>كل ما تحتاجه لعقارك في مكان واحد</h1>
+          <p>
+            اكتشف أفضل مقدمي الخدمات العقارية في الجزائر، من الصيانة
+            والنقل إلى التصميم والتوثيق القانوني
+          </p>
+        </div>
       </div>
 
-      {servicesData.map((service, index) => (
-        <section 
-          key={service.id} 
-          className={`svc-section ${index === 0 || index === 3 ? 'svc-dark-bg' : 'svc-light-bg'} ${service.reverse ? 'svc-reverse' : ''}`}
-        >
-          <div className="svc-container">
-            
-            <div className="svc-content">
-              <div className="svc-icon-wrapper">
-                {service.icon}
-              </div>
-              <h2>{service.title}</h2>
-              <p>{service.description}</p>
-              
-              <ul className="svc-features">
-                {service.features.map((feat, i) => (
-                  <li key={i}>
-                    <FiCheckCircle className="svc-check-icon" />
-                    <span>{feat}</span>
-                  </li>
-                ))}
-              </ul>
+      {/* Stats */}
+      <div className="svc-stats-bar">
+        <div className="svc-stat-item">
+          <span className="svc-stat-number">{services.length}</span>
+          <span className="svc-stat-label">خدمة متاحة</span>
+        </div>
+        <div className="svc-stat-item">
+          <span className="svc-stat-number">{uniqueWilayas}</span>
+          <span className="svc-stat-label">ولاية مغطاة</span>
+        </div>
+        <div className="svc-stat-item">
+          <span className="svc-stat-number">24/7</span>
+          <span className="svc-stat-label">تواصل مستمر</span>
+        </div>
+      </div>
 
-              {/* <-- 3. إضافة حدث الضغط للذهاب للمسار المحدد --> */}
-              <button 
-                className="svc-btn" 
-                onClick={() => navigate(service.path)}
-              >
-                اكتشف الخدمة
-              </button>
-            </div>
+      {/* Filters */}
+      <div className="svc-filters">
+        <div className="svc-filters-row">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              className={`svc-filter-btn ${activeFilter === cat.id ? "active" : ""}`}
+              onClick={() => setActiveFilter(cat.id)}
+            >
+              {cat.icon}
+              {cat.label}
+              <span className="svc-filter-count">{getCategoryCount(cat.id)}</span>
+            </button>
+          ))}
+        </div>
+      </div>
 
-            <div className="svc-image-wrapper">
-              <img src={service.image} alt={service.title} className="svc-img" />
-            </div>
-
+      {/* Grid */}
+      <div className="svc-grid">
+        {loading ? (
+          <div className="svc-loading">
+            <div className="svc-spinner"></div>
+            <p style={{ color: "#94a3b8" }}>جاري تحميل الخدمات...</p>
           </div>
-        </section>
-      ))}
+        ) : filteredServices.length === 0 ? (
+          <div className="svc-empty">
+            <div className="svc-empty-icon">🔍</div>
+            <h3>لا توجد خدمات في هذا التصنيف</h3>
+            <p>جرب تصفح التصنيفات الأخرى أو عد لاحقاً</p>
+          </div>
+        ) : (
+          filteredServices.map((service) => (
+            <div key={service.id} className="svc-card">
+              {/* Card Header */}
+              <div className="svc-card-header">
+                <div className={`svc-card-icon ${service.category}`}>
+                  {service.category === "maintenance" && <FiTool />}
+                  {service.category === "transport" && <FiTruck />}
+                  {service.category === "architecture" && <FiLayout />}
+                  {service.category === "legal" && <FiFileText />}
+                  {service.category === "cleaning" && <FiBox />}
+                  {(service.category === "other" || !service.category) && (
+                    <FiBriefcase />
+                  )}
+                </div>
+                <span className="svc-card-category">
+                  {categoryLabels[service.category] || "خدمات"}
+                </span>
+              </div>
+
+              {/* Card Body */}
+              <div className="svc-card-body">
+                <h3 className="svc-card-title">{service.title}</h3>
+                <p className="svc-card-desc">{service.description}</p>
+
+                {/* Meta Info */}
+                <div className="svc-card-meta">
+                  <div className="svc-meta-row">
+                    <span className="svc-meta-label">
+                      <FiUser style={{ verticalAlign: "middle", marginLeft: 4 }} />
+                      مقدم الخدمة
+                    </span>
+                    <span className="svc-meta-value">
+                      {service.provider_name}
+                    </span>
+                  </div>
+                  <div className="svc-meta-row">
+                    <span className="svc-meta-label">
+                      <FiMapPin style={{ verticalAlign: "middle", marginLeft: 4 }} />
+                      الولاية
+                    </span>
+                    <span className="svc-meta-value">{service.wilaya}</span>
+                  </div>
+                </div>
+
+                {/* Price */}
+                <div className="svc-card-price">
+                  {service.price_type === "negotiable" ? (
+                    <span className="svc-price-negotiable">
+                      💰 حسب الاتفاق
+                    </span>
+                  ) : (
+                    <span className="svc-price-tag">
+                      {service.price}{" "}
+                      <span>
+                        دج {service.price_type === "hourly" ? "/ ساعة" : ""}
+                      </span>
+                    </span>
+                  )}
+                </div>
+
+                {/* Request Button */}
+                <button
+                  className="svc-request-btn"
+                  onClick={() => handleRequestService(service)}
+                >
+                  <FiSend />
+                  طلب هذه الخدمة
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
     </div>
   );
 };

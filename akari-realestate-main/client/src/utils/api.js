@@ -1,21 +1,15 @@
-import { db } from "../firebase"; // تأكدي من أن اسم الملف ومساره صحيح
-import { ref, get, child, set, push } from "firebase/database";
+import { supabase } from "../supabaseClient";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
 
 // --- 1. جلب كل العقارات ---
 export const getAllProperties = async () => {
   try {
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, `properties`));
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-
-      return Object.keys(data).map((key) => ({ id: key, ...data[key] }));
-    }
-    return [];
+    const { data, error } = await supabase.from("properties").select("*");
+    if (error) throw error;
+    return data;
   } catch (error) {
-    console.error("خطأ في الاتصال:", error);
+    console.error("خطأ في الاتصال بـ Supabase:", error);
     throw error;
   }
 };
@@ -23,27 +17,38 @@ export const getAllProperties = async () => {
 // --- 2. جلب عقار واحد ---
 export const getProperty = async (id) => {
   try {
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, `properties/${id}`));
-    if (snapshot.exists()) return { id: snapshot.key, ...snapshot.val() };
-    throw new Error("Property not found");
+    const { data, error } = await supabase
+      .from("properties")
+      .select("*")
+      .eq("id", id)
+      .single(); // single() يجلب عنصر واحد فقط
+    
+    if (error) throw error;
+    return data;
   } catch (error) {
     throw error;
   }
 };
 
-// --- 3. إنشاء مستخدم (التي تسببت في الخطأ الأخير) ---
-export const createUser = async (email, token) => {
+// --- 3. إنشاء مستخدم أو التحقق من وجوده ---
+export const createUser = async (email) => {
   try {
-    const userEmailKey = email.replace(".", ",");
-    const userRef = ref(db, `users/${userEmailKey}`);
-    const snapshot = await get(userRef);
-    
-    if (!snapshot.exists()) {
-      await set(userRef, { email, bookedVisits: [], favResidenciesID: [] });
+    const { data, error } = await supabase
+      .from("users")
+      .select("email")
+      .eq("email", email)
+      .single();
+
+    // إذا لم يكن المستخدم موجوداً، نقوم بإنشائه
+    if (error && error.code === "PGRST116") {
+      const { error: insertError } = await supabase
+        .from("users")
+        .insert([{ email, bookedVisits: [], favResidenciesID: [] }]);
+      
+      if (insertError) throw insertError;
     }
   } catch (error) {
-    console.error("Error creating user:", error);
+    console.error("Error creating user in Supabase:", error);
   }
 };
 
@@ -51,10 +56,13 @@ export const createUser = async (email, token) => {
 export const getAllFav = async (email) => {
   try {
     if (!email) return [];
-    const userEmailKey = email.replace(".", ",");
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, `users/${userEmailKey}/favResidenciesID`));
-    return snapshot.exists() ? Object.keys(snapshot.val()) : [];
+    const { data, error } = await supabase
+      .from("users")
+      .select("favResidenciesID")
+      .eq("email", email)
+      .single();
+    
+    return error ? [] : (data?.favResidenciesID || []);
   } catch (error) {
     return [];
   }
@@ -64,10 +72,13 @@ export const getAllFav = async (email) => {
 export const getAllBookings = async (email) => {
   try {
     if (!email) return [];
-    const userEmailKey = email.replace(".", ",");
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, `users/${userEmailKey}/bookedVisits`));
-    return snapshot.exists() ? snapshot.val() : [];
+    const { data, error } = await supabase
+      .from("users")
+      .select("bookedVisits")
+      .eq("email", email)
+      .single();
+    
+    return error ? [] : (data?.bookedVisits || []);
   } catch (error) {
     return [];
   }
@@ -76,12 +87,26 @@ export const getAllBookings = async (email) => {
 // --- 6. حجز زيارة ---
 export const bookVisit = async (date, propertyId, email) => {
   try {
-    const userEmailKey = email.replace(".", ",");
-    const bookingRef = ref(db, `users/${userEmailKey}/bookedVisits`);
-    await push(bookingRef, {
+    // نجلب الحجوزات الحالية أولاً
+    const { data: user } = await supabase
+      .from("users")
+      .select("bookedVisits")
+      .eq("email", email)
+      .single();
+
+    const currentBookings = user?.bookedVisits || [];
+    const newBooking = {
       id: propertyId,
       date: dayjs(date).format("DD/MM/YYYY"),
-    });
+    };
+
+    // نضيف الحجز الجديد للمصفوفة ونحدث الجدول
+    const { error } = await supabase
+      .from("users")
+      .update({ bookedVisits: [...currentBookings, newBooking] })
+      .eq("email", email);
+
+    if (error) throw error;
     toast.success("Visit booked!");
   } catch (error) {
     throw error;
@@ -91,16 +116,29 @@ export const bookVisit = async (date, propertyId, email) => {
 // --- 7. إضافة/إزالة مفضلة ---
 export const toFav = async (id, email) => {
   try {
-    const userEmailKey = email.replace(".", ",");
-    const favRef = ref(db, `users/${userEmailKey}/favResidenciesID/${id}`);
-    const snapshot = await get(favRef);
-    if (snapshot.exists()) {
-      await set(favRef, null);
+    const { data: user } = await supabase
+      .from("users")
+      .select("favResidenciesID")
+      .eq("email", email)
+      .single();
+
+    const currentFavs = user?.favResidenciesID || [];
+
+    let updatedFavs;
+    if (currentFavs.includes(id)) {
+      updatedFavs = currentFavs.filter((favId) => favId !== id);
       toast.info("Removed from favorites");
     } else {
-      await set(favRef, true);
+      updatedFavs = [...currentFavs, id];
       toast.success("Added to favorites");
     }
+
+    const { error } = await supabase
+      .from("users")
+      .update({ favResidenciesID: updatedFavs })
+      .eq("email", email);
+
+    if (error) throw error;
   } catch (e) {
     throw e;
   }
@@ -108,28 +146,37 @@ export const toFav = async (id, email) => {
 
 // --- 8. إزالة حجز ---
 export const removeBooking = async (id, email) => {
-    try {
-        const userEmailKey = email.replace(".", ",");
-        toast.info("Firebase removal logic triggered");
-    } catch (error) {
-        throw error;
-    }
-};
-// في ملف src/utils/api.js
+  try {
+    const { data: user } = await supabase
+      .from("users")
+      .select("bookedVisits")
+      .eq("email", email)
+      .single();
 
+    const currentBookings = user?.bookedVisits || [];
+    
+    // نحذف الحجز الذي طابقت قيمة id الخاصة به
+    const updatedBookings = currentBookings.filter((booking) => booking.id !== id);
+
+    const { error } = await supabase
+      .from("users")
+      .update({ bookedVisits: updatedBookings })
+      .eq("email", email);
+
+    if (error) throw error;
+    toast.success("Booking removed successfully");
+  } catch (error) {
+    throw error;
+  }
+};
+
+// --- 9. جلب الوكالات ---
 export const getAllAgencies = async () => {
   try {
-    const dbRef = ref(db);
-    const snapshot = await get(child(dbRef, "agencies")); 
+    const { data, error } = await supabase.from("agencies").select("*");
     
-    if (snapshot.exists()) {
-      const data = snapshot.val();
-      return Object.keys(data).map((id) => ({
-        id,
-        ...data[id],
-      }));
-    }
-    return [];
+    if (error) throw error;
+    return data;
   } catch (error) {
     console.error("خطأ في جلب الوكالات:", error);
     throw error;

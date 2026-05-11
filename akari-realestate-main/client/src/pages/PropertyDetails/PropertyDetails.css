@@ -520,3 +520,164 @@
     justify-content: center;
   }
 }
+/* === تنسيقات نموذج تعديل العقار (وضع داكن) === */
+
+.pd-container {
+  margin-top: 30px;
+}
+
+.pd-section {
+  background: rgba(22, 28, 36, 0.8);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  width: 80%;
+  margin: auto;
+  padding: 32px;
+}
+
+/* تنسيقات العنوان */
+.edit-form-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 35px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.edit-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #f1c991, #d4a254);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.edit-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.edit-subtitle {
+  margin: 2px 0 0 0;
+  color: #8a8a9a;
+  font-size: 13px;
+}
+
+/* تنسيقات الحقول */
+.edit-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.edit-label {
+  display: block;
+  color: #b0b0c0;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.edit-input,
+.edit-textarea {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  color: #ffffff;
+  background: #15151a;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  outline: none;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+.edit-input::placeholder,
+.edit-textarea::placeholder {
+  color: #555;
+}
+
+/* تم تغيير اللون من الأزرق إلى الذهبي */
+.edit-input:focus,
+.edit-textarea:focus {
+  border-color: #d4a254;
+  box-shadow: 0 0 0 3px rgba(241, 201, 145, 0.15);
+}
+
+.edit-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* تنسيقات الزر */
+.edit-btn-wrapper {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.edit-submit-btn {
+  padding: 14px 48px;
+  background: linear-gradient(135deg, #f1c991, #d4a254);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(241, 201, 145, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.edit-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(241, 201, 145, 0.4);
+  background: linear-gradient(135deg, #f5d6a5, #d4a254);
+}
+
+.edit-submit-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.edit-submit-btn:disabled {
+  background: linear-gradient(135deg, #555, #444);
+  color: #888;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* حركة التحميل (Spinner) - تم تعديل اللون */
+.edit-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(26, 26, 26, 0.3);
+  borderTop-color: #1a1a1a;
+  border-radius: 50%;
+  display: inline-block;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}

@@ -3,7 +3,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { 
   FaFacebook, FaInstagram, FaLinkedin, FaWhatsapp, 
-  FaPhoneAlt, FaEnvelope, FaMapMarkerAlt 
+  FaPhoneAlt, FaEnvelope, FaMapMarkerAlt,
+  FaTiktok, 
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import './Footer.css';
@@ -38,11 +39,11 @@ const Footer = () => {
             <div className="footer-contact-info">
               <div className="contact-item">
                 <FaPhoneAlt className="contact-icon" />
-                <span>+213 555 123 456</span>
+                <span> 456 253 555 213 +</span>
               </div>
               <div className="contact-item">
                 <FaEnvelope className="contact-icon" />
-                <span>contact@adar-realestate.com</span>
+                <span>adarakar26@gmail.com</span>
               </div>
               <div className="contact-item">
                 <FaMapMarkerAlt className="contact-icon" />
@@ -51,10 +52,10 @@ const Footer = () => {
             </div>
 
             <div className="footer-socials">
-              <a href="#" className="social-link"><FaFacebook /></a>
-              <a href="#" className="social-link"><FaInstagram /></a>
-              <a href="#" className="social-link"><FaLinkedin /></a>
-              <a href="#" className="social-link"><FaWhatsapp /></a>
+              <a href="https://www.facebook.com" className="social-link"><FaFacebook /></a>
+              <a href="https://www.instagram.com/adar.akari?igsh=MTA2aWI5ODY4b3d2Zg==" className="social-link"><FaInstagram /></a>
+              <a href="https://www.linkedin.com" className="social-link"><FaLinkedin /></a>
+              <a href="" className="social-link" target="_blank" rel="noreferrer"><FaTiktok /></a>
             </div>
           </div>
 

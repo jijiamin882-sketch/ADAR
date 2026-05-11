@@ -1,0 +1,188 @@
+/* === إعدادات عامة لصفحة المفضلة === */
+.fav-wrapper {
+  min-height: 70vh;
+  padding: 40px 20px;
+  background: #121217;
+  margin-top: 50px;
+}
+
+.fav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* عنوان الصفحة */
+.fav-header {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.fav-header h1 {
+  color: #fff;
+  font-size: 28px;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fav-header p {
+  color: #8a8a9a;
+  margin: 0;
+  font-size: 15px;
+}
+
+/* حالة فارغة (لا توجد مفضلات أو لم يسجل دخول) */
+.fav-empty-state {
+  text-align: center;
+  padding: 80px 20px;
+  background: rgba(22, 28, 36, 0.5);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fav-empty-state h2 {
+  color: #ccc;
+  margin: 20px 0 10px 0;
+}
+
+.fav-empty-state p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+.fav-login-btn, .fav-browse-btn {
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #f1c991, #d4a254);
+  color: #1a1a1a;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.fav-login-btn:hover, .fav-browse-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(241, 201, 145, 0.3);
+}
+
+/* شبكة البطاقات */
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* تصميم البطاقة */
+.fav-card {
+  background: rgba(22, 28, 36, 0.8);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.fav-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+  border-color: rgba(241, 201, 145, 0.2);
+}
+
+/* صورة البطاقة */
+.fav-card-img-link {
+  position: relative;
+  display: block;
+  height: 200px;
+  overflow: hidden;
+}
+
+.fav-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.fav-card:hover .fav-card-img {
+  transform: scale(1.05);
+}
+
+.fav-card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #f1c991;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  backdrop-filter: blur(4px);
+}
+
+/* محتوى البطاقة */
+.fav-card-body {
+  padding: 20px;
+}
+
+.fav-card-title {
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+  transition: color 0.3s;
+}
+
+.fav-card-title:hover {
+  color: #f1c991;
+}
+
+.fav-card-location {
+  color: #8a8a9a;
+  font-size: 14px;
+  margin: 0 0 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fav-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 15px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.fav-card-price {
+  color: #f1c991;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+/* زر الحذف من المفضلة */
+.fav-remove-btn {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+  padding: 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.fav-remove-btn:hover {
+  background: #dc3545;
+  color: #fff;
+  border-color: #dc3545;
+}

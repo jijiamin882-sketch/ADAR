@@ -14,11 +14,13 @@ import {
   FiAlertCircle,
 } from "react-icons/fi";
 import "./AddService.css";
+import { useAuth } from "../../context/AuthContext";
+import { supabase } from "../../supabaseClient";
 
 const AddService = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
-
+  const { currentUser } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [images, setImages] = useState([]);
   const [errors, setErrors] = useState({}); // لحفظ أخطاء كل خطوة
@@ -68,10 +70,23 @@ const AddService = () => {
       if (!formData.description.trim()) newErrors.description = "وصف الخدمة مطلوب";
     }
 
-    if (step === 3) {
-      if (!formData.phone.trim()) newErrors.phone = "رقم الهاتف للتواصل مطلوب";
+     if (step === 3) {
+      if (!formData.phone.trim()) {
+        newErrors.phone = "رقم الهاتف للتواصل مطلوب";
+      } 
+      // ← إضافة التحقق من التلاعب (أرقام جزائرية فقط)
+      else {
+        // نزيل المسافات لنفحص الرقم الصافي
+        const cleanPhone = formData.phone.replace(/\s/g, '');
+        
+        // التحقق: يبدأ بـ 0 ويتكون من 10 أرقام بالضبط ويحتوي على أرقام فقط
+        const phoneRegex = /^0[5-7]\d{8}$/;
+        
+        if (!phoneRegex.test(cleanPhone)) {
+          newErrors.phone = "رقم الهاتف غير صحيح (يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام)";
+        }
+      }
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -97,16 +112,39 @@ const AddService = () => {
     setImages((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // تحقق أخير للخطوة 3
-    if (!validateStep(3)) return;
-    
-    console.log("تم إرسال بيانات الخدمة:", { ...formData, images });
-    alert("تم نشر خدمتك بنجاح في سوق ADAR!");
-    navigate("/services");
-  };
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (!validateStep(3)) return;
+  
+  if (!currentUser) {
+    alert("يجب عليك تسجيل الدخول أولاً لإضافة خدمة");
+    return;
+  }
+  
+  try {
+    const { data, error } = await supabase.from('services').insert([{
+      user_id: currentUser.id,
+      category: formData.category,
+      title: formData.title,
+      provider_name: formData.providerName,
+      wilaya: formData.wilaya,
+      price_type: formData.priceType,
+      price: formData.priceType === 'negotiable' ? 0 : Number(formData.price), // ← التعديل هنا
+      description: formData.description,
+      phone: formData.phone,
+      status: "active"
+    }]).select();
 
+    if (error) throw error;
+    alert("تم نشر خدمتك بنجاح في سوق ADAR! ✅");
+    navigate("/services");
+  } catch (error) {
+    alert("خطأ: " + error.message);
+  }
+};
+   
+
+     
   return (
     <div className="add-prop-wrapper">
       <div className="add-prop-container">
@@ -255,7 +293,21 @@ const AddService = () => {
 
                 <div className="form-group">
                   <label><FiPhone /> رقم الهاتف / الواتساب  </label>
-                  <input type="tel" name="phone" placeholder="05XX XX XX XX" value={formData.phone} onChange={handleInputChange} className={`phone-input ${errors.phone ? "input-error" : ""}`} />
+                   <input 
+  type="tel" 
+  name="phone" 
+  placeholder="05XX XX XX XX" 
+  value={formData.phone} 
+  onChange={(e) => {
+    // نسمح فقط بإدخال الأرقام والمسافات
+    const onlyNumbers = e.target.value.replace(/[^0-9\s]/g, '');
+    handleInputChange({ target: { name: "phone", value: onlyNumbers } });
+  }}
+  className={`phone-input ${errors.phone ? "input-error" : ""}`} 
+  inputMode="numeric" // ← هذه الخاصية تظهر لوحة الأرقام فقط في الهواتف
+  maxLength={10}     // ← أقصى طول 10 أحرف
+/>
+
                   {errors.phone && <span className="error-text"><FiAlertCircle /> {errors.phone}</span>}
                 </div>
               </div>

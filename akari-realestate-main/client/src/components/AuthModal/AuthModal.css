@@ -1,262 +1,302 @@
-/* ========================================
-   Auth Modal Styles (Realtor Style)
-   ======================================== */
-
-.auth-overlay {
+/* ==========================================
+   الخلفية المعتمة
+   ========================================== */
+.custom-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(6px);
   z-index: 10000;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 20px;
-  animation: fadeIn 0.2s ease;
-  border-radius: 10px;
-  
-  
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* الصندوق الرئيسي */
-.auth-modal-box {
+/* ==========================================
+   صندوق النافذة (خلفية بيضاء نظيفة)
+   ========================================== */
+.custom-modal {
   background: #ffffff;
-  border-radius: 20px;
+  border-radius: 16px;
   width: 100%;
-  max-width: 500px;
-  padding: 2rem 2rem;
+  max-width: 440px;
+  padding: 32px;
   position: relative;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
-  animation: slideUp 0.3s ease;
   direction: rtl;
-  font-family: 'Tajawal', 'Cairo', sans-serif;
-  height: 598px;
+  font-family: 'Tajawal', sans-serif;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(30px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* زر الإغلاق */
-.auth-close-btn {
+/* ==========================================
+   زر الإغلاق
+   ========================================== */
+.custom-close {
   position: absolute;
-  top: 15px;
-  left: 15px;
-  background: none;
+  top: 16px;
+  left: 16px;
+  background: #f3f4f6;
   border: none;
-  font-size: 1.3rem;
-  color: #6b7280;
-  cursor: pointer;
-  padding: 5px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  color: #374151;
+  transition: 0.2s;
 }
 
-.auth-close-btn:hover {
-  background: #f3f4f6;
-  color: #161c24;
+.custom-close:hover {
+  background: #e5e7eb;
 }
 
-/* العنوان */
-.auth-title {
-  font-size: 1.5rem;
+/* ==========================================
+   العنوان والوصف (لون داكن واضح جداً)
+   ========================================== */
+.custom-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.custom-header h2 {
+  font-size: 22px;
   font-weight: 800;
-  color: #161c24;
-  margin-bottom: 0.5rem;
-  text-align: center;
+  color: #111827; /* أسود قوي جداً */
+  margin: 0 0 8px 0;
 }
 
-.auth-subtitle {
-  font-size: 0.95rem;
+.custom-header p {
+  font-size: 14px;
+  color: #6b7280; /* رمادي واضح */
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ==========================================
+   تبويبات التبديل
+   ========================================== */
+.custom-tabs {
+  display: flex;
+  background: #f3f4f6;
+  border-radius: 10px;
+  padding: 4px;
+  margin-bottom: 24px;
+}
+
+.tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
   color: #6b7280;
-  text-align: center;
-  margin-bottom: 2rem;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-/* حقل الإيميل */
-.auth-input-group {
+.tab.active {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+/* ==========================================
+   حقول الإدخال (نص أسود واضح)
+   ========================================== */
+.custom-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-wrapper {
   display: flex;
   align-items: center;
-  border: 1.5px solid #d1d5db;
+  border: 1.5px solid #e5e7eb;
   border-radius: 10px;
-  padding: 0 15px;
-  margin-bottom: 1rem;
-  transition: all 0.3s ease;
+  padding: 0 14px;
   background: #fafafa;
+  transition: 0.3s;
 }
 
-.auth-input-group:focus-within {
-  border-color: #f1c991;
+.input-wrapper:focus-within {
+  border-color: #c9963a;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(241, 201, 145, 0.15);
+  box-shadow: 0 0 0 3px rgba(201, 150, 58, 0.1);
 }
 
-.auth-input-icon {
+.input-icon {
   color: #9ca3af;
-  font-size: 1.1rem;
   margin-left: 10px;
+  font-size: 16px;
 }
 
-.auth-input-group input {
+.input-wrapper input {
   flex: 1;
   border: none;
   outline: none;
   background: transparent;
   padding: 14px 0;
-  font-size: 0.95rem;
-  font-family: inherit;
-  color: #161c24;
+  font-size: 14px;
+  font-family: 'Tajawal', sans-serif;
+  color: #111827; /* ← لون الكتابة داخل الخانة (أسود لضمان الوضوح) */
 }
 
-.auth-input-group input::placeholder {
+.input-wrapper input::placeholder {
   color: #9ca3af;
 }
 
-/* زر المتابعة (ذهبي) */
-.auth-continue-btn {
+/* ==========================================
+   زر الإرسال الرئيسي
+   ========================================== */
+.submit-btn {
   width: 100%;
   padding: 14px;
   background: linear-gradient(135deg, #c9963a, #f1c991);
   color: #161c24;
   border: none;
   border-radius: 10px;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 15px;
+  font-weight: 800;
   cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: inherit;
+  font-family: 'Tajawal', sans-serif;
+  transition: 0.3s;
+  margin-top: 4px;
 }
 
-.auth-continue-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(241, 201, 145, 0.35);
+.submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(201, 150, 58, 0.3);
 }
 
-/* الفاصل */
-.auth-divider {
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==========================================
+   الفاصل
+   ========================================== */
+.custom-divider {
   display: flex;
   align-items: center;
-  margin: 1.5rem 0;
-  gap: 15px;
+  margin: 24px 0;
+  gap: 12px;
 }
 
-.auth-divider::before,
-.auth-divider::after {
+.custom-divider::before, .custom-divider::after {
   content: "";
   flex: 1;
   height: 1px;
   background: #e5e7eb;
 }
 
-.auth-divider span {
-  font-size: 0.8rem;
+.custom-divider span {
+  font-size: 12px;
   color: #9ca3af;
   white-space: nowrap;
 }
 
-/* أزرار التواصل الاجتماعي */
-.auth-social-btns {
+/* ==========================================
+   أزرار التواصل الاجتماعي
+   ========================================== */
+.social-buttons {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 10px;
 }
 
-.auth-social-btn {
+.social-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px;
+  padding: 11px;
   border-radius: 10px;
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-family: inherit;
-}
-
-.social-icon {
-  font-size: 1.2rem;
+  font-family: 'Tajawal', sans-serif;
+  transition: 0.2s;
+  border: 1.5px solid transparent;
 }
 
 /* جوجل */
-.auth-social-btn.google {
+.social-btn.google {
   background: #fff;
   color: #333;
-  border: 1.5px solid #dadce0;
+  border-color: #dadce0;
 }
-.auth-social-btn.google:hover {
-  background: #f8f9fa;
-  border-color: #c0c0c0;
-}
+.social-btn.google:hover { background: #f8f9fa; border-color: #c0c0c0; }
 
 /* فيسبوك */
-.auth-social-btn.facebook {
+.social-btn.facebook {
   background: #1877F2;
   color: #fff;
-  border: none;
 }
-.auth-social-btn.facebook:hover {
-  background: #166fe5;
-}
+.social-btn.facebook:hover { background: #166fe5; }
 
 /* أبل */
-.auth-social-btn.apple {
+.social-btn.apple {
   background: #000;
   color: #fff;
-  border: none;
 }
-.auth-social-btn.apple:hover {
-  background: #333;
-}
+.social-btn.apple:hover { background: #333; }
 
-/* رابط الوكلاء */
-.auth-agent-link {
+/* ==========================================
+   نص الشروط في الأسفل (رمادي صغير)
+   ========================================== */
+.custom-footer {
   text-align: center;
-  margin-top: 2rem;
-  font-size: 0.9rem;
-  color: #4b5563;
+  font-size: 12px;
+  color: #9ca3af; /* رمادي فاتح جداً ليكون خفيفاً ولا يشتت */
+  margin-top: 20px;
+  line-height: 1.8;
 }
 
-.auth-agent-link a {
-  color: #c9963a;
-  text-decoration: none;
-  font-weight: 700;
-}
-
-.auth-agent-link a:hover {
-  text-decoration: underline;
-}
-
-/* الشروط */
-.auth-terms {
-  text-align: center;
-  font-size: 0.75rem;
-  color: #9ca3af;
-  margin-top: 1.5rem;
-  line-height: 1.6;
-}
-
-.auth-terms a {
+.custom-footer a {
   color: #6b7280;
   text-decoration: underline;
+  font-weight: 600;
 }
 
-/* التجاوب */
+/* ==========================================
+   التجاوب مع الشاشات الصغيرة
+   ========================================== */
 @media (max-width: 480px) {
-  .auth-modal-box {
-    padding: 2rem 1.5rem;
+  .custom-modal {
+    padding: 24px 20px;
   }
-  .auth-title {
-    font-size: 1.3rem;
+  .custom-header h2 {
+    font-size: 20px;
   }
+}
+/* ==========================================
+   رسالة النجاح الاحترافية (خضراء)
+   ========================================== */
+.success-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f0fdf4; /* خلفية خضراء فاتحة جداً */
+  border: 1px solid #bbf7d0; /* إطار أخضر فاتح */
+  color: #15803d; /* نص أخضر داكن */
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'Tajawal', sans-serif;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-icon {
+  font-size: 18px;
+  flex-shrink: 0;
 }

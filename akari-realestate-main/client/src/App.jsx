@@ -1,6 +1,4 @@
-import { db } from './firebase';
-console.log("قاعدة البيانات متصلة:", db);
-
+import { createClient } from "@supabase/supabase-js";
 import { Suspense, useState } from "react";
 import Login from "./pages/Login";
 import "./App.css";
@@ -18,7 +16,7 @@ import Furniture from "./pages/Furniture/Furniture";
 import Moving from "./pages/Moving/Moving";
 import About from './pages/About/About';
 import InvestmentTools from './components/InvestmentTools/InvestmentTools';
-import Favourites from './pages/Favourites/Favourites';
+import Favorites from "./pages/Favorites/Favorites";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -27,24 +25,28 @@ import UserDetailContext from "./context/UserDetailContext";
 import Bookings from "./pages/Bookings/Bookings";
 import { MantineProvider } from '@mantine/core';
 import AddProperty from "./pages/AddProperty/AddProperty";
-import { AuthProvider } from "./context/AuthContext"; 
+import { AuthContextProvider } from './context/AuthContext'; 
 import Blog from './pages/Blog/Blog';
 import PropertyDetails from "./pages/PropertyDetails/PropertyDetails";
 import AiChat from './pages/AiChat/AiChat';
 import BlogDetail from './pages/BlogDetail/BlogDetail';
 import PrivacyPolicy from './pages/PrivacyPolicy/PrivacyPolicy';
- 
+import Dashboard from "./pages/Dashboard/Dashboard"; 
+import DashboardMessages from "./pages/Dashboard/DashboardMessages.jsx";
+import Settings from "./pages/Dashboard/Settings";
 
 function App() {
+
   const queryClient = new QueryClient();
 
   const [userDetails, setUserDetails] = useState({
-    favourites: [],
+    favorites: [],
     bookings: [],
   });
-
+   
   return (
-    <AuthProvider> 
+   
+    <AuthContextProvider> 
      <MantineProvider theme={{ dir: 'rtl' }}> 
       <UserDetailContext.Provider value={{ userDetails, setUserDetails }}>
         <QueryClientProvider client={queryClient}>
@@ -69,7 +71,7 @@ function App() {
                     
                     {/* المستخدم */}
                     <Route path="/bookings" element={<Bookings />} />
-                    <Route path="/favourites" element={<Favourites />} />
+                    <Route path="/favorites" element={<Favorites/>} />
                     
                     {/* الخدمات والمعلومات */}
                     <Route path="/services" element={<Services />} />
@@ -82,12 +84,18 @@ function App() {
                     <Route path="/InvestmentTools" element={<InvestmentTools />}/>
                     <Route path="/AiChat" element={<AiChat />} />
                     
+
+                    <Route path="/dashboard" element={<Dashboard />}>
+                      <Route path="messages" element={<DashboardMessages />} />
+                      <Route path="settings" element={<Settings />} />
+                    </Route>
                     {/* سياسة الخصوصية */}
                     <Route path="/PrivacyPolicy" element={<PrivacyPolicy />} />
                   </Route>
                   
                   {/* المسارات التي لا تحتوي على Layout (مثل تسجيل الدخول) */}
                   <Route path="/login" element={<Login />} />
+                  
                 </Routes>
               </Suspense>
             </div>
@@ -96,7 +104,7 @@ function App() {
         </QueryClientProvider>
       </UserDetailContext.Provider>
      </MantineProvider>
-    </AuthProvider>
+    </AuthContextProvider>
   );
 }
 

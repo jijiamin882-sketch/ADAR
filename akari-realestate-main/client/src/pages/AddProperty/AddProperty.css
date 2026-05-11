@@ -276,3 +276,366 @@
     grid-template-columns: 1fr;
   }
 }
+/* ========== المتغيرات الأساسية ========== */
+:root {
+  --navy: rgba(255,255,255,0.1);
+  --navy-light: black;
+  --navy-mid: black;
+  --navy-soft: black;
+  --gold: #f1c991;
+  --gold-light: #F5D9AD;
+  --gold-pale: #FBF0DE;
+  --gold-dark: #D4A85C;
+  --gold-muted: rgba(241, 201, 145, 0.15);
+  --text-light: #CBD5E1;
+  --text-muted: #8899AA;
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-border:  rgba(255,255,255,0.1);
+  --input-bg: rgba(255,255,255,0);
+  --input-border: black;
+}
+
+/* ========== قسم المرافق ========== */
+.amenities-section {
+  margin-top: 2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* خط ذهبي زخرفي علوي */
+.amenities-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+  border-radius: 16px 16px 0 0;
+}
+
+.amenities-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.amenities-header-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  color: var(--navy);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 15px rgba(241, 201, 145, 0.25);
+}
+
+.amenities-header h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--gold);
+  margin: 0 0 0.3rem 0;
+}
+
+.amenities-subtitle {
+  font-size: 0.83rem;
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* ========== شبكة المرافق ========== */
+.amenities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.65rem;
+}
+
+.amenity-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  transition: all 0.25s ease;
+}
+
+.amenity-card:hover {
+  border-color: var(--gold-muted);
+  box-shadow: 0 2px 12px rgba(241, 201, 145, 0.08);
+  transform: translateY(-1px);
+}
+
+/* أيقونات المرافق بألوان مختلفة مع خلفية داكنة */
+.amenity-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.amenity-icon-red {
+  background: rgba(239, 68, 68, 0.12);
+  color: #F87171;
+}
+
+.amenity-icon-blue {
+  background: rgba(96, 165, 250, 0.12);
+  color: #60A5FA;
+}
+
+.amenity-icon-green {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34D399;
+}
+
+.amenity-icon-gold {
+  background: var(--gold-muted);
+  color: var(--gold);
+}
+
+.amenity-icon-purple {
+  background: rgba(167, 139, 250, 0.12);
+  color: #A78BFA;
+}
+
+.amenity-icon-orange {
+  background: rgba(251, 146, 60, 0.12);
+  color: #FB923C;
+}
+
+.amenity-icon-emerald {
+  background: rgba(52, 211, 153, 0.12);
+  color: #6EE7B7;
+}
+
+.amenity-icon-slate {
+  background: rgba(148, 163, 184, 0.12);
+  color: #94A3B8;
+}
+
+.amenity-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.amenity-info label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-light);
+  margin-bottom: 0.4rem;
+}
+
+.amenity-distance-wrapper {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.amenity-input {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0 0.6rem;
+  font-size: 0.85rem;
+  font-family: inherit;
+  color: #F1F5F9;
+  background: var(--navy);
+  transition: all 0.25s ease;
+}
+
+.amenity-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(241, 201, 145, 0.15);
+}
+
+.amenity-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+/* إزالة أسهم الـ Number */
+.amenity-input::-webkit-inner-spin-button,
+.amenity-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.amenity-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.amenity-unit {
+  width: 65px;
+  height: 36px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0 0.3rem;
+  font-size: 0.8rem;
+  font-family: inherit;
+  color: var(--gold);
+  background: var(--navy);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23f1c991' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 0.4rem center;
+  padding-left: 1.4rem;
+}
+
+.amenity-unit:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(241, 201, 145, 0.15);
+}
+
+.amenity-unit option {
+  background: var(--navy);
+  color: var(--text-light);
+}
+
+/* ========== ملاحظة ========== */
+.amenities-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+  padding: 0.75rem 1rem;
+  background: var(--gold-muted);
+  border: 1px solid rgba(241, 201, 145, 0.2);
+  border-radius: 10px;
+  color: var(--gold-light);
+  font-size: 0.8rem;
+  line-height: 1.7;
+}
+
+.amenities-note svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  stroke: var(--gold);
+}
+
+/* ========== معاينة الوصف ========== */
+.amenities-preview {
+  margin-top: 1rem;
+  border: 2px dashed var(--card-border);
+  border-radius: 12px;
+  overflow: hidden;
+  animation: previewSlideIn 0.35s ease;
+}
+
+@keyframes previewSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1rem;
+  background: var(--navy-light);
+  color: var(--gold);
+  font-size: 0.82rem;
+  font-weight: 600;
+  stroke: var(--gold);
+}
+
+.preview-content {
+  padding: 1rem;
+  background: var(--input-bg);
+}
+
+.preview-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0;
+  font-size: 0.88rem;
+  color: var(--text-light);
+  line-height: 1.7;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.preview-item:last-child {
+  border-bottom: none;
+}
+
+.preview-icon {
+  font-size: 1.1rem;
+  width: 28px;
+  text-align: center;
+}
+
+.preview-item strong {
+  color: var(--gold);
+  font-weight: 700;
+}
+
+/* ========== التجاوب ========== */
+@media (max-width: 640px) {
+  .amenities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .amenities-section {
+    padding: 1rem;
+  }
+
+  .amenities-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+}
+/* ========== حقل اسم المرفق ========== */
+.amenity-name-input {
+  width: 100%;
+  height: 34px;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  padding: 0 0.6rem;
+  font-size: 0.82rem;
+  font-family: inherit;
+  color: #F1F5F9;
+  background: var(--navy);
+  transition: all 0.25s ease;
+  margin-bottom: 0.4rem;
+}
+
+.amenity-name-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(241, 201, 145, 0.12);
+}
+
+.amenity-name-input::placeholder {
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}

@@ -2,50 +2,48 @@ import React, { useState } from "react";
 import "./Header.css";
 import { BiChevronDown } from "react-icons/bi";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { FiStar, FiLogOut, FiUser } from "react-icons/fi";
+import { FiStar, FiLogOut, FiUser, FiHeart, FiHome,FiGrid } from "react-icons/fi";
 import AuthModal from "../AuthModal/AuthModal";
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
   const { currentUser, logout } = useAuth();
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false); // جديد: لحالة قائمة المستخدم
 
   const toggleDropdown = (menuName) => {
     setActiveDropdown(prev => (prev === menuName ? null : menuName));
   };
 
   const location = useLocation();
-  const isPropertiesActive = location.pathname === '/properties';
-  const isagenciesActive = location.pathname === '/agencies';
-  const isServicesActive = location.pathname === '/Services';
-  const isaboutActive = location.pathname === '/about';
-  const isBlogActive = location.pathname === '/Blog';
-
+  
   const handleLogout = async () => {
     await logout();
     closeMobileMenu();
+    setIsProfileOpen(false);
+    // 1. مسح بيانات المستخدم من localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    
+    // 2. مسح بيانات المستخدم من sessionStorage (إن وجدت)
+    sessionStorage.clear();
+    
+    // 3. الانتقال إلى الصفحة الرئيسية
+    navigate('/');
+    
   };
 
   const closeMobileMenu = () => {
     setMobileMenuOpen(false);
     setActiveDropdown(null);
   };
-  // دالة تسجيل الدخول بجوجل
-  const signInWithGoogle = async () => {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-      redirectTo: window.location.origin, // يعيد المستخدم للموقع بعد الدخول
-    },
-  });
+   
+  const navigate = useNavigate();
 
-  if (error) console.log("خطأ في تسجيل الدخول:", error.message);
-};
-
- 
-
+   
   return (
     <section className="h-wrapper">
       <div className="h-container">
@@ -71,9 +69,9 @@ const Header = () => {
           <NavLink to="/services">الخدمات</NavLink>
           <NavLink to="/blog">المدونة</NavLink>
           <NavLink to="/about">عنا</NavLink>
-          
         </div>
-        {/* ========== أزرار الدخول ========== */}
+
+        {/* ========== أزرار الدخول / قائمة المستخدم ========== */}
         <div className="h-auth-buttons">
           {!currentUser ? (
             <>
@@ -84,53 +82,70 @@ const Header = () => {
                 <FiStar /> اشتراك
               </button>
             </>
+                                  
           ) : (
-            <button className="h-login-text" onClick={handleLogout}>
-              <FiLogOut /> تسجيل الخروج
-            </button>
+            /* ✅ الشكل الجديد عند تسجيل الدخول */
+            <div className="h-profile-wrapper">
+              <button className="h-profile-btn" onClick={() => setIsProfileOpen(!isProfileOpen)}>
+                <div className="h-profile-avatar">
+                  <FiUser />
+                </div>
+                <span className="h-profile-name">
+                  {currentUser.user_metadata?.full_name || currentUser.email?.split('@')[0]}
+                </span>
+                <BiChevronDown className={`dropdown-arrow ${isProfileOpen ? 'rotate' : ''}`} />
+              </button>
+              
+                               {isProfileOpen && (
+                 <div className="h-profile-dropdown">
+                    <div className="h-profile-dropdown-header">
+                     <span>مرحباً بك!</span>
+                     <small>{currentUser.email}</small>
+                    </div>
+
+                    {/* ✅ زر لوحة التحكم الجديد */}
+                    <Link to="/dashboard" onClick={() => setIsProfileOpen(false)} className="h-logout-dropdown-btn" style={{color:'#f1c991', textDecoration:'none', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px', marginBottom: '5px'}}>
+                      <FiGrid style={{ marginRight: '8px' }} />
+                       لوحة التحكم   
+                    </Link>
+
+                    
+    
+                     
+
+                    <button onClick={handleLogout} className="h-logout-dropdown-btn">
+                      <FiLogOut /> تسجيل الخروج
+                    </button>
+                  </div>
+               )}
+            </div>
           )}
         </div>
-
       </div>
 
       {/* ========== القائمة الجانبية للهاتف ========== */}
       <div className={`h-mobile-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        <NavLink to="/" className="mobile-nav-link" onClick={closeMobileMenu}>الرئيسية</NavLink>
+        <NavLink to="/properties" className="mobile-nav-link" onClick={closeMobileMenu}>العقارات</NavLink>
+        <NavLink to="/Services" className="mobile-nav-link" onClick={closeMobileMenu}>الخدمات</NavLink>
+        <NavLink to="/Blog" className="mobile-nav-link" onClick={closeMobileMenu}>المدونة</NavLink>
+        <NavLink to="/about" className="mobile-nav-link" onClick={closeMobileMenu}>عنا</NavLink>
         
-        <NavLink to="/" className="mobile-nav-link" onClick={closeMobileMenu}>
-          الرئيسية
-        </NavLink>
-        <NavLink to="/properties" className="mobile-nav-link" onClick={closeMobileMenu}>
-          العقارات
-        </NavLink>
-        <NavLink to="/Services" className="mobile-nav-link" onClick={closeMobileMenu}>
-          الخدمات
-        </NavLink>
-        <NavLink to="/Blog" className="mobile-nav-link" onClick={closeMobileMenu}>
-          المدونة
-        </NavLink>
-        <NavLink to="/about" className="mobile-nav-link" onClick={closeMobileMenu}>
-          عنا
-        </NavLink>
         <div className="mobile-auth-section">
           {!currentUser ? (
             <>
-              <button className="h-login-text" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}>
-                تسجيل الدخول
-              </button>
-              <button className="h-subscribe-btn" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}>
-                <FiStar /> اشتراك
-              </button>
+              <button className="h-login-text" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}>تسجيل الدخول</button>
+              <button className="h-subscribe-btn" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}><FiStar /> اشتراك</button>
             </>
           ) : (
-            <button className="h-login-text" onClick={handleLogout}>
-              <FiLogOut /> تسجيل الخروج
-            </button>
+            <button className="h-login-text" onClick={handleLogout}><FiLogOut /> تسجيل الخروج ({currentUser.email?.split('@')[0]})</button>
           )}
         </div>
       </div>
 
       <div className={`h-mobile-overlay ${mobileMenuOpen ? 'open' : ''}`} onClick={closeMobileMenu}></div>
 
+      {/* نافذة تسجيل الدخول المنبثقة */}
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </section>
   );

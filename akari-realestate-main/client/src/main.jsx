@@ -2,20 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
-import { Auth0Provider } from "@auth0/auth0-react";
-import './i18n.js'
+import './i18n.js';
+
+// === استيراد مزود المصادقة الخاص بنا (Supabase) بدلاً من Auth0 ===
+import { AuthContextProvider } from "./context/AuthContext";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Auth0Provider
-     domain="dev-03ifqltxbr6nn0hn.us.auth0.com"
-     clientId="RXlGXkr49Ev5MHpvAC6vKkZ4bVn11iwl"
-     authorizationParams={{
-      redirect_uri: "https://full-stack-real-estate-youtube-sooty.vercel.app"
-     }}
-     audience="http://localhost:8000"
-     scope="openid profile email"
-    >
+    {/* لف التطبيق بـ AuthContextProvider ليتمكن كل الموقع من معرفة المستخدم */}
+    <AuthContextProvider>
       <App />
-    </Auth0Provider>
+    </AuthContextProvider>
   </React.StrictMode>
 );

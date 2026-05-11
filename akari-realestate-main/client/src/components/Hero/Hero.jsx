@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import "./Hero.css";
 import { motion } from "framer-motion";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { 
   FiSearch, FiHome, FiMessageCircle, FiUploadCloud, 
   FiShield, FiChevronDown, FiMapPin, FiUsers, FiTrendingUp, 
@@ -10,13 +11,9 @@ import {
 } from 'react-icons/fi';
 import AiChat from "../../pages/AiChat/AiChat";
 import AddProperty from "../../pages/AddProperty/AddProperty";
-import { createClient } from "@supabase/supabase-js";
 
-// === إنشاء اتصال Supabase مباشرة هنا ===
-const supabase = createClient(
-  "https://pngumoydgkdpurzbcxqv.supabase.co",  
-  "sb_publishable_YAdSiCennqPgMOdeeDO42g_ZRr9hYTz"                
-);
+
+ 
 
 export default function Hero() {
   const navigate = useNavigate();
@@ -120,7 +117,7 @@ export default function Hero() {
   const stats = [
     { number: "2,500+", label: "عقار متاح", icon: <FiHome /> },
     { number: "1,200+", label: "عميل سعيد", icon: <FiUsers /> },
-    { number: "85+", label: "وكالة معتمدة", icon: <FiAward /> },
+    { number: "85+", label: " خدمات معتمدة", icon: <FiAward /> },
     { number: "350+", label: "صفقة شهرياً", icon: <FiTrendingUp /> }
   ];
 
@@ -132,8 +129,8 @@ export default function Hero() {
         <div className="hero-bg-container"><img src="./hero.jpg" alt="Djelfa Real Estate" /><div className="hero-overlay"></div></div>
         <div className="paddings innerWidth hero-container">
           <div className="flexColCenter hero-content">
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="hero-title">دليلك الأول للعقارات</motion.h1>
-            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.8 }} className="hero-subtitle">يمكن ان نربطك مباشرة مع أفضل الوكالات العقارية والموثقين المعتمدين</motion.p>
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="hero-title">بوابة نحو عالم العقارات</motion.h1>
+            <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5, duration: 0.8 }} className="hero-subtitle">مصدرك الجديد  والآمن  والذكي  لايجاد العقار  المناسب لك</motion.p>
             
             <div className="hero-advanced-search" ref={dropdownRef}> 
               <div className="search-text-input-section"><FiSearch className="search-input-icon" /><input type="text" placeholder="بحث..." className="search-text-field" /></div>
@@ -184,7 +181,19 @@ export default function Hero() {
                 <h3>هل لديك عقار للبيع أو الإيجار؟</h3>
                 </div>
                   <p>انشره الآن ووصل لآلاف العملاء في الجلفة</p>
-                  <button className="btn-add-now" onClick={() => navigate("/AddProperty")}>أضف عقارك الآن</button>
+                  <button 
+  className="btn-add-now" 
+  onClick={(e) => {
+    e.preventDefault();
+    if (!currentUser) {
+      alert("عذراً، لا يمكنك إضافة عقار جديد بدون تسجيل الدخول.");
+      return;
+    }
+    navigate("/AddProperty");
+  }}
+>
+  أضف عقارك الآن
+</button>
                 </div>
               </div>
 
