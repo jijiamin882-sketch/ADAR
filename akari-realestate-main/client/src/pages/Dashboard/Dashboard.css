@@ -189,3 +189,4 @@
   .dash-toggle-btn.shifted { right: 320px; }
   .dash-stats-grid { grid-template-columns: 1fr; }
 }
+.dash-stat-card.red { border-top-color: #ef4444; }

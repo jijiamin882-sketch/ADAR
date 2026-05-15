@@ -12,6 +12,7 @@ import {
   FiPhone,
   FiUser,
   FiAlertCircle,
+  FiShield,
 } from "react-icons/fi";
 import "./AddService.css";
 import { useAuth } from "../../context/AuthContext";
@@ -20,10 +21,19 @@ import { supabase } from "../../supabaseClient";
 const AddService = () => {
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
+  const idImageRef = useRef(null);
+  const deedImageRef = useRef(null);
   const { currentUser } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
-  const [images, setImages] = useState([]);
-  const [errors, setErrors] = useState({}); // لحفظ أخطاء كل خطوة
+  const [uploading, setUploading] = useState(false); // ← جديد: حالة الرفع
+  
+  // حفظ الملفات الفعلية للرفع
+  const [serviceFiles, setServiceFiles] = useState([]);
+  const [servicePreviews, setServicePreviews] = useState([]);
+  const [idImage, setIdImage] = useState(null); // ← جديد
+  const [deedImage, setDeedImage] = useState(null); // ← جديد
+  
+  const [errors, setErrors] = useState({});
   
   const [formData, setFormData] = useState({
     category: "",
@@ -39,19 +49,36 @@ const AddService = () => {
   const steps = [
     { id: 1, label: "نوع الخدمة", icon: <FiBriefcase /> },
     { id: 2, label: "التسعير والتفاصيل", icon: <FiDollarSign /> },
-    { id: 3, label: "الصور والتواصل", icon: <FiImage /> },
+    { id: 3, label: "الصور والوثائق والتواصل", icon: <FiImage /> }, // ← عدّل الاسم
   ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // مسح الخطأ عند الكتابة
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
   };
 
-  // === دالة التحقق من الحقول قبل الانتقال ===
+  // === دالة رفع الملفات إلى Supabase Storage ===
+  const uploadFile = async (file) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${fileExt}`;
+    const filePath = `${currentUser.id}/services/${fileName}`;
+
+    const { error } = await supabase.storage
+      .from('property-docs')
+      .upload(filePath, file);
+
+    if (error) throw error;
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('property-docs')
+      .getPublicUrl(filePath);
+
+    return publicUrl;
+  };
+
   const validateStep = (step) => {
     const newErrors = {};
 
@@ -70,23 +97,22 @@ const AddService = () => {
       if (!formData.description.trim()) newErrors.description = "وصف الخدمة مطلوب";
     }
 
-     if (step === 3) {
+    if (step === 3) {
       if (!formData.phone.trim()) {
         newErrors.phone = "رقم الهاتف للتواصل مطلوب";
-      } 
-      // ← إضافة التحقق من التلاعب (أرقام جزائرية فقط)
-      else {
-        // نزيل المسافات لنفحص الرقم الصافي
+      } else {
         const cleanPhone = formData.phone.replace(/\s/g, '');
-        
-        // التحقق: يبدأ بـ 0 ويتكون من 10 أرقام بالضبط ويحتوي على أرقام فقط
         const phoneRegex = /^0[5-7]\d{8}$/;
-        
         if (!phoneRegex.test(cleanPhone)) {
           newErrors.phone = "رقم الهاتف غير صحيح (يجب أن يبدأ بـ 05/06/07 ويتكون من 10 أرقام)";
         }
       }
+      
+      // ← إضافة التحقق من الوثائق
+      if (!idImage) newErrors.idImage = "يجب رفع صورة الهوية الوطنية";
+      if (!deedImage) newErrors.deedImage = "يجب رفع صورة عقد الملكية أو الترخيص";
     }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -99,57 +125,82 @@ const AddService = () => {
 
   const handlePrev = () => {
     if (currentStep > 1) setCurrentStep((prev) => prev - 1);
-    setErrors({}); // مسح الأخطاء عند العودة
+    setErrors({});
   };
 
-  const handleImageChange = (e) => {
+  // === معالجة صور أعمال الخدمة (متعددة) ===
+  const handleServiceImagesChange = (e) => {
     const files = Array.from(e.target.files);
-    const newImages = files.map((file) => URL.createObjectURL(file));
-    setImages((prev) => [...prev, ...newImages]);
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+    setServiceFiles((prev) => [...prev, ...files]);
+    setServicePreviews((prev) => [...prev, ...newPreviews]);
   };
 
-  const removeImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
+  const removeServiceImage = (index) => {
+    setServiceFiles((prev) => prev.filter((_, i) => i !== index));
+    setServicePreviews((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (!validateStep(3)) return;
-  
-  if (!currentUser) {
-    alert("يجب عليك تسجيل الدخول أولاً لإضافة خدمة");
-    return;
-  }
-  
-  try {
-    const { data, error } = await supabase.from('services').insert([{
-      user_id: currentUser.id,
-      category: formData.category,
-      title: formData.title,
-      provider_name: formData.providerName,
-      wilaya: formData.wilaya,
-      price_type: formData.priceType,
-      price: formData.priceType === 'negotiable' ? 0 : Number(formData.price), // ← التعديل هنا
-      description: formData.description,
-      phone: formData.phone,
-      status: "active"
-    }]).select();
+    e.preventDefault();
+    if (!validateStep(3)) return;
+    
+    if (!currentUser) {
+      alert("يجب عليك تسجيل الدخول أولاً لإضافة خدمة");
+      return;
+    }
+    
+    setUploading(true);
+    
+    try {
+      // 1. رفع صور الأعمال
+      let uploadedImagesUrls = [];
+      if (serviceFiles.length > 0) {
+        for (const file of serviceFiles) {
+          const url = await uploadFile(file);
+          uploadedImagesUrls.push(url);
+        }
+      }
 
-    if (error) throw error;
-    alert("تم نشر خدمتك بنجاح في سوق ADAR! ✅");
-    navigate("/services");
-  } catch (error) {
-    alert("خطأ: " + error.message);
-  }
-};
+      // 2. رفع صور الهوية والعقد
+      const idImageUrl = await uploadFile(idImage);
+      const deedImageUrl = await uploadFile(deedImage);
+
+      // 3. حفظ البيانات في قاعدة البيانات
+      const { data, error } = await supabase.from('services').insert([{
+        user_id: currentUser.id,
+        category: formData.category,
+        title: formData.title,
+        provider_name: formData.providerName,
+        wilaya: formData.wilaya,
+        price_type: formData.priceType,
+        price: formData.priceType === 'negotiable' ? 0 : Number(formData.price),
+        description: formData.description,
+        phone: formData.phone,
+        images: uploadedImagesUrls, // مصفوفة روابط صور الأعمال
+        id_image: idImageUrl,       // رابط صورة الهوية
+        deed_image: deedImageUrl,   // رابط صورة العقد
+        status: "pending"           // ← يبقى معلقاً حتى يوافق الإدمن
+      }]).select();
+
+      if (error) throw error;
+      
+      // رسالة مناسبة توضح أن الإدارة ستراجع الطلب
+      alert("تم إرسال خدمتك بنجاح! ✅\nسيتم مراجعة هويتك ووثائقك من قبل الإدارة قبل النشر.");
+      navigate("/dashboard/my-services");
+      
+    } catch (error) {
+      console.error("خطأ في الرفع:", error);
+      alert("حدث خطأ أثناء رفع الوثائق أو حفظ الخدمة: " + error.message);
+    } finally {
+      setUploading(false);
+    }
+  };
    
-
-     
   return (
     <div className="add-prop-wrapper">
       <div className="add-prop-container">
         
-        {/* الهيدر */}
         <div className="add-prop-header">
           <button className="add-prop-back" onClick={() => navigate(-1)}>
             <FiArrowRight /> رجوع
@@ -158,7 +209,6 @@ const AddService = () => {
           <p>اعرض خدماتك العقارية وصل بآلاف العملاء المحتملين</p>
         </div>
 
-        {/* مؤشر الخطوات */}
         <div className="add-prop-progress">
           {steps.map((step, index) => (
             <React.Fragment key={step.id}>
@@ -171,11 +221,10 @@ const AddService = () => {
           ))}
         </div>
 
-        {/* النموذج */}
         <div className="add-prop-form">
           <form onSubmit={handleSubmit}>
             
-            {/* الخطوة 1 */}
+            {/* ===== الخطوة 1 ===== */}
             {currentStep === 1 && (
               <div className="form-step">
                 <h2>نوع الخدمة ومقدمها</h2>
@@ -216,7 +265,7 @@ const AddService = () => {
               </div>
             )}
 
-            {/* الخطوة 2 */}
+            {/* ===== الخطوة 2 ===== */}
             {currentStep === 2 && (
               <div className="form-step">
                 <h2>التسعير والوصف</h2>
@@ -259,26 +308,27 @@ const AddService = () => {
               </div>
             )}
 
-            {/* الخطوة 3 */}
+            {/* ===== الخطوة 3 (معدّلة بالكامل) ===== */}
             {currentStep === 3 && (
               <div className="form-step">
-                <h2>معرض الأعمال والتواصل</h2>
-                <p className="step-desc">أضف صوراً ل أعمالك لزيادة ثقة العملاء بك</p>
+                <h2>معرض الأعمال والوثائق والتواصل</h2>
+                <p className="step-desc">أضف صور أعمالك، وارفع الوثائق المطلوبة للتحقق</p>
                 
+                {/* === 1. معرض أعمال سابقة (اختياري) === */}
                 <div className="upload-area" onClick={() => fileInputRef.current.click()}>
                   <FiUploadCloud size={40} style={{ marginBottom: '10px', color: 'rgba(255,255,255,0.3)' }} />
-                  <h3>أضف صور أعمالك السابقة</h3>
+                  <h3>أضف صور أعمالك السابقة (اختياري)</h3>
                   <p>اسحب الصور هنا أو اضغط للاختيار</p>
                   <button type="button" className="upload-btn">اختر الصور</button>
-                  <input type="file" multiple accept="image/*" ref={fileInputRef} onChange={handleImageChange} hidden />
+                  <input type="file" multiple accept="image/*" ref={fileInputRef} onChange={handleServiceImagesChange} hidden />
                 </div>
 
-                {images.length > 0 && (
+                {servicePreviews.length > 0 && (
                   <div className="images-preview-grid">
-                    {images.map((img, index) => (
+                    {servicePreviews.map((img, index) => (
                       <div key={index} className="preview-item">
                         <img src={img} alt={`preview ${index}`} />
-                        <button type="button" className="remove-img-btn" onClick={() => removeImage(index)}>
+                        <button type="button" className="remove-img-btn" onClick={() => removeServiceImage(index)}>
                           <FiX />
                         </button>
                       </div>
@@ -286,7 +336,50 @@ const AddService = () => {
                   </div>
                 )}
 
-                <div className="form-notice-box" style={{ marginTop: '30px', marginBottom: '30px' }}>
+                {/* === 2. قسم التحقق من الهوية والعقد (مطلوب) === */}
+                <div style={{ 
+                  marginTop: '30px', 
+                  padding: '20px', 
+                  background: 'rgba(241, 201, 145, 0.05)', 
+                  border: '1px solid rgba(241, 201, 145, 0.2)', 
+                  borderRadius: '12px' 
+                }}>
+                  <h3 style={{ color: '#f1c991', marginBottom: '15px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <FiShield /> التحقق من الهوية والترخيص (مطلوب)
+                  </h3>
+                  <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '20px' }}>
+                    لضمان حقوق العملاء، يرجى رفع صورة الهوية الوطنية وعقد الملكية أو الترخيص التجاري.
+                  </p>
+
+                  <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                    <div style={{ flex: 1, minWidth: '200px' }}>
+                      <label style={{ display: 'block', marginBottom: '8px', color: '#e2e8f0', fontSize: '14px' }}>صورة الهوية الوطنية</label>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        ref={idImageRef}
+                        onChange={(e) => { setIdImage(e.target.files[0]); if(errors.idImage) setErrors(prev => ({...prev, idImage: ""})); }}
+                        style={{ width: '100%', padding: '10px', background: '#1e293b', border: errors.idImage ? '1px solid #ef4444' : '1px solid #334155', borderRadius: '8px', color: '#fff' }}
+                      />
+                      {errors.idImage && <span className="error-text" style={{marginTop: '5px', display: 'block'}}><FiAlertCircle /> {errors.idImage}</span>}
+                    </div>
+
+                    <div style={{ flex: 1, minWidth: '200px' }}>
+                      <label style={{ display: 'block', marginBottom: '8px', color: '#e2e8f0', fontSize: '14px' }}>عقد الملكية / الترخيص</label>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        ref={deedImageRef}
+                        onChange={(e) => { setDeedImage(e.target.files[0]); if(errors.deedImage) setErrors(prev => ({...prev, deedImage: ""})); }}
+                        style={{ width: '100%', padding: '10px', background: '#1e293b', border: errors.deedImage ? '1px solid #ef4444' : '1px solid #334155', borderRadius: '8px', color: '#fff' }}
+                      />
+                      {errors.deedImage && <span className="error-text" style={{marginTop: '5px', display: 'block'}}><FiAlertCircle /> {errors.deedImage}</span>}
+                    </div>
+                  </div>
+                </div>
+
+                {/* === 3. رقم الهاتف === */}
+                <div className="form-notice-box" style={{ marginTop: '30px', marginBottom: '20px' }}>
                   <FiPhone style={{ color: '#f1c991', flexShrink: 0, marginTop: '2px' }} />
                   <p>رقم الهاتف هو وسيلة التواصل الأساسية بينك وبين العميل، تأكد من صحته.</p>
                 </div>
@@ -294,20 +387,18 @@ const AddService = () => {
                 <div className="form-group">
                   <label><FiPhone /> رقم الهاتف / الواتساب  </label>
                    <input 
-  type="tel" 
-  name="phone" 
-  placeholder="05XX XX XX XX" 
-  value={formData.phone} 
-  onChange={(e) => {
-    // نسمح فقط بإدخال الأرقام والمسافات
-    const onlyNumbers = e.target.value.replace(/[^0-9\s]/g, '');
-    handleInputChange({ target: { name: "phone", value: onlyNumbers } });
-  }}
-  className={`phone-input ${errors.phone ? "input-error" : ""}`} 
-  inputMode="numeric" // ← هذه الخاصية تظهر لوحة الأرقام فقط في الهواتف
-  maxLength={10}     // ← أقصى طول 10 أحرف
-/>
-
+                    type="tel" 
+                    name="phone" 
+                    placeholder="05XX XX XX XX" 
+                    value={formData.phone} 
+                    onChange={(e) => {
+                      const onlyNumbers = e.target.value.replace(/[^0-9\s]/g, '');
+                      handleInputChange({ target: { name: "phone", value: onlyNumbers } });
+                    }}
+                    className={`phone-input ${errors.phone ? "input-error" : ""}`} 
+                    inputMode="numeric"
+                    maxLength={10}
+                  />
                   {errors.phone && <span className="error-text"><FiAlertCircle /> {errors.phone}</span>}
                 </div>
               </div>
@@ -326,8 +417,8 @@ const AddService = () => {
                   التالي <FiArrowLeft />
                 </button>
               ) : (
-                <button type="submit" className="btn-primary">
-                  <FiCheck /> نشر الخدمة الآن
+                <button type="submit" className="btn-primary" disabled={uploading}>
+                  {uploading ? "جاري رفع الوثائق والإرسال..." : <><FiCheck /> إرسال للمراجعة</>}
                 </button>
               )}
             </div>

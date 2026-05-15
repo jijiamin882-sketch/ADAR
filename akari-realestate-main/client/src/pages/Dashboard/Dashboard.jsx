@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { FiHome, FiMessageSquare, FiSettings, FiPlusCircle, FiLogOut, FiMenu, FiX, FiHeart, FiEye, FiEdit3, FiTrash2 } from 'react-icons/fi';
+import { FiHome, FiMessageSquare, FiLogOut, FiMenu, FiX, FiHeart, FiGrid, FiUsers, FiTool, FiPlusCircle, FiAlertCircle } from 'react-icons/fi';
 import { supabase } from '../../supabaseClient';
 import { useAuth } from '../../context/AuthContext';
 import './Dashboard.css';
@@ -10,76 +10,186 @@ export default function Dashboard() {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  
-  const isActive = (path) => location.pathname === path ? 'dash-link active' : 'dash-link';
 
-  const [stats, setStats] = useState({ totalProperties: 0, activeProperties: 0, totalFavorites: 0, messages: 0 });
+  // === قراءة دور المستخدم ===
+  const [userRole, setUserRole] = useState('user');
+  
+  // === تعريف stats مرة واحدة فقط (مع pendingItems) ===
+  const [stats, setStats] = useState({ 
+    totalProperties: 0, activeProperties: 0, totalFavorites: 0, totalServices: 0, totalUsers: 0, messages: 0, pendingItems: 0
+  });
   const [loadingStats, setLoadingStats] = useState(true);
 
-  const [recentProperties, setRecentProperties] = useState([]);
-  const [loadingTable, setLoadingTable] = useState(true);
-
-  useEffect(() => {
+     useEffect(() => {
     if (!currentUser?.id) return;
+    
+    const fetchRole = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', currentUser.id)
+          .single();
+          
+        if (error) throw error;
+        setUserRole(data?.role?.toLowerCase() || 'user');
+      } catch (err) {
+        console.warn("خطأ في جلب الدور، تم التعيين كمستخدم عادي:", err.message);
+        setUserRole('user'); // يعطيه صلاحيات عادية بدل أن يتهنج
+      }
+    };
+    
+    fetchRole();
+  }, [currentUser?.id]);
+
+  const isActive = (path) => location.pathname === path ? 'dash-link active' : 'dash-link';
+
+  // === جلب الإحصائيات فقط ===
+  useEffect(() => {
+    if (!currentUser?.id || !userRole) return;
 
     const fetchData = async () => {
       try {
-        const { count: totalProps } = await supabase.from('properties').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
-        const { count: activeProps } = await supabase.from('properties').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('status', 'active');
-        const { count: totalFavs } = await supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
-        const { count: unreadMsgs } = await supabase.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+        const newStats = { totalProperties: 0, activeProperties: 0, totalFavorites: 0, totalServices: 0, totalUsers: 0, messages: 0, pendingItems: 0 };
+        
+        if (userRole === 'admin') {
+          const { count: totalProps } = await supabase.from('properties').select('*', { count: 'exact', head: true });
+          const { count: totalServs } = await supabase.from('services').select('*', { count: 'exact', head: true });
+          const { count: totalUsrs } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
+          const { count: unreadMsgs } = await supabase.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+          const { count: pendingProps } = await supabase.from('properties').select('*', { count: 'exact', head: true }).eq('status', 'pending');
+          const { count: pendingServs } = await supabase.from('services').select('*', { count: 'exact', head: true }).eq('status', 'pending');
 
-        setStats({
-          totalProperties: totalProps || 0,
-          activeProperties: activeProps || 0,
-          totalFavorites: totalFavs || 0,
-          messages: unreadMsgs || 0 
-        });
+          newStats.pendingItems = (pendingProps || 0) + (pendingServs || 0);
+          newStats.totalProperties = totalProps || 0;
+          newStats.totalServices = totalServs || 0;
+          newStats.totalUsers = totalUsrs || 0;
+          newStats.messages = unreadMsgs || 0;
 
-        const { data: properties } = await supabase
-          .from('properties')
-          .select('*')
-          .eq('user_id', currentUser.id)
-          .order('created_at', { ascending: false })
-          .limit(5);
+        } else if (userRole === 'owner') {
+          const { count: totalProps } = await supabase.from('properties').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+          const { count: activeProps } = await supabase.from('properties').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id).eq('status', 'active');
+          const { count: totalFavs } = await supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+          const { count: unreadMsgs } = await supabase.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+          
+          newStats.totalProperties = totalProps || 0;
+          newStats.activeProperties = activeProps || 0;
+          newStats.totalFavorites = totalFavs || 0;
+          newStats.messages = unreadMsgs || 0;
 
-        setRecentProperties(properties || []);
+        } else if (userRole === 'provider') {
+          const { count: totalServs } = await supabase.from('services').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+          const { count: totalFavs } = await supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+          const { count: unreadMsgs } = await supabase.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+          
+          newStats.totalServices = totalServs || 0;
+          newStats.totalFavorites = totalFavs || 0;
+          newStats.messages = unreadMsgs || 0;
+
+        } else {
+          const { count: totalFavs } = await supabase.from('favorites').select('*', { count: 'exact', head: true }).eq('user_id', currentUser.id);
+          newStats.totalFavorites = totalFavs || 0;
+        }
+
+        setStats(newStats);
       } catch (error) {
         console.error("خطأ في جلب البيانات:", error);
       } finally {
         setLoadingStats(false);
-        setLoadingTable(false);
       }
     };
 
     fetchData();
-  }, [currentUser?.id]);
+  }, [currentUser?.id, userRole]);
 
-  const handleQuickDelete = async (e, id) => {
-    e.preventDefault();
-    if (window.confirm("هل أنت متأكد من حذف هذا العقار؟")) {
-      const { error } = await supabase.from('properties').delete().eq('id', id);
-      if (!error) {
-        setRecentProperties(prev => prev.filter(p => p.id !== id));
-        setStats(prev => ({ ...prev, totalProperties: prev.totalProperties - 1 }));
-      } else {
-        alert("حدث خطأ أثناء الحذف");
-      }
+  const getRoleName = () => {
+    switch (userRole) {
+      case 'admin': return 'مدير النظام';
+      case 'owner': return 'مالك عقار';
+      case 'provider': return 'مقدم خدمة';
+      default: return 'مستخدم';
     }
   };
 
-  const handleToggleStatus = async (e, id, currentStatus) => {
-    e.preventDefault();
-    const newStatus = currentStatus === 'active' ? 'pending' : 'active';
-    const statusText = newStatus === 'active' ? 'تفعيل' : 'تعليق';
-
-    if (window.confirm(`هل تريد ${statusText} هذا العقار؟`)) {
-      const { error } = await supabase.from('properties').update({ status: newStatus }).eq('id', id);
-      if (!error) {
-        setRecentProperties(prev => prev.map(p => p.id === id ? { ...p, status: newStatus } : p));
-        setStats(prev => ({ ...prev, activeProperties: newStatus === 'active' ? prev.activeProperties + 1 : prev.activeProperties - 1 }));
-      }
+  const renderSidebarLinks = () => {
+    if (userRole === 'admin') {
+      return (
+        <>
+          <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setSidebarOpen(false)}><FiGrid className="dash-link-icon" /> الرئيسية</Link>
+          <Link to="/AddProperty" className={isActive('/AddProperty')} onClick={() => setSidebarOpen(false)}><FiPlusCircle className="dash-link-icon" /> إضافة عقار</Link>
+          <Link to="/AddService" className={isActive('/AddService')} onClick={() => setSidebarOpen(false)}><FiPlusCircle className="dash-link-icon" /> إضافة خدمة</Link>
+          <Link to="/dashboard/my-properties" className={isActive('/dashboard/my-properties')} onClick={() => setSidebarOpen(false)}><FiHome className="dash-link-icon" /> إدارة العقارات</Link>
+          <Link to="/dashboard/my-services" className={isActive('/dashboard/my-services')} onClick={() => setSidebarOpen(false)}><FiTool className="dash-link-icon" /> إدارة الخدمات</Link>
+          <Link to="/dashboard/moderation" className={isActive('/dashboard/moderation')} onClick={() => setSidebarOpen(false)}><FiAlertCircle className="dash-link-icon" /> بانتظار الموافقة</Link>
+          <Link to="/dashboard/users" className={isActive('/dashboard/users')} onClick={() => setSidebarOpen(false)}><FiUsers className="dash-link-icon" /> إدارة المستخدمين</Link>
+          <Link to="/dashboard/messages" className={isActive('/dashboard/messages')} onClick={() => setSidebarOpen(false)}><FiMessageSquare className="dash-link-icon" /> الرسائل</Link>
+        </>
+      );
     }
+    if (userRole === 'owner') {
+      return (
+        <>
+          <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setSidebarOpen(false)}><FiHome className="dash-link-icon" /> الرئيسية</Link>
+          <Link to="/AddProperty" className={isActive('/AddProperty')} onClick={() => setSidebarOpen(false)}><FiPlusCircle className="dash-link-icon" /> إضافة عقار جديد</Link>
+          <Link to="/dashboard/my-properties" className={isActive('/dashboard/my-properties')} onClick={() => setSidebarOpen(false)}><FiHome className="dash-link-icon" /> عقاراتي</Link>
+          <Link to="/favorites" className={isActive('/favorites')} onClick={() => setSidebarOpen(false)}><FiHeart className="dash-link-icon" /> مفضلاتي</Link>
+          <Link to="/dashboard/messages" className={isActive('/dashboard/messages')} onClick={() => setSidebarOpen(false)}><FiMessageSquare className="dash-link-icon" /> الرسائل</Link>
+        </>
+      );
+    }
+    if (userRole === 'provider') {
+      return (
+        <>
+          <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setSidebarOpen(false)}><FiTool className="dash-link-icon" /> الرئيسية</Link>
+          <Link to="/AddService" className={isActive('/AddService')} onClick={() => setSidebarOpen(false)}><FiPlusCircle className="dash-link-icon" /> إضافة خدمة جديدة</Link>
+          <Link to="/dashboard/my-services" className={isActive('/dashboard/my-services')} onClick={() => setSidebarOpen(false)}><FiTool className="dash-link-icon" /> خدماتي</Link>
+          <Link to="/favorites" className={isActive('/favorites')} onClick={() => setSidebarOpen(false)}><FiHeart className="dash-link-icon" /> مفضلاتي</Link>
+          <Link to="/dashboard/messages" className={isActive('/dashboard/messages')} onClick={() => setSidebarOpen(false)}><FiMessageSquare className="dash-link-icon" /> الرسائل</Link>
+        </>
+      );
+    }
+    return (
+      <>
+        <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setSidebarOpen(false)}><FiHome className="dash-link-icon" /> الرئيسية</Link>
+        <Link to="/favorites" className={isActive('/favorites')} onClick={() => setSidebarOpen(false)}><FiHeart className="dash-link-icon" /> مفضلاتي</Link>
+      </>
+    );
+  };
+
+  const renderStatsCards = () => {
+    if (userRole === 'admin') {
+      return (
+        <>
+          <StatCard to="/dashboard/moderation" title="بانتظار الموافقة" value={stats.pendingItems} color="red" loading={loadingStats} />
+          <StatCard to="/dashboard/my-properties" title="إجمالي العقارات" value={stats.totalProperties} color="blue" loading={loadingStats} />
+          <StatCard to="/dashboard/my-services" title="إجمالي الخدمات" value={stats.totalServices} color="blue" loading={loadingStats} />
+          <StatCard to="/dashboard/users" title="إجمالي المستخدمين" value={stats.totalUsers} color="gold" loading={loadingStats} />
+          <StatCard to="/dashboard/messages" title="الرسائل الجديدة" value={stats.messages} color="green" loading={loadingStats} />
+        </>
+      );
+    }
+    if (userRole === 'owner') {
+      return (
+        <>
+          <StatCard to="/dashboard/my-properties" title="عقاراتي" value={stats.totalProperties} color="blue" loading={loadingStats} />
+          <StatCard to="/favorites" title="مفضلاتي" value={stats.totalFavorites} color="blue" loading={loadingStats} />
+          <StatCard to="/dashboard/my-properties" title="عقارات مفعّلة" value={stats.activeProperties} color="gold" loading={loadingStats} />
+          <StatCard to="/dashboard/messages" title="الرسائل الجديدة" value={stats.messages} color="green" loading={loadingStats} />
+        </>
+      );
+    }
+    if (userRole === 'provider') {
+      return (
+        <>
+          <StatCard to="/dashboard/my-services" title="خدماتي" value={stats.totalServices} color="blue" loading={loadingStats} />
+          <StatCard to="/favorites" title="مفضلاتي" value={stats.totalFavorites} color="blue" loading={loadingStats} />
+          <StatCard to="/dashboard/messages" title="الرسائل الجديدة" value={stats.messages} color="green" loading={loadingStats} />
+        </>
+      );
+    }
+    return (
+      <StatCard to="/favorites" title="مفضلاتي" value={stats.totalFavorites} color="blue" loading={loadingStats} />
+    );
   };
 
   return (
@@ -93,16 +203,12 @@ export default function Dashboard() {
       <aside className={`dash-sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="dash-sidebar-header">
           <h2 className="dash-logo">ADAR</h2>
-          <p className="dash-logo-sub">لوحة التحكم</p>
+          <p className="dash-logo-sub">لوحة التحكم ({getRoleName()})</p>
         </div>
+        
         <nav className="dash-nav">
-          <Link to="/dashboard" className={isActive('/dashboard')} onClick={() => setSidebarOpen(false)}><FiHome className="dash-link-icon" /> الرئيسية</Link>
-          <Link to="/AddProperty" className={isActive('/AddProperty')} onClick={() => setSidebarOpen(false)}><FiPlusCircle className="dash-link-icon" /> إضافة عقار جديد</Link>
-          <Link to="/AddService" className={isActive('/AddService')} onClick={() => setSidebarOpen(false)}><FiPlusCircle className="dash-link-icon" /> إضافة خدمة جديدة</Link>
-          <Link to="/properties?mine=true" className={isActive('/properties?mine=true')} onClick={() => setSidebarOpen(false)}><FiHome className="dash-link-icon" /> عقاراتي</Link>
-          <Link to="/favorites" className="dash-link" onClick={() => setSidebarOpen(false)}><FiHeart className="dash-link-icon" /> مفضلاتي</Link>
-          <Link to="/dashboard/messages" className={isActive('/dashboard/messages')} onClick={() => setSidebarOpen(false)}><FiMessageSquare className="dash-link-icon" /> الرسائل</Link>
-          <Link to="/#" className="dash-link dash-logout"><FiLogOut className="dash-link-icon" /> العودة للموقع</Link>
+          {renderSidebarLinks()}
+          <Link to="/" className="dash-link dash-logout" onClick={() => setSidebarOpen(false)}><FiLogOut className="dash-link-icon" /> العودة للموقع</Link>
         </nav>
       </aside>
 
@@ -110,96 +216,12 @@ export default function Dashboard() {
         {location.pathname === '/dashboard' ? (
           <>
             <div className="dash-welcome">
-              <h1>مرحباً بك في لوحة التحكم 👋</h1>
-              <p>إدارة عقاراتك ومتابعة الاهتمامات بسهولة.</p>
+              <h1>مرحباً بك، {currentUser?.user_metadata?.full_name || currentUser?.email?.split('@')[0]} 👋</h1>
+              <p>إدارة حسابك بسهولة (بدور: {getRoleName()}).</p>
             </div>
 
             <div className="dash-stats-grid">
-              <Link to="/properties?mine=true" style={{ textDecoration: 'none' }}>
-                <div className="dash-stat-card blue" style={{ cursor: 'pointer' }}>
-                  <h3 className="dash-stat-title">عقاراتي</h3>
-                  <span className="dash-stat-number">{loadingStats ? '...' : stats.totalProperties}</span>
-                </div>
-              </Link>
-              <Link to="/Services?mine=true" style={{ textDecoration: 'none' }}>
-                <div className="dash-stat-card blue" style={{ cursor: 'pointer' }}>
-                  <h3 className="dash-stat-title">خدماتي</h3>
-                  <span className="dash-stat-number">{loadingStats ? '...' : stats.totalProperties}</span>
-                </div>
-              </Link>
-
-              <Link to="/favorites" style={{ textDecoration: 'none' }}>
-                <div className="dash-stat-card blue" style={{ cursor: 'pointer' }}>
-                  <h3 className="dash-stat-title">مفضلاتي</h3>
-                  <span className="dash-stat-number">{loadingStats ? '...' : stats.totalFavorites}</span>
-                </div>
-              </Link>
-
-              <Link to="/properties?mine=true" style={{ textDecoration: 'none' }}>
-                <div className="dash-stat-card gold" style={{ cursor: 'pointer' }}>
-                  <h3 className="dash-stat-title">عقارات مفعّلة</h3>
-                  <span className="dash-stat-number">{loadingStats ? '...' : stats.activeProperties}</span>
-                </div>
-              </Link>
-
-              <Link to="/dashboard/messages" style={{ textDecoration: 'none' }}>
-                <div className="dash-stat-card green" style={{ cursor: 'pointer' }}>
-                  <h3 className="dash-stat-title">الرسائل الجديدة</h3>
-                  <span className="dash-stat-number">{loadingStats ? '...' : stats.messages}</span>
-                </div>
-              </Link>
-            </div>
-
-            <div className="dash-content-box">
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ margin: 0 }}>آخر العقارات المضافة</h2>
-                <Link to="/AddProperty" style={{ background: '#f1c991', color: '#0a0f18', padding: '8px 16px', borderRadius: '6px', textDecoration: 'none', fontWeight: 'bold', fontSize: '14px' }}>
-                  <FiPlusCircle style={{ verticalAlign: 'middle', marginLeft: '5px' }} /> إضافة جديد
-                </Link>
-              </div>
-
-              {loadingTable ? (
-                <p style={{ textAlign: 'center', color: '#888' }}>جاري تحميل العقارات...</p>
-              ) : recentProperties.length === 0 ? (
-                <p style={{ textAlign: 'center', color: '#888' }}>لم تقم بإضافة أي عقارات بعد.</p>
-              ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
-                  <thead>
-                    <tr style={{ borderBottom: '2px solid #eee', textAlign: 'right' }}>
-                      <th style={{ padding: '10px', color: '#64748b' }}>العقار</th>
-                      <th style={{ padding: '10px', color: '#64748b' }}>السعر</th>
-                      <th style={{ padding: '10px', color: '#64748b' }}>الحالة</th>
-                      <th style={{ padding: '10px', color: '#64748b' }}>إجراءات</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {recentProperties.map(prop => (
-                      <tr key={prop.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                        <td style={{ padding: '10px' }}>
-                          <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <img src={prop.image || 'https://placehold.co/40x40/1a1a2e/ffffff?text=عقار'} alt="" style={{ width: '40px', height: '40px', borderRadius: '6px', objectFit: 'cover' }} onError={(e) => e.target.src = 'https://placehold.co/40x40/1a1a2e/ffffff?text=عقار'} />
-                            <span style={{ fontWeight: '500', color: '#64748b' }}>{prop.title}</span>
-                          </span>
-                        </td>
-                        <td style={{ padding: '10px', fontWeight: 'bold', color: '#64748b' }}>{prop.price} دج</td>
-                        <td style={{ padding: '10px' }}>
-                          <span style={{ background: prop.status === 'active' ? '#dcfce7' : '#fef3c7', color: prop.status === 'active' ? '#166534' : '#92400e', padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: 'bold' }}>
-                            {prop.status === 'active' ? 'مفعّل' : 'معلّق'}
-                          </span>
-                        </td>
-                        <td style={{ padding: '10px' }}>
-                          <span style={{ display: 'flex', gap: '8px' }}>
-                            <button onClick={() => navigate(`/property/${prop.id}`)} title="معاينة" style={actionBtnStyle}><FiEye /></button>
-                            <button onClick={() => navigate(`/property/${prop.id}`)} title="تعديل" style={{ ...actionBtnStyle, color: '#3b82f6' }}><FiEdit3 /></button>
-                            <button onClick={(e) => handleToggleStatus(e, prop.id, prop.status)} title="تعليق/تفعيل" style={{ ...actionBtnStyle, color: prop.status === 'active' ? '#f59e0b' : '#10b981' }}><FiSettings /></button>
-                            <button onClick={(e) => handleQuickDelete(e, prop.id)} title="حذف" style={{ ...actionBtnStyle, color: '#ef4444' }}><FiTrash2 /></button>
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              )}
+              {renderStatsCards()}
             </div>
           </>
         ) : (
@@ -210,15 +232,12 @@ export default function Dashboard() {
   );
 }
 
-const actionBtnStyle = {
-  background: '#f1f5f9',
-  border: 'none',
-  width: '32px',
-  height: '32px',
-  borderRadius: '6px',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  transition: '0.2s'
-};
+// === مكون صغير لبطاقة الإحصائيات ===
+const StatCard = ({ to, title, value, color, loading }) => (
+  <Link to={to} style={{ textDecoration: 'none' }}>
+    <div className={`dash-stat-card ${color}`} style={{ cursor: 'pointer' }}>
+      <h3 className="dash-stat-title">{title}</h3>
+      <span className="dash-stat-number">{loading ? '...' : value}</span>
+    </div>
+  </Link>
+);

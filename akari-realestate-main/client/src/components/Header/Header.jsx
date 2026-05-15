@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Header.css";
 import { BiChevronDown } from "react-icons/bi";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { FiStar, FiLogOut, FiUser, FiHeart, FiHome,FiGrid } from "react-icons/fi";
+import { FiStar, FiLogOut, FiUser, FiHeart, FiHome, FiGrid } from "react-icons/fi";
 import AuthModal from "../AuthModal/AuthModal";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState(null);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false); // جديد: لحالة قائمة المستخدم
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const toggleDropdown = (menuName) => {
     setActiveDropdown(prev => (prev === menuName ? null : menuName));
@@ -24,16 +24,10 @@ const Header = () => {
     await logout();
     closeMobileMenu();
     setIsProfileOpen(false);
-    // 1. مسح بيانات المستخدم من localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('user');
-    
-    // 2. مسح بيانات المستخدم من sessionStorage (إن وجدت)
     sessionStorage.clear();
-    
-    // 3. الانتقال إلى الصفحة الرئيسية
     navigate('/');
-    
   };
 
   const closeMobileMenu = () => {
@@ -43,7 +37,6 @@ const Header = () => {
    
   const navigate = useNavigate();
 
-   
   return (
     <section className="h-wrapper">
       <div className="h-container">
@@ -74,17 +67,10 @@ const Header = () => {
         {/* ========== أزرار الدخول / قائمة المستخدم ========== */}
         <div className="h-auth-buttons">
           {!currentUser ? (
-            <>
-              <button className="h-login-text" onClick={() => setIsAuthOpen(true)}>
-                تسجيل الدخول
-              </button>
-              <button className="h-subscribe-btn" onClick={() => setIsAuthOpen(true)}>
-                <FiStar /> اشتراك
-              </button>
-            </>
-                                  
+            <button className="h-login-text" onClick={() => setIsAuthOpen(true)}>
+              تسجيل الدخول
+            </button>                                  
           ) : (
-            /* ✅ الشكل الجديد عند تسجيل الدخول */
             <div className="h-profile-wrapper">
               <button className="h-profile-btn" onClick={() => setIsProfileOpen(!isProfileOpen)}>
                 <div className="h-profile-avatar">
@@ -96,22 +82,17 @@ const Header = () => {
                 <BiChevronDown className={`dropdown-arrow ${isProfileOpen ? 'rotate' : ''}`} />
               </button>
               
-                               {isProfileOpen && (
+              {isProfileOpen && (
                  <div className="h-profile-dropdown">
                     <div className="h-profile-dropdown-header">
                      <span>مرحباً بك!</span>
                      <small>{currentUser.email}</small>
                     </div>
 
-                    {/* ✅ زر لوحة التحكم الجديد */}
                     <Link to="/dashboard" onClick={() => setIsProfileOpen(false)} className="h-logout-dropdown-btn" style={{color:'#f1c991', textDecoration:'none', fontWeight: 'bold', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '12px', marginBottom: '5px'}}>
                       <FiGrid style={{ marginRight: '8px' }} />
                        لوحة التحكم   
                     </Link>
-
-                    
-    
-                     
 
                     <button onClick={handleLogout} className="h-logout-dropdown-btn">
                       <FiLogOut /> تسجيل الخروج
@@ -120,6 +101,11 @@ const Header = () => {
                )}
             </div>
           )}
+          
+          {/* زر الاشتراك - خارج الشرط يظهر دائماً في الديسكتوب */}
+          <button className="h-subscribe-btn" onClick={() => navigate('/pricingPlans')}>
+            <FiStar /> اشتراك
+          </button>
         </div>
       </div>
 
@@ -133,20 +119,31 @@ const Header = () => {
         
         <div className="mobile-auth-section">
           {!currentUser ? (
-            <>
-              <button className="h-login-text" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}>تسجيل الدخول</button>
-              <button className="h-subscribe-btn" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}><FiStar /> اشتراك</button>
-            </>
+            <button className="h-login-text" onClick={() => { setIsAuthOpen(true); closeMobileMenu(); }}>
+              تسجيل الدخول
+            </button>
           ) : (
-            <button className="h-login-text" onClick={handleLogout}><FiLogOut /> تسجيل الخروج ({currentUser.email?.split('@')[0]})</button>
+            <button className="h-login-text" onClick={handleLogout}>
+              <FiLogOut /> تسجيل الخروج ({currentUser.email?.split('@')[0]})
+            </button>
           )}
+          
+          {/* زر الاشتراك - خارج الشرط يظهر دائماً في الهاتف */}
+          <button className="h-subscribe-btn" onClick={() => { navigate('/pricingPlans'); closeMobileMenu(); }}>
+            <FiStar /> اشتراك
+          </button>
         </div>
       </div>
 
       <div className={`h-mobile-overlay ${mobileMenuOpen ? 'open' : ''}`} onClick={closeMobileMenu}></div>
 
       {/* نافذة تسجيل الدخول المنبثقة */}
-      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
+      {isAuthOpen && (
+        <AuthModal
+          isOpen={isAuthOpen}
+          onClose={() => setIsAuthOpen(false)}
+        />
+      )}
     </section>
   );
 };

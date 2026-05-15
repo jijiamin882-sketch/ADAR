@@ -499,3 +499,98 @@
     height: 200px;
   }
 }
+/* ========================================== */
+/* === تنسيق الفلاتر المتقدمة الجديدة === */
+/* ========================================== */
+/* ========================================== */
+/* === تنسيق الفلاتر المتقدمة (داكن وذهبي) === */
+/* ========================================== */
+
+.props-advanced-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 30px;
+  background: linear-gradient(160deg, #06080b 0%, #0f172a21 100%)!important;/* خلفية داكنة متدرجة */
+  border-radius: 16px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5); /* ظل عميق */
+  margin-top: 15px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(241, 201, 145, 0.1); /* حدود ذهبية شفافة */
+  animation: fadeInDark 0.3s ease-in-out;
+}
+
+@keyframes fadeInDark {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.props-af-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.props-af-item label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #808a98; /* نص رمادي فاتح للعناوين */
+  margin-bottom: 2px;
+}
+
+/* تنسيق القوائم المنسدلة بالتصميم الداكن */
+.props-af-item select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid rgba(255, 255, 255, 0.02); /* حدود شفافة داكنة */
+  border-radius: 10px;
+  background-color: rgba(22, 28, 36, 0.9)!important; /* خلفية سوداء شبه شفافة */
+  color: #9198a1; /* نص فاتح */
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  appearance: none; /* إزالة السهم الافتراضي */
+  /* سهم مخصص بلون رمادي */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 12px center;
+  transition: all 0.2s ease;
+}
+
+.props-af-item select:hover {
+  border-color: rgba(241, 201, 145, 0.3); /* حدود ذهبية عند التمرير */
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.props-af-item select:focus {
+  outline: none;
+  border-color: #f1c991; /* حدود ذهبية صريحة عند التحديد */
+  background-color: rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 0 4px rgba(241, 201, 145, 0.1); /* ظل ذهبي خارجي */
+}
+
+/* تنسيق زر مسح الفلاتر */
+.props-af-clear-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(239, 68, 68, 0.1); /* خلفية حمراء شفافة جداً */
+  color: #f87171; /* نص أحمر فاتح */
+  border: 1px dashed rgba(239, 68, 68, 0.4); /* حدود متقطعة حمراء */
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 14px;
+  font-family: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.props-af-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.2); /* تظليل أحمر أكثر عند التمرير */
+  border-color: #ef4444;
+  color: #ffffff;
+  transform: translateY(-1px);
+}

@@ -38,6 +38,7 @@ const Blog = () => {
     { key: "news", label: "أخبار وقوانين" },
     { key: "tips", label: "نصائح قانونية" },
     { key: "guide", label: "دليل الاستثمار" },
+    { key: "tourism", label: "دليل سياحي" },   
   ];
 
   const displayedData = filteredData.slice(0, visibleCount);
@@ -48,6 +49,7 @@ const Blog = () => {
       case "news": return "#e74c3c";
       case "tips": return "#f39c12";
       case "guide": return "#3498db";
+      case "tourism": return "#27ae60";
       default: return "#333";
     }
   };
@@ -57,6 +59,7 @@ const Blog = () => {
       case "news": return "أخبار وقوانين";
       case "tips": return "نصائح قانونية";
       case "guide": return "دليل الاستثمار";
+      case "tourism": return "دليل سياحي";   
       default: return "عام";
     }
   };

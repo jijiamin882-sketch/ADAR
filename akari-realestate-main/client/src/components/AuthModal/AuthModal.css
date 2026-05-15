@@ -300,3 +300,89 @@
   font-size: 18px;
   flex-shrink: 0;
 }
+.auth-role-selector {
+  margin-bottom: 20px;
+}
+
+.auth-role-selector label {
+  display: block;
+  color: #ccc;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.auth-roles-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-role-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #888;
+}
+
+.auth-role-option:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.03);
+}
+
+.auth-role-option.selected {
+  border-color: #f1c991;
+  background: rgba(241, 201, 145, 0.08);
+  color: #f1c991;
+}
+
+.auth-role-option input[type="radio"] {
+  display: none;
+}
+
+.auth-role-option span {
+  font-size: 14px;
+  font-weight: 600;
+}
+.success-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(76, 175, 80, 0.1);
+  border: 1px solid rgba(76, 175, 80, 0.3);
+  border-radius: 10px;
+  color: #4caf50;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+.success-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+}
+
+.auth-guest-btn {
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #888;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: inherit;
+  margin-top: 10px;
+}
+
+.auth-guest-btn:hover {
+  border-color: rgba(255,255,255,0.3);
+  color: #ccc;
+  background: rgba(255,255,255,0.03);
+}

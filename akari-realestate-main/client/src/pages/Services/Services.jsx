@@ -12,7 +12,7 @@ import {
   FiBriefcase,
   FiBox,
 } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import { useAuth } from "../../context/AuthContext";
 import "./Services.css";
@@ -38,6 +38,8 @@ const categoryLabels = {
 
 const Services = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // <-- أضف هذا السطر
+  const isMine = searchParams.get('mine') === 'true';
   const { currentUser } = useAuth();
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
@@ -45,13 +47,21 @@ const Services = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchServices = async () => {
+         const fetchServices = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("services")
-        .select("*")
-        .eq("status", "active")
-        .order("created_at", { ascending: false });
+      
+      // بناء الاستعلام الأساسي
+      let query = supabase.from("services").select("*");
+
+      if (isMine && currentUser) {
+        // إذا كان الرابط يحتوي على mine=true، اجلب خدماتي أنا فقط (بجميع حالاتها)
+        query = query.eq("user_id", currentUser.id);
+      } else {
+        // غير ذلك، اعرض الخدمات العامة المفعلة للجميع
+        query = query.eq("status", "active");
+      }
+
+      const { data, error } = await query.order("created_at", { ascending: false });
 
       if (!error && data) {
         setServices(data);
@@ -81,7 +91,7 @@ const Services = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [activeFilter]);
+  }, [activeFilter, isMine, currentUser?.id]);
 
   useEffect(() => {
     if (activeFilter === "all") {
@@ -132,13 +142,18 @@ const Services = () => {
   return (
     <div className="svc-page">
       {/* Hero */}
-      <div className="svc-hero">
+             <div className="svc-hero">
         <div className="svc-hero-content">
-          <span className="svc-hero-badge">  سوق ADAR للخدمات</span>
-          <h1>كل ما تحتاجه لعقارك في مكان واحد</h1>
+          <span className="svc-hero-badge"> 
+            {isMine ? "خدماتي في سوق ADAR" : "سوق ADAR للخدمات"}
+          </span>
+          <h1>
+            {isMine ? "إدارة خدماتك المضافة" : "كل ما تحتاجه لعقارك في مكان واحد"}
+          </h1>
           <p>
-            اكتشف أفضل مقدمي الخدمات العقارية في الجزائر، من الصيانة
-            والنقل إلى التصميم والتوثيق القانوني
+            {isMine 
+              ? "هنا يمكنك مراجعة جميع الخدمات التي قمت بنشرها." 
+              : "اكتشف أفضل مقدمي الخدمات العقارية في الجزائر، من الصيانة والنقل إلى التصميم والتوثيق القانوني"}
           </p>
         </div>
       </div>
@@ -251,13 +266,16 @@ const Services = () => {
                 </div>
 
                 {/* Request Button */}
-                <button
-                  className="svc-request-btn"
-                  onClick={() => handleRequestService(service)}
-                >
-                  <FiSend />
-                  طلب هذه الخدمة
-                </button>
+                                 {/* إخفاء زر الطلب إذا كنت أشاهد خدماتي أنا */}
+                {!isMine && (
+                  <button
+                    className="svc-request-btn"
+                    onClick={() => handleRequestService(service)}
+                  >
+                    <FiSend />
+                    طلب هذه الخدمة
+                  </button>
+                )}
               </div>
             </div>
           ))
