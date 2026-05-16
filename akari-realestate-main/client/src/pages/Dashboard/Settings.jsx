@@ -1,16 +1,19 @@
 import React from 'react';
 import { FiUser, FiMail, FiPhone } from 'react-icons/fi';
+import { useTranslation } from "react-i18next"; // <-- 1. استدعاء المكتبة
 
 export default function Settings() {
+  const { t } = useTranslation(); // <-- 2. تعريف الترجمة
+
   return (
     <div style={{ maxWidth: '600px' }}>
-      <h2 style={{ color: '#fff', marginBottom: '30px' }}>إعدادات الحساب</h2>
+      <h2 style={{ color: '#fff', marginBottom: '30px' }}>{t('settings_title')}</h2>
       
       <div style={{ background: '#0f172a', padding: '25px', borderRadius: '12px', border: '1px solid rgba(241, 201, 145, 0.1)' }}>
         <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <FiUser color="#f1c991" />
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: '14px', marginBottom: '5px' }}>الاسم الكامل</label>
+            <label style={{ display: 'block', color: '#94a3b8', fontSize: '14px', marginBottom: '5px' }}>{t('settings_name_label')}</label>
             <input type="text" defaultValue="jjilamin882" style={{ ...inputStyle }} />
           </div>
         </div>
@@ -18,7 +21,7 @@ export default function Settings() {
         <div style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}>
           <FiMail color="#f1c991" />
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: '14px', marginBottom: '5px' }}>البريد الإلكتروني</label>
+            <label style={{ display: 'block', color: '#94a3b8', fontSize: '14px', marginBottom: '5px' }}>{t('settings_email_label')}</label>
             <input type="email" defaultValue="test@example.com" style={{ ...inputStyle }} />
           </div>
         </div>
@@ -26,8 +29,8 @@ export default function Settings() {
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
           <FiPhone color="#f1c991" />
           <div style={{ flex: 1 }}>
-            <label style={{ display: 'block', color: '#94a3b8', fontSize: '14px', marginBottom: '5px' }}>رقم الهاتف</label>
-            <input type="tel" placeholder="0555 123 456" style={{ ...inputStyle }} />
+            <label style={{ display: 'block', color: '#94a3b8', fontSize: '14px', marginBottom: '5px' }}>{t('settings_phone_label')}</label>
+            <input type="tel" placeholder={t('settings_phone_ph')} style={{ ...inputStyle }} />
           </div>
         </div>
 
@@ -36,7 +39,7 @@ export default function Settings() {
           color: '#0a0f18', border: 'none', borderRadius: '8px', fontWeight: 'bold', 
           fontSize: '16px', cursor: 'pointer' 
         }}>
-          حفظ التغييرات
+          {t('settings_save_btn')}
         </button>
       </div>
     </div>

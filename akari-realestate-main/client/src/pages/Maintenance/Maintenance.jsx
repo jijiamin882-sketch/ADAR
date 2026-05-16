@@ -3,14 +3,16 @@ import { FiTool, FiZap, FiUserCheck, FiSettings, FiArrowRight, FiX, FiArrowLeft 
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import './Maintenance.css';
+import { useTranslation } from "react-i18next"; // <-- 1. استدعاء المكتبة
 
 const Maintenance = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation(); // <-- 2. تعريف الترجمة
   const [showModal, setShowModal] = useState(false);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
-    toast.success("تم استلام طلب الصيانة بنجاح! سيقوم فني بالتواصل معك قريباً.", {
+    toast.success(t('maint_success_msg'), {
       position: "top-center"
     });
     setShowModal(false);
@@ -19,103 +21,97 @@ const Maintenance = () => {
   return (
     <div className="maintenance-page-wrapper">
       
-      {/* واجهة الخدمة العلوية */}
       <div className="maintenance-hero">
         <div className="maintenance-hero-icon">
           <FiTool />
         </div>
-        <h1>خدمات صيانة العقارات</h1>
-        <p>فريق متخصص وذو كفاءة عالية لضمان الحفاظ على عقارك. نقدم صيانة دورية وطوارئ فورية على مدار الساعة.</p>
+        <h1>{t('maint_hero_title')}</h1>
+        <p>{t('maint_hero_desc')}</p>
       </div>
 
-      {/* قسم المحتوى */}
       <div className="maintenance-content-container">
         
-        {/* لماذا تختار صيانتنا */}
         <div className="maintenance-section-box">
-          <h2>لماذا تثق بخدمات الصيانة لدينا؟</h2>
+          <h2>{t('maint_why_title')}</h2>
           <div className="maintenance-features-grid">
             <div className="maintenance-feature-item">
               <FiZap className="maintenance-feat-icon" />
-              <h3>استجابة فورية</h3>
-              <p>فريق طوارئ جاهز للتحرك خلال دقائق لحل الأعطال المفاجئة كالأعطال الكهربائية أو انسداد المجاري.</p>
+              <h3>{t('maint_feat1_title')}</h3>
+              <p>{t('maint_feat1_desc')}</p>
             </div>
             <div className="maintenance-feature-item">
               <FiUserCheck className="maintenance-feat-icon" />
-              <h3>فنيون معتمدون</h3>
-              <p>جميع فنيينا حاصلون على شهادات خبرة ويخضعون لفحص أمني لضمان أمان منزلك.</p>
+              <h3>{t('maint_feat2_title')}</h3>
+              <p>{t('maint_feat2_desc')}</p>
             </div>
             <div className="maintenance-feature-item">
               <FiSettings className="maintenance-feat-icon" />
-              <h3>خدمات شاملة</h3>
-              <p>من السباكة والكهرباء إلى التكييف والطلاء، نوفر لك كل ما تحتاجه تحت سقف واحد.</p>
+              <h3>{t('maint_feat3_title')}</h3>
+              <p>{t('maint_feat3_desc')}</p>
             </div>
           </div>
         </div>
 
-        {/* كيف تعمل الخدمة */}
         <div className="maintenance-section-box maintenance-steps-box">
-          <h2>كيف ندير عملية الصيانة؟</h2>
+          <h2>{t('maint_how_title')}</h2>
           <div className="maintenance-steps-flex">
             <div className="maintenance-step">
               <div className="maintenance-step-num">1</div>
-              <h4>حجز موعد</h4>
-              <p>حدد نوع العطل واختر الوقت المناسب لك من خلال نموذج التواصل السريع.</p>
+              <h4>{t('maint_step1_title')}</h4>
+              <p>{t('maint_step1_desc')}</p>
             </div>
             <FiArrowLeft className="maintenance-step-arrow" />
             <div className="maintenance-step">
               <div className="maintenance-step-num">2</div>
-              <h4>الفحص والتشخيص</h4>
-              <p>يصل الفني لموقعك، يقوم بتشخيص المشكلة بدقة ويحدد التكلفة قبل البدء.</p>
+              <h4>{t('maint_step2_title')}</h4>
+              <p>{t('maint_step2_desc')}</p>
             </div>
              <FiArrowLeft className="maintenance-step-arrow" />
             
             <div className="maintenance-step">
               <div className="maintenance-step-num">3</div>
-              <h4>الإصلاح والضمان</h4>
-              <p>تنفيذ الإصلاح فوراً مع تقديم ضمان شامل على قطع الغيار وأعمال الصيانة.</p>
+              <h4>{t('maint_step3_title')}</h4>
+              <p>{t('maint_step3_desc')}</p>
             </div>
           </div>
         </div>
 
       </div>
 
-      {/* أزرار التوجيه السفلية (مرتبة عن الفوتر) */}
       <div className="maintenance-actions-bar">
         <button className="maintenance-back-btn" onClick={() => navigate('/Services')}>
-          العودة للخدمات
+          {t('maint_back_btn')}
         </button>
         <button className="maintenance-cta-btn" onClick={() => setShowModal(true)}>
-          احجز فني صيانة الآن
+          {t('maint_cta_btn')}
         </button>
       </div>
 
-      {/* --- النافذة المنبثقة (Modal) --- */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
-              <h3>طلب خدمة صيانة</h3>
+              <h3>{t('maint_modal_title')}</h3>
               <FiX className="modal-close-icon" onClick={() => setShowModal(false)} />
             </div>
-            <p className="modal-subtitle">صف لنا المشكلة وسنرسل لك أفضل فني متخصص في منطقتك.</p>
+            <p className="modal-subtitle">{t('maint_modal_desc')}</p>
             
             <form onSubmit={handleFormSubmit} className="modal-form">
-              <input type="text" placeholder="الاسم الكامل" required />
-              <input type="tel" placeholder="رقم الهاتف" required />
+              <input type="text" placeholder={t('maint_ph_name')} required />
+              <input type="tel" placeholder={t('maint_ph_phone')} required />
               <select required defaultValue="">
-                <option value="" disabled>نوع الصيانة المطلوبة</option>
-                <option value="plumbing">سباكة</option>
-                <option value="electrical">كهرباء</option>
-                <option value="ac">صيانة تكييف</option>
-                <option value="painting">طلاء وتشطيبات</option>
-                <option value="other">أخرى</option>
+                <option value="" disabled>{t('maint_ph_type')}</option>
+                <option value="plumbing">{t('maint_opt_plumbing')}</option>
+                <option value="electrical">{t('maint_opt_electrical')}</option>
+                <option value="ac">{t('maint_opt_ac')}</option>
+                <option value="painting">{t('maint_opt_painting')}</option>
+                <option value="other">{t('maint_opt_other')}</option>
               </select>
-              <textarea rows="4" placeholder="وصف مختصر للمشكلة..."></textarea>
+              <textarea rows="4" placeholder={t('maint_ph_desc')}></textarea>
               
               <div className="modal-actions">
-                <button type="button" className="modal-cancel-btn" onClick={() => setShowModal(false)}>إلغاء</button>
-                <button type="submit" className="modal-submit-btn">إرسال الطلب</button>
+                <button type="button" className="modal-cancel-btn" onClick={() => setShowModal(false)}>{t('maint_cancel_btn')}</button>
+                <button type="submit" className="modal-submit-btn">{t('maint_submit_btn')}</button>
               </div>
             </form>
           </div>

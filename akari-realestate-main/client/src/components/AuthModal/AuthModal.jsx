@@ -187,14 +187,7 @@ const AuthModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-        {/* زر تصفح كزائر */}
-        <button
-          type="button"
-          className="auth-guest-btn"
-          onClick={onClose}
-        >
-          تصفح كزائر
-        </button>
+         
 
         <p className="custom-footer">
           بالاستمرار، أنت توافق على <a href="#">شروط الخدمة</a> و<a href="#">سياسة الخصوصية</a>

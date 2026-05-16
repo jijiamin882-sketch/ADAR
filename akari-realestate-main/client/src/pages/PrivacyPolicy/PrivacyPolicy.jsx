@@ -1,51 +1,73 @@
 import React from 'react';
 import './PrivacyPolicy.css';
+import { useTranslation } from "react-i18next";
 
 export default function PrivacyPolicy() {
+  const { t } = useTranslation();
+
   const sections = [
     {
-      title: "1. المعلومات التي نجمعها",
+      title: "privacy_sec1_title",
       content: [
-        { type: 'text', value: "نقوم بجمع أنواع معينة من المعلومات لتقديم خدماتنا وتحسين تجربتك:" },
-        { type: 'list', value: ["بيانات الحساب: الاسم، البريد الإلكتروني، ورقم الهاتف (عبر خدمات تسجيل الدخول الآمن).", "بيانات التحقق ونشر العقارات: عند رغبتك في نشر عقار، نطلب الاسم، اللقب، رقم الهوية الوطنية، وصورة وثيقة تثبت الملكية.", "البيانات التقنية: عنوان بروتوكول الإنترنت (IP)، نوع المتصفح، اللغة، والموقع الجغرافي التقريبي.", "بيانات المساعد الذكي (AI): إذا استخدمت خاصية المساعد الذكي، سيتم معالجة نصوص أسئلتك لتقديم الإجابات."] } // <--- تم إضافة الفاصلة هنا
+        { type: 'text', value: "privacy_sec1_text" },
+        { 
+          type: 'list', 
+          value: ["privacy_sec1_list_1", "privacy_sec1_list_2", "privacy_sec1_list_3", "privacy_sec1_list_4", "privacy_sec1_list_5"] 
+        }
       ]
     },
     {
-      title: "2. كيف نستخدم معلوماتك؟",
+      title: "privacy_sec2_title",
       content: [
-        { type: 'list', value: ["التحقق والوقاية من الاحتيال: استخدام رقم الهوية ووثيقة الملكية حصرياً لفريق الإدارة للتحقق من صحة العقار ومنع الإعلانات الوهمية.", "تقديم الخدمات: عرض العقارات، ربطك بالوكالات، وتسهيل التواصل.", "تحسين المنصة: تحليل كيفية استخدام الموقع لإصلاح الأخطاء وتحسين سرعة وتجربة المستخدم.", "الإشعارات: إرسال تحديثات حول حالة إعلاناتك أو رسائل من المشترين (يمكنك إيقاف هذا من الإعدادات)."] } // <--- تم إضافة الفاصلة هنا
+        { type: 'list', value: ["privacy_sec2_list_1", "privacy_sec2_list_2", "privacy_sec2_list_3", "privacy_sec2_list_4"] }
       ]
     },
     {
-      title: "3. مشاركة المعلومات مع أطراف ثالثة",
+      title: "privacy_sec3_title",
       content: [
-        { type: 'text', value: "نحترم خصوصيتك ولا نبيع بياناتك. نشارك بياناتك فقط مع:" },
-        { type: 'list', value: ["مزودي الخدمات التقنية: مثل (Firebase) لتخزين البيانات بشكل آمن، و(Auth0) لإدارة تسجيل الدخول.", "الجهات القانونية: فقط إذا كان ذلك مطلوباً بموجب القانون الجزائري لحل النزاعات أو منع الاحتيال.", "المستخدمون الآخرون: سيظهر للمستخدمين فقط الاسم والمدينة. أما رقم الهوية الوطنية والعقود فتبقى مخفية ومشفرة ولا يطلع عليها سوى الإدارة."] } // <--- تم إضافة الفاصلة هنا
+        { type: 'text', value: "privacy_sec3_text" }
       ]
     },
     {
-      title: "4. أمان البيانات",
+      title: "privacy_sec4_title",
       content: [
-        { type: 'text', value: "نتخذ إجراءات أمنية مناسبة لحماية معلوماتك من الوصول غير المصرح به أو التعديل أو الكشف. تشمل هذه الإجراءات التشفير أثناء النقل (HTTPS) والوصول المقيد لقواعد البيانات." } // <--- تم إضافة الفاصلة هنا
+        { type: 'text', value: "privacy_sec4_text" }
       ]
     },
     {
-      title: "5. الاحتفاظ بالبيانات",
+      title: "privacy_sec5_title",
       content: [
-        { type: 'list', value: ["بيانات الحساب والإعلانات: نحتفظ بها طالما كان حسابك نشطاً أو حسب الحاجة القانونية.", "بيانات التحقق (الهوية والعقود): يتم حذفها من خوادمنا بمجرد قبول أو رفض الإعلان، أو بعد مرور فترة الاحتفاظ القانونية."] } // <--- تم إضافة الفاصلة هنا
+        { type: 'list', value: ["privacy_sec5_list_1", "privacy_sec5_list_2", "privacy_sec5_list_3"] }
       ]
     },
     {
-      title: "6. حقوقك (بموجب القانون الجزائري 18-05)",
+      title: "privacy_sec6_title",
       content: [
-        { type: 'text', value: "لديك الحق في:" },
-        { type: 'list', value: ["الوصول: طلب نسخة من البيانات الشخصية التي نحتفظ بها.", "التصحيح: تعديل أو تحديث بياناتك غير الدقيقة.", "الحذف: طلب حذف حسابك وبياناتك (يرجى ملاحظة أن حذف الحساب يعني حذف إعلاناتك العقارية)."] } // <--- تم إضافة الفاصلة هنا
+        { type: 'list', value: ["privacy_sec6_list_1", "privacy_sec6_list_2", "privacy_sec6_list_3"] }
       ]
     },
     {
-      title: "7. ملفات تعريف الارتباط (Cookies)",
+      title: "privacy_sec7_title",
       content: [
-        { type: 'text', value: "نستخدم ملفات تعريف الارتباط لتذكر تفضيلاتك (مثل اللغة أو حفظ تسجيل الدخول). يمكنك تعطيل ملفات تعريف الارتباط من خلال إعدادات المتصفح، ولكن قد تفقد بعض وظائف الموقع." } // <--- تم إضافة الفاصلة هنا
+        { type: 'text', value: "privacy_sec7_text" }
+      ]
+    },
+    {
+      title: "privacy_sec8_title",
+      content: [
+        { type: 'text', value: "privacy_sec8_text" }
+      ]
+    },
+    {
+      title: "privacy_sec9_title",
+      content: [
+        { type: 'text', value: "privacy_sec9_text" }
+      ]
+    },
+    {
+      title: "privacy_sec10_title",
+      content: [
+        { type: 'text', value: "privacy_sec10_text" }
       ]
     }
   ];
@@ -55,25 +77,35 @@ export default function PrivacyPolicy() {
       <div className="privacy-container">
         
         <div className="privacy-header">
-          <h1 className="privacy-main-title">سياسة الخصوصية</h1>
-          <p className="privacy-update-date">آخر تحديث: مايو 2024</p>
-        </div>
-
-        <div className="privacy-section">
-          <p>في منصة "أكاري" العقارية، نلتزم بأعلى معايير حماية بيانات مستخدمينا. توضح سياسة الخصوصية هذه كيفية جمعنا واستخدامنا وحمايتنا للمعلومات التي تزودنا بها عند استخدامك لموقعنا الإلكتروني. باستخدامك لمنصتنا، فإنك توافق على الممارسات الموضحة في هذه السياسة.</p>
+          <h1 className="privacy-main-title">{t('privacy_main_title')}</h1>
+          <p className="privacy-update-date">{t('privacy_update_date')}</p>
         </div>
 
         {sections.map((section, index) => (
           <div key={index} className="privacy-section">
-            <h2>{section.title}</h2>
+            <h2>{t(section.title)}</h2>
             {section.content.map((item, i) => (
               item.type === 'text' ? (
-                <p key={i}>{item.value}</p>
+                <p key={i}>{t(item.value)}</p>
               ) : (
                 <ul key={i}>
-                  {item.value.map((li, idx) => (
-                    <li key={idx}><strong>{li.split(':')[0]}{li.includes(':') ? ':' : ''}</strong>{li.split(':')[1] || li}</li>
-                  ))}
+                  {item.value.map((li, idx) => {
+                    // 1. نأخذ النص المترجم أولاً
+                    const translatedText = t(li); 
+                    
+                    // 2. نتحقق إذا كان النص يحتوي على نقطتين (:) لتفعيل الـ Bold
+                    if (translatedText.includes(':')) {
+                      const parts = translatedText.split(':');
+                      return (
+                        <li key={idx}>
+                          <strong>{parts[0]}:</strong>{parts[1]}
+                        </li>
+                      );
+                    }
+                    
+                    // 3. إذا لم يحتوي على نقطتين، نطبعه كاملاً بدون تعديل
+                    return <li key={idx}>{translatedText}</li>;
+                  })}
                 </ul>
               )
             ))}
@@ -81,17 +113,17 @@ export default function PrivacyPolicy() {
         ))}
 
         <div className="privacy-section">
-          <h2>8. التغييرات على هذه السياسة</h2>
-          <p>قد نقوم بتحديث سياسة الخصوصية هذه من وقت لآخر. سنقوم بإعلامك بأي تغييرات جوهرية من خلال إشعار بارز على الموقع.</p>
+          <h2>{t('privacy_sec11_title')}</h2>
+          <p>{t('privacy_sec11_text')}</p>
         </div>
 
         <div className="privacy-contact-section">
           <div className="privacy-highlight-box">
             <p style={{ margin: 0, textAlign: 'center' }}>
-              للأسئلة أو لطلب الوصول إلى بياناتك، يرجى التواصل مع فريق الخصوصية لدينا.
+              {t('privacy_contact_text')}
             </p>
           </div>
-          <p style={{ margin: '20px 0 5px 0' }}>البريد الإلكتروني:</p>
+          <p style={{ margin: '20px 0 5px 0' }}>{t('privacy_email_label')}:</p>
           <a href="mailto:privacy@adar-dz.com" className="privacy-email-link">
             privacy@adar-dz.com
           </a>

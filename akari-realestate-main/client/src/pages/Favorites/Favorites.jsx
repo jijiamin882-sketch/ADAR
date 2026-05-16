@@ -4,15 +4,16 @@ import { FiHeart, FiMapPin, FiHome, FiTrash2 } from 'react-icons/fi';
 import { useAuth } from "../../context/AuthContext";
 import { supabase } from "../../supabaseClient";
 import "./Favorites.css";
+import { useTranslation } from "react-i18next"; // <-- 1. استدعاء المكتبة
 
 export default function Favorites() {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation(); // <-- 2. تعريف الترجمة
   
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // جلب العقارات المفضلة مربوطة بتفاصيل العقار
   useEffect(() => {
     const fetchFavorites = async () => {
       if (!currentUser) {
@@ -21,7 +22,6 @@ export default function Favorites() {
       }
 
       try {
-        // نجلب المفضلة ونجلب بيانات العقار المرتبطة بها في طلب واحد (Join)
         const { data, error } = await supabase
           .from('favorites')
           .select(`
@@ -42,81 +42,66 @@ export default function Favorites() {
           .order('created_at', { ascending: false });
 
         if (error) throw error;
-        
-        // تنقية البيانات (في حال تم حذف العقار وبقيت المفضلة عالقة)
         const validFavorites = data.filter(item => item.properties !== null);
         setFavorites(validFavorites);
       } catch (error) {
-        console.error("خطأ في جلب المفضلات:", error);
+        console.error("Error fetching favorites:", error);
       } finally {
         setLoading(false);
       }
     };
 
     fetchFavorites();
-  }, [currentUser?.id]); // ✅ تم الإصلاح: نستخدم ID فقط لمنع التكرار اللانهائي
+  }, [currentUser?.id]);
 
-  // دالة إزالة العقار من المفضلة
   const handleRemove = async (favId, propertyId) => {
-    const { error } = await supabase
-      .from('favorites')
-      .delete()
-      .eq('id', favId);
-
+    const { error } = await supabase.from('favorites').delete().eq('id', favId);
     if (!error) {
       setFavorites(prev => prev.filter(fav => fav.id !== favId));
     }
   };
 
-  // حالة عدم تسجيل الدخول
   if (!currentUser) {
     return (
       <div className="fav-empty-state">
         <FiHeart size={50} color="#555" />
-        <h2>يجب تسجيل الدخول أولاً</h2>
-        <p>لرؤية عقاراتك المفضلة، يرجى تسجيل الدخول.</p>
-        <button onClick={() => navigate('/login')} className="fav-login-btn">تسجيل الدخول</button>
+        <h2>{t('fav_not_logged_title')}</h2>
+        <p>{t('fav_not_logged_desc')}</p>
+        <button onClick={() => navigate('/login')} className="fav-login-btn">{t('fav_login_btn')}</button>
       </div>
     );
   }
 
-  // حالة التحميل
   if (loading) {
-    return <div style={{textAlign: 'center', padding: '50px', color: '#fff'}}>جاري تحميل المفضلة...</div>;
+    return <div style={{textAlign: 'center', padding: '50px', color: '#fff'}}>{t('fav_loading')}</div>;
   }
 
   return (
     <div className="fav-wrapper">
       <div className="fav-container">
         
-        {/* عنوان الصفحة */}
         <div className="fav-header">
-          <h1><FiHeart style={{color: '#dc3545'}} /> عقاراتي المفضلة</h1>
-          <p>لقد قمت بحفظ {favorites.length} عقار</p>
+          <h1><FiHeart style={{color: '#dc3545'}} /> {t('fav_page_title')}</h1>
+          <p>{t('fav_page_count')} {favorites.length} {t('fav_page_word')}</p>
         </div>
 
-        {/* حالة عدم وجود عقارات */}
         {favorites.length === 0 ? (
           <div className="fav-empty-state">
             <FiHeart size={60} color="#333" />
-            <h2>لا توجد عقارات مفضلة حتى الآن</h2>
-            <p>عندما تجد عقاراً يعجبك، اضغط على زر "حفظ" وسيظهر هنا.</p>
-            <Link to="/properties" className="fav-browse-btn">تصفح العقارات</Link>
+            <h2>{t('fav_empty_title')}</h2>
+            <p>{t('fav_empty_desc')}</p>
+            <Link to="/properties" className="fav-browse-btn">{t('fav_browse_btn')}</Link>
           </div>
         ) : (
-          /* شبكة العقارات */
           <div className="fav-grid">
             {favorites.map((fav) => {
               const prop = fav.properties;
               
-              // ✅ تم الإصلاح: التحقق من أن الرابط صحيح ويعمل قبل استخدامه
               const getValidImage = () => {
                 const firstImg = prop.images?.find(img => img && img.startsWith('http'));
                 if (firstImg) return firstImg;
-                
                 if (prop.image && prop.image.startsWith('http')) return prop.image;
-                
-                return 'https://placehold.co/400x250/1a1a2e/ffffff?text=لا+توجد+صورة';
+                return 'https://placehold.co/400x250/1a1a2e/ffffff?text=No+Image';
               };
 
               const mainImage = getValidImage();
@@ -124,18 +109,17 @@ export default function Favorites() {
               return (
                 <div key={fav.id} className="fav-card">
                   <Link to={`/property/${prop.id}`} className="fav-card-img-link">
-                    {/* ✅ تم الإصلاح: إضافة onError لمنع ظهور 404 نهائياً */}
                     <img 
                       src={mainImage} 
                       alt={prop.title} 
                       className="fav-card-img"
                       loading="lazy"
                       onError={(e) => {
-                        e.target.src = 'https://placehold.co/400x250/1a1a2e/ffffff?text=لا+توجد+صورة';
+                        e.target.src = 'https://placehold.co/400x250/1a1a2e/ffffff?text=No+Image';
                       }}
                     />
                     <div className="fav-card-badge">
-                      {prop.listing_type === 'rent' ? 'للكراء' : 'للبيع'}
+                      {prop.listing_type === 'rent' ? t('pd_for_rent') : t('pd_for_sale')}
                     </div>
                   </Link>
                   
@@ -149,7 +133,7 @@ export default function Favorites() {
                       <button 
                         onClick={() => handleRemove(fav.id, prop.id)} 
                         className="fav-remove-btn"
-                        title="إزالة من المفضلة"
+                        title={t('fav_remove_title')}
                       >
                         <FiTrash2 />
                       </button>

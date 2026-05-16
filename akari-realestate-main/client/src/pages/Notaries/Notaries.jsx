@@ -1,121 +1,104 @@
 import React, { useState } from 'react';
 import { FiFileText, FiShield, FiClock, FiUsers, FiArrowRight, FiX, FiArrowLeft } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; // <-- استدعاء أداة التنبيهات
+import { toast } from 'react-toastify';
 import './Notaries.css';
+import { useTranslation } from "react-i18next"; // <-- 1. استدعاء المكتبة
 
 const Notaries = () => {
   const navigate = useNavigate();
-  
-  // حالة لإظهار وإخفاء النافذة المنبثقة
+  const { t } = useTranslation(); // <-- 2. تعريف الترجمة
   const [showModal, setShowModal] = useState(false);
 
-  // دالة إرسال النموذج
   const handleFormSubmit = (e) => {
-    e.preventDefault(); // لمنع تحديث الصفحة
-    // هنا يمكنك لاحقاً إرسال البيانات لقاعدة البيانات (Firebase)
-    toast.success("تم إرسال طلبك بنجاح! سيتواصل معك الموثق خلال دقائق.", {
-      position: "top-center"
-    });
-    setShowModal(false); // إغلاق النافذة بعد الإرسال
+    e.preventDefault();
+    toast.success(t('not_success_msg'), { position: "top-center" });
+    setShowModal(false);
   };
 
   return (
     <div className="notary-page-wrapper">
       
-      {/* واجهة الخدمة العلوية (Hero) */}
       <div className="notary-hero">
-        <div className="notary-hero-icon">
-          <FiFileText />
-        </div>
-        <h1>خدمات الموثقون المعتمدون</h1>
-        <p>نضمن لك سلامة معاملاتك العقارية من خلال شراكاتنا مع نخبة من الموثقين القانونيين المعتمدين في منطقتك.</p>
+        <div className="notary-hero-icon"><FiFileText /></div>
+        <h1>{t('not_hero_title')}</h1>
+        <p>{t('not_hero_desc')}</p>
       </div>
 
-      {/* قسم المحتوى */}
       <div className="notary-content-container">
         
-        {/* لماذا تختارنا */}
         <div className="notary-section-box">
-          <h2>لماذا تختار خدمة التوثيق لدينا؟</h2>
+          <h2>{t('not_why_title')}</h2>
           <div className="notary-features-grid">
             <div className="notary-feature-item">
               <FiShield className="notary-feat-icon" />
-              <h3>شرعية مطلقة</h3>
-              <p>جميع عقودنا يتم مراجعتها من قبل محامين متخصصين لضمان عدم وجود ثغرات قانونية.</p>
+              <h3>{t('not_feat1_title')}</h3>
+              <p>{t('not_feat1_desc')}</p>
             </div>
             <div className="notary-feature-item">
               <FiClock className="notary-feat-icon" />
-              <h3>توفير الوقت</h3>
-              <p>نتولى عنك كافة إجراءات المداولة في المحاكم والبلديات بدلاً من الانتظار في الطوابير.</p>
+              <h3>{t('not_feat2_title')}</h3>
+              <p>{t('not_feat2_desc')}</p>
             </div>
             <div className="notary-feature-item">
               <FiUsers className="notary-feat-icon" />
-              <h3>شبكة واسعة</h3>
-              <p>نوفر لك قائمة بأفضل الموثقين مع تقييمات حقيقية من عملاء سابقين لتختار الأنسب لك.</p>
+              <h3>{t('not_feat3_title')}</h3>
+              <p>{t('not_feat3_desc')}</p>
             </div>
           </div>
         </div>
 
-        {/* كيف تعمل الخدمة */}
         <div className="notary-section-box notary-steps-box">
-          <h2>كيف نتمم عملية التوثيق؟</h2>
+          <h2>{t('not_how_title')}</h2>
           <div className="notary-steps-flex">
             <div className="notary-step">
               <div className="step-num">1</div>
-              <h4>طلب الخدمة</h4>
-              <p>أرسل تفاصيل عقارك ونوع العقد المطلوب عبر نموذجنا المباشر.</p>
+              <h4>{t('not_step1_title')}</h4>
+              <p>{t('not_step1_desc')}</p>
             </div>
             <FiArrowLeft className="step-arrow" />
             <div className="notary-step">
               <div className="step-num">2</div>
-              <h4>مراجعة الأوراق</h4>
-              <p>يقوم فريقنا القانوني بمراجعة مستنداتك الأولية والتأكد من صحتها.</p>
+              <h4>{t('not_step2_title')}</h4>
+              <p>{t('not_step2_desc')}</p>
             </div>
             <FiArrowLeft className="step-arrow" />
             <div className="notary-step">
               <div className="step-num">3</div>
-              <h4>التوثيق النهائي</h4>
-              <p>نثبت موعدك مع الموثق وإتمام التوقيع الرسمي واستلام العقود النهائية.</p>
+              <h4>{t('not_step3_title')}</h4>
+              <p>{t('not_step3_desc')}</p>
             </div>
           </div>
         </div>
 
       </div>
 
-      {/* أزرار التوجيه السفلية */}
       <div className="notary-actions-bar">
         <button className="notary-back-btn" onClick={() => navigate('/Services')}>
-          العودة للخدمات
+          {t('not_back_btn')}
         </button>
-        {/* تم تغيير الزر ليفتح النافذة المنبثقة */}
         <button className="notary-cta-btn" onClick={() => setShowModal(true)}>
-          تواصل مع موثق الآن
+          {t('not_cta_btn')}
         </button>
       </div>
 
-      {/* --- النافذة المنبثقة (Modal) --- */}
       {showModal && (
         <div className="modal-overlay" onClick={() => setShowModal(false)}>
           <div className="modal-box" onClick={(e) => e.stopPropagation()}>
-            
-            {/* زر الإغلاق */}
             <div className="modal-header">
-              <h3>طلب تواصل مع موثق</h3>
+              <h3>{t('not_modal_title')}</h3>
               <FiX className="modal-close-icon" onClick={() => setShowModal(false)} />
             </div>
+            <p className="modal-subtitle">{t('not_modal_desc')}</p>
             
-            <p className="modal-subtitle">أدخل بياناتك وسيتواصل معك أحد الموثقين المعتمدين في أقرب وقت.</p>
-
-            {/* نموذج الإدخال */}
             <form onSubmit={handleFormSubmit} className="modal-form">
-              <input type="text" placeholder="الاسم الكامل" required />
-              <input type="tel" placeholder="رقم الهاتف" required />
-              <textarea rows="4" placeholder="تفاصيل الخدمة المطلوبة (نوع العقار، المدينة، رقم العقد...)"></textarea>
+              <input type="text" placeholder={t('not_ph_name')} required />
+              <input type="tel" placeholder={t('not_ph_phone')} required />
+              <textarea rows="4" placeholder={t('not_ph_desc')}></textarea>
               
               <div className="modal-actions">
-                <button type="button" className="modal-cancel-btn" onClick={() => setShowModal(false)}>إلغاء</button>
-                <button type="submit" className="modal-submit-btn">إرسال الطلب</button>
+                <button type="button" className="modal-cancel-btn" onClick={() => setShowModal(false)}>{t('not_cancel_btn')}</button>
+                <button type="submit" className="modal-submit-btn">{t('not_submit_btn')}</button>
               </div>
             </form>
           </div>

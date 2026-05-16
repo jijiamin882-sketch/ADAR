@@ -1,5 +1,5 @@
 /* ==========================================
-   الخلفية المعتمة
+   الخلفية المعتمة (تم إصلاح التمرير للموبايل)
    ========================================== */
 .custom-overlay {
   position: fixed;
@@ -8,9 +8,10 @@
   backdrop-filter: blur(6px);
   z-index: 10000;
   display: flex;
-  align-items: center;
+  align-items: flex-start; /* <-- تم التعديل: كان center يمنع التمرير */
   justify-content: center;
-  padding: 20px;
+  padding: 50px 20px;      /* <-- تم التعديل: مسافة آمنة من الأعلى */
+  overflow-y: auto;        /* <-- تم الإضافة: الحل الأساسي لاختفاء الأزرار */
 }
 
 /* ==========================================
@@ -26,6 +27,7 @@
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
   direction: rtl;
   font-family: 'Tajawal', sans-serif;
+  margin: auto 0;          /* <-- تم الإضافة: لتبقى في المنتصف في الشاشات الكبيرة */
 }
 
 /* ==========================================
@@ -53,7 +55,7 @@
 }
 
 /* ==========================================
-   العنوان والوصف (لون داكن واضح جداً)
+   العنوان والوصف
    ========================================== */
 .custom-header {
   text-align: center;
@@ -63,13 +65,13 @@
 .custom-header h2 {
   font-size: 22px;
   font-weight: 800;
-  color: #111827; /* أسود قوي جداً */
+  color: #111827;
   margin: 0 0 8px 0;
 }
 
 .custom-header p {
   font-size: 14px;
-  color: #6b7280; /* رمادي واضح */
+  color: #6b7280;
   margin: 0;
   line-height: 1.6;
 }
@@ -106,7 +108,7 @@
 }
 
 /* ==========================================
-   حقول الإدخال (نص أسود واضح)
+   حقول الإدخال
    ========================================== */
 .custom-form {
   display: flex;
@@ -144,7 +146,7 @@
   padding: 14px 0;
   font-size: 14px;
   font-family: 'Tajawal', sans-serif;
-  color: #111827; /* ← لون الكتابة داخل الخانة (أسود لضمان الوضوح) */
+  color: #111827;
 }
 
 .input-wrapper input::placeholder {
@@ -227,7 +229,6 @@
   border: 1.5px solid transparent;
 }
 
-/* جوجل */
 .social-btn.google {
   background: #fff;
   color: #333;
@@ -235,14 +236,12 @@
 }
 .social-btn.google:hover { background: #f8f9fa; border-color: #c0c0c0; }
 
-/* فيسبوك */
 .social-btn.facebook {
   background: #1877F2;
   color: #fff;
 }
 .social-btn.facebook:hover { background: #166fe5; }
 
-/* أبل */
 .social-btn.apple {
   background: #000;
   color: #fff;
@@ -250,12 +249,12 @@
 .social-btn.apple:hover { background: #333; }
 
 /* ==========================================
-   نص الشروط في الأسفل (رمادي صغير)
+   نص الشروط في الأسفل
    ========================================== */
 .custom-footer {
   text-align: center;
   font-size: 12px;
-  color: #9ca3af; /* رمادي فاتح جداً ليكون خفيفاً ولا يشتت */
+  color: #9ca3af;
   margin-top: 20px;
   line-height: 1.8;
 }
@@ -267,27 +266,16 @@
 }
 
 /* ==========================================
-   التجاوب مع الشاشات الصغيرة
-   ========================================== */
-@media (max-width: 480px) {
-  .custom-modal {
-    padding: 24px 20px;
-  }
-  .custom-header h2 {
-    font-size: 20px;
-  }
-}
-/* ==========================================
-   رسالة النجاح الاحترافية (خضراء)
+   رسالة النجاح الاحترافية (تم حذف التكرار)
    ========================================== */
 .success-box {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: #f0fdf4; /* خلفية خضراء فاتحة جداً */
-  border: 1px solid #bbf7d0; /* إطار أخضر فاتح */
-  color: #15803d; /* نص أخضر داكن */
   padding: 12px 16px;
+  background: #f0fdf4; 
+  border: 1px solid #bbf7d0; 
+  color: #15803d; 
   border-radius: 10px;
   margin-bottom: 16px;
   font-size: 13px;
@@ -296,17 +284,26 @@
   animation: fadeIn 0.3s ease;
 }
 
+@keyframes fadeIn {
+  from { opacity: 0; } 
+  to { opacity: 1; } 
+}
+
 .success-icon {
   font-size: 18px;
   flex-shrink: 0;
 }
+
+/* ==========================================
+   اختيار نوع الحساب والضيف
+   ========================================== */
 .auth-role-selector {
   margin-bottom: 20px;
 }
 
 .auth-role-selector label {
   display: block;
-  color: #ccc;
+  color: #6b7280; /* تم تعديله ليتناسب مع الخلفية البيضاء */
   font-size: 14px;
   margin-bottom: 10px;
 }
@@ -322,22 +319,22 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid #e5e7eb; /* تم تعديله ليتناسب مع الخلفية البيضاء */
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s;
-  color: #888;
+  color: #6b7280; /* تم تعديله */
 }
 
 .auth-role-option:hover {
-  border-color: rgba(255,255,255,0.2);
-  background: rgba(255,255,255,0.03);
+  border-color: #c9963a;
+  background: #fffdf5; /* خلفية صفراء فاتحة جداً عند التمرير */
 }
 
 .auth-role-option.selected {
-  border-color: #f1c991;
-  background: rgba(241, 201, 145, 0.08);
-  color: #f1c991;
+  border-color: #c9963a;
+  background: #fffbeb; /* خلفية صفراء فاتحة */
+  color: #161c24;
 }
 
 .auth-role-option input[type="radio"] {
@@ -348,30 +345,13 @@
   font-size: 14px;
   font-weight: 600;
 }
-.success-box {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  background: rgba(76, 175, 80, 0.1);
-  border: 1px solid rgba(76, 175, 80, 0.3);
-  border-radius: 10px;
-  color: #4caf50;
-  font-size: 14px;
-  margin-bottom: 16px;
-}
-
-.success-icon {
-  flex-shrink: 0;
-  font-size: 18px;
-}
 
 .auth-guest-btn {
   width: 100%;
   padding: 14px;
   background: transparent;
-  border: 1px solid rgba(255,255,255,0.1);
-  color: #888;
+  border: 1px solid #e5e7eb; /* تم تعديله */
+  color: #6b7280; /* تم تعديله */
   font-size: 14px;
   font-weight: 600;
   border-radius: 12px;
@@ -382,7 +362,22 @@
 }
 
 .auth-guest-btn:hover {
-  border-color: rgba(255,255,255,0.3);
-  color: #ccc;
-  background: rgba(255,255,255,0.03);
+  border-color: #9ca3af;
+  color: #374151;
+  background: #f9fafb;
+}
+
+/* ==========================================
+   التجاوب مع الشاشات الصغيرة
+   ========================================== */
+@media (max-width: 480px) {
+  .custom-overlay {
+    padding: 30px 15px; /* تقليل المسافة في الهواتف الصغيرة جداً */
+  }
+  .custom-modal {
+    padding: 24px 20px;
+  }
+  .custom-header h2 {
+    font-size: 20px;
+  }
 }

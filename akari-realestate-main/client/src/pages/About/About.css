@@ -3,7 +3,7 @@
    ======================================== */
 
 .about-wrapper {
-  direction: rtl;
+   direction: inherit !important;
   font-family: 'Tajawal', 'Cairo', sans-serif;
   color: #161c24;
   overflow-x: hidden;
