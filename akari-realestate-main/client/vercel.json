@@ -1,1 +1,6 @@
-{ "rewrites": [{ "source": "/(.*)", "destination": "/" }] }
+{
+  "framework": "vite",
+  "public": true,
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "client/dist"
+}
