@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import VitePWA from 'vite-plugin-pwa' // <-- 1. استيراد مكتبة PWA
+import react from '@vitejs/plugin-react' // <-- تمت إزالة الأقواس
+import { VitePWA } from 'vite-plugin-pwa' // <-- صحيح
 
 export default defineConfig({
   plugins: [

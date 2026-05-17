@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { FiCheck, FiX, FiZap, FiStar, FiLayout, FiShield, FiBox, FiGrid, FiCreditCard, FiLock } from "react-icons/fi";
 import "./PricingPlans.css";
-import { useTranslation } from "react-i18next"; // استدعاء الترجمة
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 export default function PricingPlans() {
-  const { t } = useTranslation(); // تعريف الترجمة
-  
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [loadingPlan, setLoadingPlan] = useState(null);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [cardData, setCardData] = useState({ number: '', expiry: '', cvv: '' });
 
-  // تم نقل المصفوفة للداخل لترجمتها
   const plans = [
     {
       id: "free",
@@ -128,12 +128,17 @@ export default function PricingPlans() {
   const handlePaySubmit = (e) => {
     e.preventDefault();
     setLoadingPlan(selectedPlan.id);
+
     setTimeout(() => {
-      // استخدام المتغيرات في الترجمة
       alert(t('pricing_alert_success', { name: selectedPlan.name, price: selectedPlan.price, period: selectedPlan.period }));
+      
+      // إعادة تعيين الحالة
       setLoadingPlan(null);
       setShowPaymentModal(false);
       setCardData({ number: '', expiry: '', cvv: '' });
+
+      // ✅ التوجيه لصفحة إضافة عقار بعد نجاح الدفع
+      navigate('/Addproperty');
     }, 2000);
   };
 
@@ -262,7 +267,12 @@ export default function PricingPlans() {
                 </div>
               </div>
 
-              <button type="submit" className="pay-submit-btn" disabled={loadingPlan === selectedPlan?.id}>
+              {/* ✅ الزر عاد لـ type="submit" بدون onClick */}
+              <button 
+                type="submit" 
+                className="pay-submit-btn" 
+                disabled={loadingPlan === selectedPlan?.id}
+              >
                 {loadingPlan === selectedPlan?.id ? (
                   <>{t('pricing_modal_processing')}</>
                 ) : (
