@@ -14,9 +14,11 @@ import {
 } from "react-icons/md";
 import data from "../../utils/accordion.jsx";
 import "./Value.css";
-// Demo styles, see 'Styles' section below for some notes on use.
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 const Value = () => {
+  const { t } = useTranslation(); // تعريف الترجمة
+
   return (
     <section id="value" className="v-wrapper">
       <div className="paddings innerWidth flexCenter v-container">
@@ -29,14 +31,14 @@ const Value = () => {
 
         {/* right */}
         <div className="flexColStart v-right">
-          <span className="orangeText"> قيمتنا</span>
+          <span className="orangeText">{t('value_our_values')}</span>
 
-          <span className="primaryText"> القيمة التي نقدمها لك</span>
+          <span className="primaryText">{t('value_main_title')}</span>
 
           <span className="secondaryText">
-             نحن دائماً على استعداد للمساعدة من خلال تقديم أفضل الخدمات لكم.
+            {t('value_desc_1')}
             <br />
-             نؤمن بأن المكان الجيد للعيش فيه يمكن أن يجعل حياتك أفضل.
+            {t('value_desc_2')}
           </span>
 
           <Accordion
@@ -50,7 +52,6 @@ const Value = () => {
                 <AccordionItem className={`accordionItem ${className}`} uuid={i} key={i}>
                   <AccordionItemHeading>
                     <AccordionItemButton className="flexCenter accordionButton ">
-                        {/* just for getting state of item */}
                       <AccordionItemState>
                         {({ expanded }) =>
                           expanded
@@ -59,9 +60,7 @@ const Value = () => {
                         }
                       </AccordionItemState>
                       <div className="flexCenter icon">{item.icon}</div>
-                      <span
-                        className="primaryText"
-                      >
+                      <span className="primaryText">
                         {item.heading}
                       </span>
                       <div className="flexCenter icon">

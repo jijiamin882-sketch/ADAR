@@ -2,8 +2,11 @@ import React from "react";
 import { TextInput, Box, Textarea, Group, Button, NumberInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { validateString } from "../../utils/common";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 const BasicDetails = ({ prevStep, nextStep, propertyDetails, setPropertyDetails }) => {
+  const { t } = useTranslation(); // تعريف الترجمة
+
   const form = useForm({
     initialValues: {
       title: propertyDetails.title,
@@ -14,12 +17,11 @@ const BasicDetails = ({ prevStep, nextStep, propertyDetails, setPropertyDetails 
       title: (value) => validateString(value),
       description: (value) => validateString(value),
       price: (value) =>
-          value < 1000 ? "Must be greater than 999 dollars" : null,
+          value < 1000 ? t('basic_price_error') : null, // ترجمة رسالة الخطأ
     },
   });
 
   const {title, description, price} = form.values
-
 
   const handleSubmit = ()=> {
     const {hasErrors} = form.validate()
@@ -27,7 +29,8 @@ const BasicDetails = ({ prevStep, nextStep, propertyDetails, setPropertyDetails 
      setPropertyDetails((prev)=> ({...prev, title, description, price}))
      nextStep()
     }
-   }
+  }
+  
   return (
     <Box maw="50%" mx="auto" my="md">
       <form  onSubmit={(e) => {
@@ -36,29 +39,29 @@ const BasicDetails = ({ prevStep, nextStep, propertyDetails, setPropertyDetails 
         }}>
         <TextInput
           withAsterisk
-          label="Title"
-          placeholder="Property Name"
+          label={t('basic_title_label')} // ترجمة
+          placeholder={t('basic_title_placeholder')} // ترجمة
           {...form.getInputProps("title")}
         />
         <Textarea
-          placeholder="Description"
-          label="Description"
+          placeholder={t('basic_desc_placeholder')} // ترجمة
+          label={t('basic_desc_label')} // ترجمة
           withAsterisk
           {...form.getInputProps("description")}
         />
         <NumberInput
           withAsterisk
-          label="Price"
+          label={t('basic_price_label')} // ترجمة
           placeholder="1000"
           min={0}
           {...form.getInputProps("price")}
         />
         <Group position="center" mt="xl">
           <Button variant="default" onClick={prevStep}>
-            Back
+            {t('basic_btn_back')} {/* ترجمة */}
           </Button>
           <Button type="submit">
-            Next step
+            {t('basic_btn_next')} {/* ترجمة */}
           </Button>
         </Group>
       </form>

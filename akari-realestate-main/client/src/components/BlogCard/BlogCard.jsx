@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { useSearchParams, Link } from "react-router-dom"; // <--- تأكد من استيراد Link
+import { useSearchParams, Link } from "react-router-dom";
 import BlogCard from "../../components/BlogCard/BlogCard";
-import { blogData } from "../../blogData"; // <--- تأكد من مسار البيانات
+import { blogData } from "../../blogData";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 import "./BlogCard.css";
 
 const Blog = () => {
+  const { t } = useTranslation(); // تعريف الترجمة
   const [searchParams, setSearchParams] = useSearchParams();
   const initialType = searchParams.get('type') || 'all';
   
   const [activeFilter, setActiveFilter] = useState(initialType);
   const [visibleCount, setVisibleCount] = useState(6);
 
-  // ... (باقي منطق الفلترة والدوال كما هو في الكود السابق) ...
-
-  // ... (لقد قمت باختصار الجزء العلوي للتركيز على التصحيح المطلوب) ...
+  // دالة تغيير الفلتر (تمت إضافتها لكي لا يحدث خطأ في الكود)
+  const handleFilterChange = (key) => {
+    setActiveFilter(key);
+    if (key === 'all') {
+      setSearchParams({});
+    } else {
+      setSearchParams({ type: key });
+    }
+  };
 
   const handleLoadMore = () => {
     setVisibleCount(prev => prev + 3);
   };
 
+  // تم نقل المصفوفة للداخل لتعمل مع t()، مع الإبقاء على key بالإنجليزية للفلترة
   const filters = [
-    { key: 'all', label: 'الكل' },
-    { key: 'news', label: 'قوانين العقارات' },
-    { key: 'tips', label: 'نصائح استثمارية' },
-    { key: 'guide', label: 'دليل الولايات' }
+    { key: 'all', label: t('blog_filter_all') },
+    { key: 'news', label: t('blog_filter_news') },
+    { key: 'tips', label: t('blog_filter_tips') },
+    { key: 'guide', label: t('blog_filter_guide') }
   ];
 
   // تصفية البيانات
@@ -39,8 +48,8 @@ const Blog = () => {
       {/* هيرو المدونة */}
       <div className="blog-hero">
         <div className="blog-hero-content">
-          <h1>المدونة العقارية</h1>
-          <p>دليلك الشامل للاستثمار، القوانين، وأهم الأحياء في الجزائر</p>
+          <h1>{t('blog_hero_title')}</h1>
+          <p>{t('blog_hero_desc')}</p>
         </div>
       </div>
 
@@ -60,7 +69,7 @@ const Blog = () => {
           ))}
         </div>
 
-        {/* --- هذا هو الجزء الذي تم تصحيحه --- */}
+        {/* عرض المقالات */}
         {displayedData.length > 0 ? (
           <>
             <div className="blog-grid">
@@ -85,15 +94,14 @@ const Blog = () => {
             {filteredData.length > visibleCount && (
               <div className="blog-load-more-wrapper">
                 <button className="load-more-btn" onClick={handleLoadMore}>
-                  عرض المزيد من المقالات
+                  {t('blog_load_more')}
                 </button>
               </div>
             )}
           </>
         ) : (
           <div className="blog-empty">
-             {/* كود الحالة الفارغة */}
-            <h3>لا توجد مقالات</h3>
+            <h3>{t('blog_empty_title')}</h3>
           </div>
         )}
 

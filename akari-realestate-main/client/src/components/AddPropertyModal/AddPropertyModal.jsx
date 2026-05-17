@@ -5,8 +5,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import UploadImage from "../UploadImage/UploadImage";
 import BasicDetails from "../BasicDetails/BasicDetails";
 import Facilities from "../Facilities/Facilities";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 const AddPropertyModal = ({ opened, setOpened }) => {
+  const { t } = useTranslation(); // تعريف الترجمة
   const [active, setActive] = useState(0);
   const { user } = useAuth0();
 
@@ -48,14 +50,15 @@ const AddPropertyModal = ({ opened, setOpened }) => {
           breakpoint="sm"
           allowNextStepsSelect={false}
         >
-          <Stepper.Step label="Location" description="Address">
+          <Stepper.Step label={t('add_prop_step_location')} description={t('add_prop_step_location_desc')}>
             <AddLocation
               nextStep={nextStep}
               propertyDetails={propertyDetails}
               setPropertyDetails={setPropertyDetails}
             />
           </Stepper.Step>
-          <Stepper.Step label="Images" description="Upload ">
+          
+          <Stepper.Step label={t('add_prop_step_images')} description={t('add_prop_step_images_desc')}>
             <UploadImage
               prevStep={prevStep}
               nextStep={nextStep}
@@ -63,7 +66,8 @@ const AddPropertyModal = ({ opened, setOpened }) => {
               setPropertyDetails={setPropertyDetails}
             />
           </Stepper.Step>
-          <Stepper.Step label="Basics" description="Details">
+          
+          <Stepper.Step label={t('add_prop_step_basics')} description={t('add_prop_step_basics_desc')}>
             <BasicDetails
               prevStep={prevStep}
               nextStep={nextStep}
@@ -81,8 +85,9 @@ const AddPropertyModal = ({ opened, setOpened }) => {
               setActiveStep={setActive}
             />
           </Stepper.Step>
+          
           <Stepper.Completed>
-            Completed, click back button to get to previous step
+            {t('add_prop_completed')}
           </Stepper.Completed>
         </Stepper>
       </Container>

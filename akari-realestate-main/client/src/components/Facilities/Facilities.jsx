@@ -2,9 +2,10 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { Box, Button, Group, NumberInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import React from "react";
-import { db } from "../../firebase"; // تأكد من استيراد قاعدة البيانات
+import { db } from "../../firebase";
 import { ref, push, set } from "firebase/database";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 const Facilities = ({
   prevStep,
@@ -13,7 +14,8 @@ const Facilities = ({
   setOpened,
   setActiveStep,
 }) => {
-  // 1. إعداد النموذج (Form) كما كان في الأصل لكن مع تعريب التنبيهات
+  const { t } = useTranslation(); // تعريف الترجمة
+  
   const form = useForm({
     initialValues: {
       bedrooms: propertyDetails.facilities.bedrooms,
@@ -21,15 +23,14 @@ const Facilities = ({
       bathrooms: propertyDetails.facilities.bathrooms,
     },
     validate: {
-      bedrooms: (value) => (value < 1 ? "يجب إدخال غرفة واحدة على الأقل" : null),
-      bathrooms: (value) => (value < 1 ? "يجب إدخال حمام واحد على الأقل" : null),
+      bedrooms: (value) => (value < 1 ? t('facilities_bedrooms_error') : null),
+      bathrooms: (value) => (value < 1 ? t('facilities_bathrooms_error') : null),
     },
   });
 
   const { bedrooms, parkings, bathrooms } = form.values;
   const { user } = useAuth0();
 
-  // 2. دالة الإرسال إلى Firebase
   const handleSubmit = async () => {
     const { hasErrors } = form.validate();
     if (!hasErrors) {
@@ -40,13 +41,12 @@ const Facilities = ({
         await set(newPropertyRef, {
           ...propertyDetails,
           facilities: { bedrooms, parkings, bathrooms },
-          userEmail: user?.email || "غير مسجل",
+          userEmail: user?.email || t('facilities_unregistered'), // ترجمة الحالة الافتراضية
           addedAt: new Date().toISOString(),
         });
 
-        toast.success("تمت إضافة العقار بنجاح!", { position: "bottom-right" });
+        toast.success(t('facilities_success_toast'), { position: "bottom-right" });
 
-        // تصفير البيانات وإغلاق النافذة
         setPropertyDetails({
           title: "",
           description: "",
@@ -62,13 +62,14 @@ const Facilities = ({
 
       } catch (error) {
         console.error(error);
-        toast.error("حدث خطأ أثناء الإضافة", { position: "bottom-right" });
+        toast.error(t('facilities_error_toast'), { position: "bottom-right" });
       }
     }
   };
 
   return (
-    <Box maw="30%" mx="auto" my="sm" dir="rtl">
+    // تمت إزالة dir="rtl" لتجنب التعارض مع تبديل اللغة العالمي
+    <Box maw="30%" mx="auto" my="sm"> 
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -77,27 +78,27 @@ const Facilities = ({
       >
         <NumberInput
           withAsterisk
-          label="عدد الغرف"
+          label={t('facilities_bedrooms_label')}
           min={0}
           {...form.getInputProps("bedrooms")}
         />
         <NumberInput
-          label="مواقف السيارات"
+          label={t('facilities_parkings_label')}
           min={0}
           {...form.getInputProps("parkings")}
         />
         <NumberInput
           withAsterisk
-          label="عدد الحمامات"
+          label={t('facilities_bathrooms_label')}
           min={0}
           {...form.getInputProps("bathrooms")}
         />
         <Group position="center" mt="xl">
           <Button variant="default" onClick={prevStep}>
-            السابق
+            {t('facilities_btn_back')}
           </Button>
           <Button type="submit" color="green">
-            نشر العقار الآن
+            {t('facilities_btn_submit')}
           </Button>
         </Group>
       </form>

@@ -2,8 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { supabase } from "../supabaseClient";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 export default function ProtectedRoute({ children, allowedRoles }) {
+  const { t } = useTranslation(); // تعريف الترجمة
   const { currentUser } = useAuth();
   const [userRole, setUserRole] = useState(null);
   const [checking, setChecking] = useState(true);
@@ -35,7 +37,7 @@ export default function ProtectedRoute({ children, allowedRoles }) {
   // 2. جاري التحقق من الدور → اعرض تحميل
   if (checking) return (
     <div style={{ textAlign: "center", padding: "100px", color: "#888" }}>
-      جاري التحقق من صلاحياتك...
+      {t('protected_checking_role')}
     </div>
   );
 

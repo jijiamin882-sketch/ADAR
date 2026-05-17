@@ -1,28 +1,32 @@
 import React from 'react';
 import { FiSearch, FiTrendingUp, FiList, FiChevronLeft } from 'react-icons/fi';
 import './InvestmentTools.css';
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 export default function InvestmentTools() {
+  const { t } = useTranslation(); // تعريف الترجمة
+
+  // تم نقل المصفوفة للداخل لترجمتها
   const tools = [
     {
       id: 1,
       icon: <FiSearch />,
-      title: 'بحث العقارات',
-      description: 'ابحث بسهولة بين آلاف العقارات المتاحة باستخدام فلاتر متقدمة للعثور على ما يناسبك تماماً.',
+      title: t('inv_tool_1_title'),
+      description: t('inv_tool_1_desc'),
       colorClass: 'icon-bg-blue'
     },
     {
       id: 2,
       icon: <FiTrendingUp />,
-      title: 'تحليل الأسعار',
-      description: 'احصل على رؤى عميقة حول اتجاهات السوق والأسعار لاتخاذ قرارات استثمارية مدروسة.',
+      title: t('inv_tool_2_title'),
+      description: t('inv_tool_2_desc'),
       colorClass: 'icon-bg-green'
     },
     {
       id: 3,
       icon: <FiList />,
-      title: 'قوائم العقارات',
-      description: 'تصفح قوائم العقارات المحدثة يومياً واطلع على التفاصيل الكاملة والصور عالية الجودة.',
+      title: t('inv_tool_3_title'),
+      description: t('inv_tool_3_desc'),
       colorClass: 'icon-bg-purple'
     }
   ];
@@ -30,8 +34,8 @@ export default function InvestmentTools() {
   return (
     <section className="inv-tools-section">
       <div className="inv-tools-header">
-        <h1>أدوات الاستثمار العقاري</h1>
-        <p>نوفر لك مجموعة متكاملة من الأدوات الذكية لتسهيل عملية البحث والتحليل والمقارنة قبل اتخاذ قرارك الاستثماري.</p>
+        <h1>{t('inv_tools_main_title')}</h1>
+        <p>{t('inv_tools_main_desc')}</p>
       </div>
 
       <div className="inv-tools-grid">
@@ -43,7 +47,7 @@ export default function InvestmentTools() {
             <h3>{tool.title}</h3>
             <p>{tool.description}</p>
             <div className="inv-card-link">
-              <span>اكتشف المزيد</span>
+              <span>{t('inv_tools_discover_more')}</span>
               <FiChevronLeft className="inv-link-arrow" />
             </div>
           </div>

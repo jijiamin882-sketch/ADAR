@@ -4,9 +4,12 @@ import { validateString } from "../../utils/common";
 import { Button, Group, Select, TextInput } from "@mantine/core";
 import useCountries from "../../hooks/useCountries";
 import Map from "../Map/Map";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 const AddLocation = ({ propertyDetails, setPropertyDetails, nextStep }) => {
+  const { t } = useTranslation(); // تعريف الترجمة
   const { getAll } = useCountries();
+  
   const form = useForm({
     initialValues: {
       country: propertyDetails?.country,
@@ -21,9 +24,7 @@ const AddLocation = ({ propertyDetails, setPropertyDetails, nextStep }) => {
     },
   });
 
-
   const { country, city, address } = form.values;
-
 
   const handleSubmit = ()=> {
     const {hasErrors} = form.validate();
@@ -32,6 +33,7 @@ const AddLocation = ({ propertyDetails, setPropertyDetails, nextStep }) => {
         nextStep()
     }
   }
+  
   return (
     <form
     onSubmit={(e)=>{
@@ -48,14 +50,12 @@ const AddLocation = ({ propertyDetails, setPropertyDetails, nextStep }) => {
           flexDirection: "row",
         }}
       >
-        {/* left side */}
         {/* inputs */}
-
         <div className="flexColStart" style={{ flex: 1, gap: "1rem" }}>
           <Select
             w={"100%"}
             withAsterisk
-            label="Country"
+            label={t('add_loc_country')} // ترجمة
             clearable
             searchable
             data={getAll()}
@@ -65,27 +65,26 @@ const AddLocation = ({ propertyDetails, setPropertyDetails, nextStep }) => {
           <TextInput
             w={"100%"}
             withAsterisk
-            label="City"
+            label={t('add_loc_city')} // ترجمة
             {...form.getInputProps("city", { type: "input" })}
           />
 
           <TextInput
             w={"100%"}
             withAsterisk
-            label="Address"
+            label={t('add_loc_address')} // ترجمة
             {...form.getInputProps("address", { type: "input" })}
           />
         </div>
 
-        {/* right side */}
-
+        {/* map */}
         <div style={{ flex: 1 }}>
           <Map address={address} city={city} country={country} />
         </div>
       </div>
 
       <Group position="center" mt={"xl"}>
-        <Button type="submit">Next Step</Button>
+        <Button type="submit">{t('add_loc_next_btn')}</Button> {/* ترجمة */}
       </Group>
     </form>
   );

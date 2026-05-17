@@ -2,19 +2,24 @@ import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineCloudUpload } from "react-icons/ai";
 import "./UploadImage.css";
 import { Button, Group } from "@mantine/core";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
+
 const UploadImage = ({
   propertyDetails,
   setPropertyDetails,
   nextStep,
   prevStep,
 }) => {
+  const { t } = useTranslation(); // تعريف الترجمة
   const [imageURL, setImageURL] = useState(propertyDetails.image);
   const cloudinaryRef = useRef();
   const widgetRef = useRef();
+  
   const handleNext = () => {
     setPropertyDetails((prev) => ({ ...prev, image: imageURL }));
     nextStep();
   };
+
   useEffect(() => {
     cloudinaryRef.current = window.cloudinary;
     widgetRef.current = cloudinaryRef.current.createUploadWidget(
@@ -30,6 +35,7 @@ const UploadImage = ({
       }
     );
   }, []);
+
   return (
     <div className="flexColCenter uploadWrapper">
       {!imageURL ? (
@@ -38,23 +44,24 @@ const UploadImage = ({
           onClick={() => widgetRef.current?.open()}
         >
           <AiOutlineCloudUpload size={50} color="grey" />
-          <span>Upload Image</span>
+          <span>{t('upload_img_text')}</span> {/* ترجمة */}
         </div>
       ) : (
         <div
           className="uploadedImage"
           onClick={() => widgetRef.current?.open()}
         >
-          <img src={imageURL} alt="" />
+          {/* alt فارغ لأن الصورة من رفع المستخدم */}
+          <img src={imageURL} alt="" /> 
         </div>
       )}
 
       <Group position="center" mt={"xl"}>
         <Button variant="default" onClick={prevStep}>
-          Back
+          {t('upload_img_back')} {/* ترجمة */}
         </Button>
         <Button onClick={handleNext} disabled={!imageURL}>
-          Next
+          {t('upload_img_next')} {/* ترجمة */}
         </Button>
       </Group>
     </div>

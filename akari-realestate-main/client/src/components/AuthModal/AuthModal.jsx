@@ -3,11 +3,13 @@ import "./AuthModal.css";
 import { FiX, FiMail, FiLock, FiAlertCircle, FiCheckCircle, FiUser, FiHome, FiTool } from "react-icons/fi";
 import { FaGoogle, FaFacebookF, FaApple } from "react-icons/fa";
 import { supabase } from "../../supabaseClient";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 
 const AuthModal = ({ isOpen, onClose }) => {
+  const { t } = useTranslation(); // تعريف الترجمة
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState(""); // ← كان مفقوداً
+  const [fullName, setFullName] = useState("");
   const [loading, setLoading] = useState(false);
   const [mode, setMode] = useState("login");
   const [errorMsg, setErrorMsg] = useState("");
@@ -23,7 +25,6 @@ const AuthModal = ({ isOpen, onClose }) => {
     setSuccessMsg("");
 
     if (mode === "login") {
-      // ===== تسجيل الدخول =====
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -31,7 +32,7 @@ const AuthModal = ({ isOpen, onClose }) => {
 
       if (error) {
         if (error.message === "Invalid login credentials") {
-          setErrorMsg("البريد الإلكتروني أو كلمة المرور غير صحيحة.");
+          setErrorMsg(t('auth_error_invalid_credentials'));
         } else {
           setErrorMsg(error.message);
         }
@@ -39,7 +40,6 @@ const AuthModal = ({ isOpen, onClose }) => {
         onClose();
       }
     } else {
-      // ===== إنشاء حساب جديد =====
       const { error } = await supabase.auth.signUp({
         email: email,
         password: password,
@@ -54,7 +54,7 @@ const AuthModal = ({ isOpen, onClose }) => {
       if (error) {
         setErrorMsg(error.message);
       } else {
-        setSuccessMsg("تم إنشاء الحساب بنجاح! يمكنك الآن الانتقال لتسجيل الدخول.");
+        setSuccessMsg(t('auth_success_signup'));
       }
     }
 
@@ -81,8 +81,8 @@ const AuthModal = ({ isOpen, onClose }) => {
         <button className="custom-close" onClick={onClose}><FiX /></button>
 
         <div className="custom-header">
-          <h2>مرحباً بك في ADAR</h2>
-          <p>سجّل دخولك للوصول إلى حسابك أو أنشئ حساباً جديداً</p>
+          <h2>{t('auth_welcome_title')}</h2>
+          <p>{t('auth_welcome_desc')}</p>
         </div>
 
         <div className="custom-tabs">
@@ -91,14 +91,14 @@ const AuthModal = ({ isOpen, onClose }) => {
             className={mode === "login" ? "tab active" : "tab"}
             onClick={() => { setMode("login"); setErrorMsg(""); setSuccessMsg(""); }}
           >
-            تسجيل الدخول
+            {t('auth_tab_login')}
           </button>
           <button
             type="button"
             className={mode === "signup" ? "tab active" : "tab"}
             onClick={() => { setMode("signup"); setErrorMsg(""); setSuccessMsg(""); }}
           >
-            حساب جديد
+            {t('auth_tab_signup')}
           </button>
         </div>
 
@@ -118,37 +118,35 @@ const AuthModal = ({ isOpen, onClose }) => {
 
         <form onSubmit={handleAuth} className="custom-form">
 
-          {/* ===== اختيار الدور: يظهر فقط في "حساب جديد" ===== */}
           {mode === "signup" && (
             <div className="auth-role-selector">
-              <label>نوع الحساب:</label>
+              <label>{t('auth_role_label')}</label>
               <div className="auth-roles-grid">
                 <label className={`auth-role-option ${registerRole === 'user' ? 'selected' : ''}`}>
                   <input type="radio" name="role" value="user" checked={registerRole === 'user'} onChange={(e) => setRegisterRole(e.target.value)} />
                   <FiUser size={20} />
-                  <span>مستخدم عادي</span>
+                  <span>{t('auth_role_user')}</span>
                 </label>
                 <label className={`auth-role-option ${registerRole === 'owner' ? 'selected' : ''}`}>
                   <input type="radio" name="role" value="owner" checked={registerRole === 'owner'} onChange={(e) => setRegisterRole(e.target.value)} />
                   <FiHome size={20} />
-                  <span>مالك عقار</span>
+                  <span>{t('auth_role_owner')}</span>
                 </label>
                 <label className={`auth-role-option ${registerRole === 'provider' ? 'selected' : ''}`}>
                   <input type="radio" name="role" value="provider" checked={registerRole === 'provider'} onChange={(e) => setRegisterRole(e.target.value)} />
                   <FiTool size={20} />
-                  <span>مقدم خدمة</span>
+                  <span>{t('auth_role_provider')}</span>
                 </label>
               </div>
             </div>
           )}
 
-          {/* ===== حقل الاسم: يظهر فقط في "حساب جديد" ===== */}
           {mode === "signup" && (
             <div className="input-wrapper">
               <FiUser className="input-icon" />
               <input
                 type="text"
-                placeholder="الاسم الكامل"
+                placeholder={t('auth_fullname_placeholder')}
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 required
@@ -158,21 +156,21 @@ const AuthModal = ({ isOpen, onClose }) => {
 
           <div className="input-wrapper">
             <FiMail className="input-icon" />
-            <input type="email" placeholder="البريد الإلكتروني" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input type="email" placeholder={t('auth_email_placeholder')} value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
 
           <div className="input-wrapper">
             <FiLock className="input-icon" />
-            <input type="password" placeholder="كلمة المرور" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
+            <input type="password" placeholder={t('auth_password_placeholder')} value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} />
           </div>
 
           <button type="submit" className="submit-btn" disabled={loading}>
-            {loading ? "جاري التحقق..." : (mode === "login" ? "تسجيل الدخول" : "إنشاء الحساب")}
+            {loading ? t('auth_loading') : (mode === "login" ? t('auth_btn_login') : t('auth_btn_signup'))}
           </button>
         </form>
 
         <div className="custom-divider">
-          <span>أو المتابعة عبر</span>
+          <span>{t('auth_divider')}</span>
         </div>
 
         <div className="social-buttons">
@@ -187,10 +185,8 @@ const AuthModal = ({ isOpen, onClose }) => {
           </button>
         </div>
 
-         
-
         <p className="custom-footer">
-          بالاستمرار، أنت توافق على <a href="#">شروط الخدمة</a> و<a href="#">سياسة الخصوصية</a>
+          {t('auth_footer_terms')} <a href="#">{t('auth_footer_tos')}</a> {t('auth_footer_and')} <a href="#">{t('auth_footer_privacy')}</a>
         </p>
       </div>
     </div>

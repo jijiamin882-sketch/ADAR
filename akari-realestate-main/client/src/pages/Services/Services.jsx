@@ -8,56 +8,55 @@ import {
   FiMapPin,
   FiUser,
   FiFilter,
-  FiSearch,
   FiBriefcase,
   FiBox,
 } from "react-icons/fi";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "react-i18next"; // استدعاء الترجمة
 import "./Services.css";
 
-const categories = [
-  { id: "all", label: "الكل", icon: <FiFilter /> },
-  { id: "maintenance", label: "صيانة", icon: <FiTool /> },
-  { id: "transport", label: "نقل وشحن", icon: <FiTruck /> },
-  { id: "architecture", label: "هندسة وتصميم", icon: <FiLayout /> },
-  { id: "legal", label: "توثيق قانوني", icon: <FiFileText /> },
-  { id: "cleaning", label: "تنظيف", icon: <FiBox /> },
-  { id: "other", label: "أخرى", icon: <FiBriefcase /> },
-];
-
-const categoryLabels = {
-  maintenance: "صيانة عقارات",
-  transport: "نقل وشحن",
-  architecture: "هندسة وتصميم",
-  legal: "توثيق قانوني",
-  cleaning: "تنظيف وخدمات",
-  other: "خدمات أخرى",
-};
-
 const Services = () => {
+  const { t } = useTranslation(); // تعريف الترجمة
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams(); // <-- أضف هذا السطر
+  const [searchParams] = useSearchParams();
   const isMine = searchParams.get('mine') === 'true';
   const { currentUser } = useAuth();
+  
   const [services, setServices] = useState([]);
   const [filteredServices, setFilteredServices] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
   const [loading, setLoading] = useState(true);
 
+  // تم نقل المصفوفات للداخل لتعمل مع t()
+  const categories = [
+    { id: "all", label: t('svc_cat_all'), icon: <FiFilter /> },
+    { id: "maintenance", label: t('svc_cat_maintenance'), icon: <FiTool /> },
+    { id: "transport", label: t('svc_cat_transport'), icon: <FiTruck /> },
+    { id: "architecture", label: t('svc_cat_architecture'), icon: <FiLayout /> },
+    { id: "legal", label: t('svc_cat_legal'), icon: <FiFileText /> },
+    { id: "cleaning", label: t('svc_cat_cleaning'), icon: <FiBox /> },
+    { id: "other", label: t('svc_cat_other'), icon: <FiBriefcase /> },
+  ];
+
+  const categoryLabels = {
+    maintenance: t('svc_label_maintenance'),
+    transport: t('svc_label_transport'),
+    architecture: t('svc_label_architecture'),
+    legal: t('svc_label_legal'),
+    cleaning: t('svc_label_cleaning'),
+    other: t('svc_label_other'),
+  };
+
   useEffect(() => {
-         const fetchServices = async () => {
+    const fetchServices = async () => {
       setLoading(true);
-      
-      // بناء الاستعلام الأساسي
       let query = supabase.from("services").select("*");
 
       if (isMine && currentUser) {
-        // إذا كان الرابط يحتوي على mine=true، اجلب خدماتي أنا فقط (بجميع حالاتها)
         query = query.eq("user_id", currentUser.id);
       } else {
-        // غير ذلك، اعرض الخدمات العامة المفعلة للجميع
         query = query.eq("status", "active");
       }
 
@@ -91,28 +90,24 @@ const Services = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [activeFilter, isMine, currentUser?.id]);
+  }, [activeFilter, isMine, currentUser?.id, t]);
 
   useEffect(() => {
     if (activeFilter === "all") {
       setFilteredServices(services);
     } else {
-      setFilteredServices(
-        services.filter((s) => s.category === activeFilter)
-      );
+      setFilteredServices(services.filter((s) => s.category === activeFilter));
     }
   }, [activeFilter, services]);
 
   const handleRequestService = async (service) => {
     if (!currentUser) {
-      alert("يجب عليك تسجيل الدخول أولاً لتقديم طلب");
+      alert(t('svc_alert_login'));
       navigate("/login");
       return;
     }
 
-    const details = prompt(
-      "اكتب تفاصيل طلبك هنا:\nمثال: أريد صيانة مكيف في غرفة المعيشة"
-    );
+    const details = prompt(t('svc_alert_prompt'));
     if (!details || details.trim() === "") return;
 
     try {
@@ -120,15 +115,15 @@ const Services = () => {
         {
           sender_id: currentUser.id,
           receiver_id: service.user_id,
-          content: `طلب خدمة جديد بخصوص: "${service.title}"\nالتفاصيل: ${details}`,
+          content: `${t('svc_msg_prefix')} "${service.title}"\n${t('svc_msg_details')}: ${details}`,
           is_read: false,
         },
       ]);
 
       if (error) throw error;
-      alert("تم إرسال طلبك بنجاح! سيقوم مقدم الخدمة بالتواصل معك قريباً ✅");
+      alert(t('svc_alert_success'));
     } catch (error) {
-      alert("حدث خطأ: " + error.message);
+      alert(`${t('svc_alert_error')} ${error.message}`);
     }
   };
 
@@ -142,18 +137,18 @@ const Services = () => {
   return (
     <div className="svc-page">
       {/* Hero */}
-             <div className="svc-hero">
+      <div className="svc-hero">
         <div className="svc-hero-content">
           <span className="svc-hero-badge"> 
-            {isMine ? "خدماتي في سوق ADAR" : "سوق ADAR للخدمات"}
+            {isMine ? t('svc_hero_badge_mine') : t('svc_hero_badge_public')}
           </span>
           <h1>
-            {isMine ? "إدارة خدماتك المضافة" : "كل ما تحتاجه لعقارك في مكان واحد"}
+            {isMine ? t('svc_hero_title_mine') : t('svc_hero_title_public')}
           </h1>
           <p>
             {isMine 
-              ? "هنا يمكنك مراجعة جميع الخدمات التي قمت بنشرها." 
-              : "اكتشف أفضل مقدمي الخدمات العقارية في الجزائر، من الصيانة والنقل إلى التصميم والتوثيق القانوني"}
+              ? t('svc_hero_desc_mine') 
+              : t('svc_hero_desc_public')}
           </p>
         </div>
       </div>
@@ -162,15 +157,15 @@ const Services = () => {
       <div className="svc-stats-bar">
         <div className="svc-stat-item">
           <span className="svc-stat-number">{services.length}</span>
-          <span className="svc-stat-label">خدمة متاحة</span>
+          <span className="svc-stat-label">{t('svc_stat_available')}</span>
         </div>
         <div className="svc-stat-item">
           <span className="svc-stat-number">{uniqueWilayas}</span>
-          <span className="svc-stat-label">ولاية مغطاة</span>
+          <span className="svc-stat-label">{t('svc_stat_wilayas')}</span>
         </div>
         <div className="svc-stat-item">
           <span className="svc-stat-number">24/7</span>
-          <span className="svc-stat-label">تواصل مستمر</span>
+          <span className="svc-stat-label">{t('svc_stat_support')}</span>
         </div>
       </div>
 
@@ -196,13 +191,13 @@ const Services = () => {
         {loading ? (
           <div className="svc-loading">
             <div className="svc-spinner"></div>
-            <p style={{ color: "#94a3b8" }}>جاري تحميل الخدمات...</p>
+            <p style={{ color: "#94a3b8" }}>{t('svc_loading')}</p>
           </div>
         ) : filteredServices.length === 0 ? (
           <div className="svc-empty">
             <div className="svc-empty-icon">🔍</div>
-            <h3>لا توجد خدمات في هذا التصنيف</h3>
-            <p>جرب تصفح التصنيفات الأخرى أو عد لاحقاً</p>
+            <h3>{t('svc_empty_title')}</h3>
+            <p>{t('svc_empty_desc')}</p>
           </div>
         ) : (
           filteredServices.map((service) => (
@@ -215,12 +210,10 @@ const Services = () => {
                   {service.category === "architecture" && <FiLayout />}
                   {service.category === "legal" && <FiFileText />}
                   {service.category === "cleaning" && <FiBox />}
-                  {(service.category === "other" || !service.category) && (
-                    <FiBriefcase />
-                  )}
+                  {(service.category === "other" || !service.category) && <FiBriefcase />}
                 </div>
                 <span className="svc-card-category">
-                  {categoryLabels[service.category] || "خدمات"}
+                  {categoryLabels[service.category] || t('svc_label_default')}
                 </span>
               </div>
 
@@ -234,16 +227,14 @@ const Services = () => {
                   <div className="svc-meta-row">
                     <span className="svc-meta-label">
                       <FiUser style={{ verticalAlign: "middle", marginLeft: 4 }} />
-                      مقدم الخدمة
+                      {t('svc_card_provider')}
                     </span>
-                    <span className="svc-meta-value">
-                      {service.provider_name}
-                    </span>
+                    <span className="svc-meta-value">{service.provider_name}</span>
                   </div>
                   <div className="svc-meta-row">
                     <span className="svc-meta-label">
                       <FiMapPin style={{ verticalAlign: "middle", marginLeft: 4 }} />
-                      الولاية
+                      {t('svc_card_wilaya')}
                     </span>
                     <span className="svc-meta-value">{service.wilaya}</span>
                   </div>
@@ -252,28 +243,22 @@ const Services = () => {
                 {/* Price */}
                 <div className="svc-card-price">
                   {service.price_type === "negotiable" ? (
-                    <span className="svc-price-negotiable">
-                      💰 حسب الاتفاق
-                    </span>
+                    <span className="svc-price-negotiable">💰 {t('svc_price_negotiable')}</span>
                   ) : (
                     <span className="svc-price-tag">
                       {service.price}{" "}
                       <span>
-                        دج {service.price_type === "hourly" ? "/ ساعة" : ""}
+                        {t('svc_currency')} {service.price_type === "hourly" ? t('svc_price_hourly') : ""}
                       </span>
                     </span>
                   )}
                 </div>
 
                 {/* Request Button */}
-                                 {/* إخفاء زر الطلب إذا كنت أشاهد خدماتي أنا */}
                 {!isMine && (
-                  <button
-                    className="svc-request-btn"
-                    onClick={() => handleRequestService(service)}
-                  >
+                  <button className="svc-request-btn" onClick={() => handleRequestService(service)}>
                     <FiSend />
-                    طلب هذه الخدمة
+                    {t('svc_btn_request')}
                   </button>
                 )}
               </div>
